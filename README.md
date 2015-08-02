@@ -171,14 +171,20 @@ MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a
 **Most relevant options**:
 
 ```-i``` (*MToolBox.sh*) to choose the input file(s) format (mandatory).
+
 ```-r``` (*MToolBox.sh*) to choose the mitochondrial reference sequence for read mapping. Please note that the selected reference sequence will be used as reference for the VCF output file. Allowed values are RCRS and RSRS. Default is RSRS.
+
 ```-M``` (*MToolBox.sh*h) to enable duplicate read removal by MarkDuplicates.
+
 ```-I``` (*MToolBox.sh*) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar.
+
 ```-t``` (*mapExome.py*) to set the number of threads used by gsnap. Default is 8.
+
 ```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values ≥ 5 are allowed.
+
 ```-z``` (*assembleMTgenome.py*) to set the minimum heteroplasmy threshold for variants to be reported in the FASTA consensus sequence. Default is 0.80.
 
-For the full list of MToolBox options, please run as follows:
+**For the full list of MToolBox options, please run as follows**:
 ```
 MToolBox.sh -h
 ```
