@@ -102,7 +102,6 @@ MToolBox default outputs are:
 - *mtDNAassembly-coverage.txt*: a text file including the coverage per contig and per mitochondrial known annotation;
 - *logassemble.txt*, which is the log file of the assembleMTgenome.py script 
 - *sorted.csv* contains a table with each haplogroup whose prediction is > 90%. It contains the following fields:
-	
 	*N* = the number of SNPs in the fragment sequence vs RSRS;
 	*Nph* = the number of SNPs (among N) mapped in Phylotree;
 	*Nph_tot* = the number of SNPs defining the haplogroup in the whole genome;
@@ -169,7 +168,7 @@ Besides the mandatory ```-i``` option, the execution of MToolBox can be fine-tun
 MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a "<assembleMTgenome_options>" -c "<mt-classifier_options>"
 
 ```
-##Most relevant options:
+**Most relevant options**:
 
 ```-i``` (*MToolBox.sh*) to choose the input file(s) format (mandatory);
 ```-r``` (*MToolBox.sh*) to choose the mitochondrial reference sequence for read mapping. Please note that the selected reference sequence will be used as reference for the VCF output file. Allowed values are RCRS and RSRS. Default is RSRS.
@@ -183,13 +182,13 @@ For the full list of MToolBox options, please run as follows:
 ```
 MToolBox.sh -h
 ```
-##For the full list of mapExome and assembleMTgenome options, please run as follows:
+**For the full list of mapExome and assembleMTgenome options, please run as follows**:
 ```
 mapExome.py -h
 assembleMTgenome.py -h
 mt-classifier.py -h
 ```
-##Usage example:
+**Usage example**:
 ```
 MToolBox.sh -M -I -m "-t 20 -M /path/to/gsnapdb/chrRSRS/ -H /path/to/gsnapdb/hg19RSRS/" -a "-t 10"
 ```
