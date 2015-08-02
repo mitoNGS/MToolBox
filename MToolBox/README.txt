@@ -64,7 +64,7 @@ The MToolBox folder includes the MITOMAP_HMTDB_known_indels.vcf file, containing
 INSTALLATION
 ============
 
-Download MToolBox.tar.gz. Decompress the file and copy the package folder in a folder of your choice. Add this folder to your system PATH with the following command:
+Download MToolBox and add the folder path to your system PATH with the following command:
 
 export PATH=/dir/MToolBox/:$PATH
 
