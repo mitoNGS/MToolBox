@@ -41,19 +41,18 @@ List of fasta files and index .fai files in the genome_fasta folder (https://sou
 - *chrRSRS.fa.fai*
 - *hg19RSRS.fa*
 - *hg19RSRS.fa.fai*
-
 - *chrRCRS.fa*
 - *chrRCRS.fa.fai*
 - *hg19RCRS.fa*
 - *hg19RCRS.fa.fai*
 
-The default directory for these files is */usr/local/share/genomes/*, otherwise you must specify the actual path using the assembleMTgenome.py options ~~-r~~ (for further details please refer to "RUNNING MTOOLBOX" section). 
+The default directory for these files is */usr/local/share/genomes/*, otherwise you must specify the actual path using the assembleMTgenome.py options ```-r``` (for further details please refer to "RUNNING MTOOLBOX" section). 
 
 List of compressed files of gsnap indexes in the genome_index folder (https://sourceforge.net/projects/mtoolbox/files/genome_index/):
 - *chrRSRS.tar.gz*
 - *hg19RSRS.tar.gz*
 
-The default directory for decompressed folders is */usr/local/share/gmapdb/*, otherwise you must specify the actual path using the *mapExome.py* options ~~-M~~ and ~~-H~~, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
+The default directory for decompressed folders is */usr/local/share/gmapdb/*, otherwise you must specify the actual path using the *mapExome.py* options ```-M``` and ```-H```, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
 
 The MToolBox folder includes the *MITOMAP_HMTDB_known_indels.vcf* file, containing 127 known indels annotated in MITOMAP and HMTDB and the related *intervals_file.list* used by GATK *GenomeAnalysisTK.jar* module.
 
@@ -72,7 +71,7 @@ Basic execution of MToolBox can be run as follows:
 MToolBox.sh -i <input_format>
 ```
 
-Please note that you MUST specify the ~~-i~~ option (sam|bam|fastq|fasta).
+Please note that you MUST specify the ```-i``` option (sam|bam|fastq|fasta).
 The command must be executed inside the folder containing your input files. Please note that only one of the supported formats can be used within a single MToolBox run.
 For a complete list of *MToolBox.sh* options please run as follows:
 
@@ -165,20 +164,20 @@ FASTQ files: FASTQ files MUST be renamed as <sample_name>.R1.fastq, <sample_name
 ###MTOOLBOX PROGRAMS OPTIONS
 
 
-Besides the mandatory ~~-i~~ option, the execution of MToolBox can be fine-tuned by tweaking parameters of the *mapExome.py* and *assembleMTgenome.py* scripts by running MToolBox as follows:
+Besides the mandatory ```-i``` option, the execution of MToolBox can be fine-tuned by tweaking parameters of the *mapExome.py* and *assembleMTgenome.py* scripts by running MToolBox as follows:
 ```
 MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a "<assembleMTgenome_options>" -c "<mt-classifier_options>"
 
 ```
 ##Most relevant options:
 
-~~-i~~ (*MToolBox.sh*) to choose the input file(s) format (mandatory);
-~~-r~~ (*MToolBox.sh*) to choose the mitochondrial reference sequence for read mapping. Please note that the selected reference sequence will be used as reference for the VCF output file. Allowed values are RCRS and RSRS. Default is RSRS.
-~~-M~~ (*MToolBox.sh*h) to enable duplicate read removal by MarkDuplicates;
-~~-I~~ (*MToolBox.sh*) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar;
-~~-t~~ (*mapExome.py*) to set the number of threads used by gsnap. Default is 8;
-~~-t~~ (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values ≥ 5 are allowed;
-~~-z~~ (*assembleMTgenome.py*) to set the minimum heteroplasmy threshold for variants to be reported in the FASTA consensus sequence. Default is 0.80;
+```-i``` (*MToolBox.sh*) to choose the input file(s) format (mandatory);
+```-r``` (*MToolBox.sh*) to choose the mitochondrial reference sequence for read mapping. Please note that the selected reference sequence will be used as reference for the VCF output file. Allowed values are RCRS and RSRS. Default is RSRS.
+```-M``` (*MToolBox.sh*h) to enable duplicate read removal by MarkDuplicates;
+```-I``` (*MToolBox.sh*) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar;
+```-t``` (*mapExome.py*) to set the number of threads used by gsnap. Default is 8;
+```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values ≥ 5 are allowed;
+```-z``` (*assembleMTgenome.py*) to set the minimum heteroplasmy threshold for variants to be reported in the FASTA consensus sequence. Default is 0.80;
 
 For the full list of MToolBox options, please run as follows:
 ```
