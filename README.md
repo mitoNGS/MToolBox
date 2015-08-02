@@ -109,8 +109,8 @@ MToolBox default outputs are:
 	5. *P_Hg* = the prediction percentage value for the haplogroup (Nph/Nph_exp*100);
 	6. *Missing sites* = the mutation events that are not present in the query genome but were expected from its respective path to the RSRS. These mutations may also point to a sequencing error;
 - *merged\_diff.csv* file reports the SNPs between the query genome and each of the three sequences RSRS, rCRS and hg\_MHCS (*Macro-Haplogroup Consensus Sequence*);
-- *<sample\_name>.csv* contains a table where, for all the haplogroups present in the Phylotree Build 15, are reported the same data as in the file *sequence\_name>.sorted.csv*, except for the *Missing Sites* field;
-- *annotation.csv* is a further elaboration of the file *merged\_diff.csv*, providing, for each mt variant allele between the query genome and each of the three sequences RSRS, rCRS and hg\_MHCS, several annotations:
+- *\<sample\_name>.csv* contains a table where, for all the haplogroups present in the Phylotree Build 15, are reported the same data as in the file *sequence\_name>.sorted.csv*, except for the *Missing Sites* field;
+- *annotation.csv* is a further elaboration of the file *\merged\_diff.csv*, providing, for each mt variant allele between the query genome and each of the three sequences RSRS, rCRS and hg\_MHCS, several annotations:
 	1. *Nt Position* = the nucleotide position in mitochondrial genome
 	2. *Locus* = Mitochondrial gene locus;
 	3. *Nt Variability* = SiteVar variability value; 
@@ -149,13 +149,13 @@ MToolBox default outputs are:
 
 The basename for output folder and files will be parsed from the input filename, for each sample. 
 
-BAM|SAM files: BAM or SAM files MUST be renamed as *<sample_name>.ext*, eg:
+BAM|SAM files: BAM or SAM files MUST be renamed as *\<sample\_name\>.ext*, eg:
 ```
 mv HG00096.chrom20.ILLUMINA.bwa.GBR.low_coverage.20101123.bam HG00096.bam
 ```
 and "HG00096" will be the output basename.
 
-FASTQ files: FASTQ files MUST be renamed as <sample_name>.R1.fastq, <sample_name>.R2.fastq for PAIRED-END data and <sample_name>.fastq for SINGLE END data.
+FASTQ files: FASTQ files MUST be renamed as \<sample\_name\>.R1.fastq, \<sample\_name\>.R2.fastq for PAIRED-END data and \<sample\_name\>.fastq for SINGLE END data.
 
 **IMPORTANT**: Please note that MToolBox cannot recognize more than one PAIRED-END couple of fastq files (R1+R2) and one SINGLE-END fastq file per sample.
 
@@ -170,13 +170,13 @@ MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a
 ```
 **Most relevant options**:
 
-```-i``` (*MToolBox.sh*) to choose the input file(s) format (mandatory);
+```-i``` (*MToolBox.sh*) to choose the input file(s) format (mandatory).
 ```-r``` (*MToolBox.sh*) to choose the mitochondrial reference sequence for read mapping. Please note that the selected reference sequence will be used as reference for the VCF output file. Allowed values are RCRS and RSRS. Default is RSRS.
-```-M``` (*MToolBox.sh*h) to enable duplicate read removal by MarkDuplicates;
-```-I``` (*MToolBox.sh*) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar;
-```-t``` (*mapExome.py*) to set the number of threads used by gsnap. Default is 8;
-```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values ≥ 5 are allowed;
-```-z``` (*assembleMTgenome.py*) to set the minimum heteroplasmy threshold for variants to be reported in the FASTA consensus sequence. Default is 0.80;
+```-M``` (*MToolBox.sh*h) to enable duplicate read removal by MarkDuplicates.
+```-I``` (*MToolBox.sh*) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar.
+```-t``` (*mapExome.py*) to set the number of threads used by gsnap. Default is 8.
+```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values ≥ 5 are allowed.
+```-z``` (*assembleMTgenome.py*) to set the minimum heteroplasmy threshold for variants to be reported in the FASTA consensus sequence. Default is 0.80.
 
 For the full list of MToolBox options, please run as follows:
 ```
