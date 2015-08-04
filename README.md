@@ -61,7 +61,7 @@ The MToolBox folder includes the *MITOMAP_HMTDB_known_indels.vcf* file, containi
 
 Simply add the MToolBox path to your system PATH with the following command:
 ```
-export PATH=/dir/MToolBox/:$PATH
+export PATH="/path/to/MToolBox/:$PATH"
 ```
 
 ###RUNNING MTOOLBOX
