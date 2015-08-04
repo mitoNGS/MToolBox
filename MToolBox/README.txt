@@ -64,9 +64,9 @@ The MToolBox folder includes the MITOMAP_HMTDB_known_indels.vcf file, containing
 INSTALLATION
 ============
 
-Download MToolBox and add the folder path to your system PATH with the following command:
+Download MToolBox.tar.gz. Decompress the file and copy the package folder in a folder of your choice. Add this folder to your system PATH with the following command:
 
-export PATH=/dir/MToolBox/:$PATH
+export PATH="/path/to/MToolBox/:$PATH"
 
 
 RUNNING MTOOLBOX
@@ -207,19 +207,16 @@ CONTACTS AND CITATION
 =====================
 
 Contacts:
-dome.simone@gmail.com
-claudia.calabrese23@gmail.com
+dome.simone [at] gmail.com
+claudia.calabrese23 [at] gmail.com
 
 If you use MToolBox, please cite:
-Calabrese C, Simone D, Diroma MA, Santorsola M, Guttà C, Gasparre G, Picardi E, Pesole G, Attimonelli M. MToolBox: a highly automated pipeline for heteroplasmy annotation and prioritization analysis of human mitochondrial variants in high-throughput sequencing. Bioinformatics. 2014 Jul 14. pii: btu483. Epub ahead of print] PubMed PMID: 25028726
+Calabrese C, Simone D, Diroma MA, Santorsola M, Gutt√† C, Gasparre G, Picardi E, Pesole G, Attimonelli M. MToolBox: a highly automated pipeline for heteroplasmy annotation and prioritization analysis of human mitochondrial variants in high-throughput sequencing. Bioinformatics. 2014 Jul 14. pii: btu483. Epub ahead of print] PubMed PMID: 25028726
 
 To get support please 
-1) Join the MToolBox google group:
+Join the MToolBox google group:
 https://groups.google.com/forum/?hl=IT#!forum/mtoolbox-users
 
-or
-2) Create a topic in the MToolBox General Discussion here:
-https://sourceforge.net/p/mtoolbox/discussion/general/
 
 CHANGELOG - 5 June 2014
 ==========================
