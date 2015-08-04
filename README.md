@@ -210,6 +210,6 @@ claudia.calabrese23 [at] gmail.com
 ##If you use MToolBox, please cite:
 Calabrese C, Simone D, Diroma MA, Santorsola M, Guttà C, Gasparre G, Picardi E, Pesole G, Attimonelli M. MToolBox: a highly automated pipeline for heteroplasmy annotation and prioritization analysis of human mitochondrial variants in high-throughput sequencing. *Bioinformatics*. 2014 Jul 14. pii: btu483. Epub ahead of print] PubMed PMID: 25028726
 
-##To get support please 
-Join the MToolBox google group:
+##Get support 
+Please join the MToolBox google group:
 https://groups.google.com/forum/?hl=IT#!forum/mtoolbox-users
