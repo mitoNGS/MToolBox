@@ -180,7 +180,7 @@ MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a
 
 ```-t``` (*mapExome.py*) to set the number of threads used by gsnap. Default is 8.
 
-```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values â‰¥ 5 are allowed.
+```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values >= 5 are allowed.
 
 ```-z``` (*assembleMTgenome.py*) to set the minimum heteroplasmy threshold for variants to be reported in the FASTA consensus sequence. Default is 0.80.
 
@@ -208,7 +208,7 @@ dome.simone@gmail.com ;
 claudia.calabrese23@gmail.com
 
 ##If you use MToolBox, please cite:
-Calabrese C, Simone D, Diroma MA, Santorsola M, Guttˆ C, Gasparre G, Picardi E, Pesole G, Attimonelli M. MToolBox: a highly automated pipeline for heteroplasmy annotation and prioritization analysis of human mitochondrial variants in high-throughput sequencing. *Bioinformatics*. 2014 Jul 14. pii: btu483. Epub ahead of print] PubMed PMID: 25028726
+Calabrese C, Simone D, Diroma MA, Santorsola M, Guttà C, Gasparre G, Picardi E, Pesole G, Attimonelli M. MToolBox: a highly automated pipeline for heteroplasmy annotation and prioritization analysis of human mitochondrial variants in high-throughput sequencing. *Bioinformatics*. 2014 Jul 14. pii: btu483. Epub ahead of print] PubMed PMID: 25028726
 
 ##To get support please 
 Join the MToolBox google group:
