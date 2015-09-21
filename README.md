@@ -10,8 +10,8 @@ The MToolBox pipeline includes:
 
 - UNIX-based OS
 - Python2.7 (www.python.org)
-- GSNAP (https://github.com/julian-gehring/GMAP-GSNAP) installed in */usr/local/bin/gsnap* (otherwise you must specify the actual path using mapExome.py options). 
-  **WARNING**: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2013-09-11. We cannot guarantee that such indexes will work with later versions of GSNAP. 
+- GSNAP (https://github.com/julian-gehring/GMAP-GSNAP; newest version of GMAP-GSNAP at http://research-pub.gene.com/gmap/) installed in */usr/local/bin/gsnap* (otherwise you must specify the actual path using mapExome.py options). 
+  **WARNING: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2013-09-11. We cannot guarantee that such indexes will work with later versions of GSNAP**. 
 - samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options)
 - MUSCLE (http://www.drive5.com/muscle/downloads.htm) installed in */usr/local/bin/muscle* (otherwise you should specify the actual path using mt-classifier.py options)
 
