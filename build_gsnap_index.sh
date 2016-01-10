@@ -4,6 +4,11 @@ function usage() {
 
     cat<<EOF    
 Usage: gmap_build_index.sh -D <path_to_database> -n <database_name> -f <file.fa> -k <kmer> 
+
+	-D Destination directory for installation  [ex. /usr/local/share/gmapdb]
+	-n database name [ex. hg19RCRS]
+	-f single o multifasta file [ex. hg19RCRS.fa]
+	-k kmer [ex. 12]
 EOF
 
 }
