@@ -110,7 +110,7 @@ MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a
 
 ```-o``` (*MToolBox.sh*) to set the specific path to the output folder.
 
-```-l``` (*MToolBox.sh*) to indicate a list of samples (without path) to be analyzed. Comma separated file names or a "list.txt" file in the input folder should be provided. 
+```-l``` (*MToolBox.sh*) to indicate a list of file names to be analyzed. Argument of the option can be a list of comma separated file names or a txt file with one file name per line. 
 
 ```-X``` (*MToolBox.sh*) to enable extraction of mitochondrial reads from the input file, avoiding realignment of all the reads. Useful only for BAM input files
 
@@ -137,14 +137,18 @@ assembleMTgenome.py -h
 mt-classifier.py -h
 ```
 **Usage examples**:
+
+1) Input and output files are placed in the working directory 
 ```
 MToolBox.sh -i fastq -M -I -m "-t 20 -M /path/to/gsnapdb/chrRSRS/ -H /path/to/gsnapdb/hg19RSRS/" -a "-t 10"
 ```
-this command, launched in the input folder, will take all the fastq files as input (-i fastq), enable duplicate read removal (-M), enable mapped reads realignment (-I); also, the number of threads used by gsnap will be set to 20 (-m "-t 20..") and the custom path for gsnap mitochondrial and nuclear indexes will be set (-M and -H respectively). Finally, the minimum nucleotide distance from read end to retain indels will be set to 10 (-a "-t 10").
+this command can be launched if the fastq files are placed in the working directory. The command will take all the fastq files placed in theworkind directory as input (-i fastq), enable duplicate read removal (-M), enable mapped reads realignment (-I), set the number of threads used by gsnap will be set to 20 (-m "-t 20..") and the path to GMAP/GSNAP mitochondrial and nuclear indexes(-M and -H respectively). Finally, the minimum nucleotide distance allowed from read end, to retain indels, will be set to 10 (-a "-t 10").
+
+2) Input and output files are placed in a user-specified input/output directory 
 ```
 MToolBox.sh -i bam -l mysample1.bam,mysample2.bam -p /path/to/input/folder/ -X -a "-z 0.9" -o /path/to/output/folder/
 ```
-this command will analyze 2 bam files (-i bam -l mysample1.bam,mysample2.bam) in the input folder (-p /path/to/input/folder/). Only reads previously mapped to the mitochondrial genome will be considered in the analysis (-X), avoiding the re-mapping of all the reads cointained in the input files. Only variants with heteroplasmic fraction HF>0.9 will be reported in the FASTA consensus sequence (-a "-z 0.9"). Finally, all the results will be written in the specified output folder (-o /path/to/output/folder/).
+this command will run MToolBox on 2 bam files (-i bam -l mysample1.bam,mysample2.bam) placed in the input folder (-p /path/to/input/folder/). Only reads previously mapped to the mitochondrial genome will be considered in the analysis (-X), avoiding the re-mapping of all the reads cointained in the input files. Only variants with heteroplasmic fraction HF>0.9 will be reported in the FASTA consensus sequence (-a "-z 0.9"). All the results will be placed in the specified output folder (-o /path/to/output/folder/).
 
 
 ###MTOOLBOX OUTPUTS
@@ -261,10 +265,14 @@ Calabrese C, Simone D, Diroma MA, Santorsola M, Guttà C, Gasparre G, Picardi E,
 
 Falk MJ, Shen L, Gonzalez M, Leipzig J, Lott MT, Stassen AP, Diroma MA, Navarro-Gomez D, Yeske P, Bai R, Boles RG, Brilhante V, Ralph D, DaRe JT, Shelton R, Terry SF, Zhang Z, Copeland WC, van Oven M, Prokisch H, Wallace DC, Attimonelli M, Krotoski D, Zuchner S, Gai X; MSeqDR Consortium Participants; MSeqDR Consortium participants. Mitochondrial Disease Sequence Data Resource (MSeqDR): a global grass-roots consortium to facilitate deposition, curation, annotation, and integrated analysis of genomic data for the mitochondrial disease clinical and research communities. *Mol Genet Metab*. 2015 Mar;114(3):388-96. doi: 10.1016/j.ymgme.2014.11.016. Epub 2014 Dec 4. Review. PubMed PMID: 25542617; PubMed Central PMCID: PMC4512182.
 
-**If you would like to refer to our variant prioritization method, please also cite**:
+**If you would like to have more details about the variants prioritization method implemented in MToolBox, please refer to**:
 
 Santorsola M, Calabrese C, Girolimetti G, Diroma MA, Gasparre G, Attimonelli M. A multi-parametric workflow for the prioritization of mitochondrial DNA variants of clinical interest. *Hum Genet*. 2016 Jan;135(1):121-36. doi:10.1007/s00439-015-1615-9. Epub 2015 Nov 30. PubMed PMID: 26621530; PubMed Central PMCID: PMC4698288.
 
-##Get support 
+##Get support for MToolBox (command-line version)
 Please join the MToolBox google group:
 https://groups.google.com/forum/?hl=IT#!forum/mtoolbox-users
+
+##Get support for MToolBox GUI 
+Please visit the MSeqDR website at:
+https://mseqdr.org/mtoolbox.php
