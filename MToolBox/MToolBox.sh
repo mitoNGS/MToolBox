@@ -1,4 +1,5 @@
 #!/bin/bash
+#export PATH=/Volumes/RAID5/UTENTI_FTP/1000genomes/MToolBox:$PATH
 
 
 check_exit_status()
@@ -21,7 +22,6 @@ usage()
 	MToolBox: a tool for heteroplasmy annotation and accurate functional analysis of mitochondrial variants from high throughput sequencing data.
 	Written by Domenico Simone, Claudia Calabrese and Maria Angela Diroma 2013-2014.
 	https://sourceforge.net/projects/mtoolbox/
-	https://github.com/clody23/MToolBox
 
 	You must run the MToolBox command on only one of the supported input file formats (bam, sam, fastq, fastq.gz, fasta).
 
@@ -30,7 +30,7 @@ usage()
 		-p	path to input folder.
 		-i	input file format. Mandatory argument [bam|sam|fastq|fasta]. FASTQ files may be compressed or uncompressed.
 		-o	path to output folder.
-		-l	list of samples to be analyzed. [comma separated sample names]
+		-l	list of samples to be analyzed. [comma separated sample names or list.txt file]
 		-X	extraction of mitochondrial reads from bam file, avoiding realignment of all bam file input
 		-m	options for mapExome script [see mapExome.py -h for details]
 		-M	remove duplicate reads with PicardTools MarkDuplicates after mapExome [default: no]
@@ -491,7 +491,7 @@ fasta_input()
 	#for i in $(ls -d OUT_*); do cd $i; variants_functional_annotation.py $hpbest ; cd ..; done
 	variants_functional_annotation.py #${hpbest}
 	# Collect all prioritized variants from all the samples
-	for i in $(ls -d OUT_*/*annotation.csv); do tail -n+2 $i | awk 'BEGIN {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") {print $1"\t"$2"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14"\t"$15"\t"$28"\t"$29"\t"$30"\t"$31"\t"$32"\t"$33"\t"$34"\t"$35"\t"$36"\t"$37"\t"$38"\t"$39}}' >> priority_tmp.txt; done
+	for i in $(ls -d OUT_*/*annotation.csv); do tail -n+2 $i | awk 'BEGIN {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") {print $1"\t"$2"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14"\t"$15"\t"$16"\t"$17"\t"$30"\t"$31"\t"$32"\t"$33"\t"$34"\t"$35"\t"$36"\t"$37"\t"$38"\t"$39"\t"$40"\t"$41"\t"$42"\t"$43"\t"$44}}' >> priority_tmp.txt; done
 	for i in $(ls -d OUT_*/*annotation.csv); do tail -n+2 $i | awk 'BEGIN {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") count++} END {print $1"\t"NR"\t"count}' >> variant_number.txt; done
 	prioritization.py priority_tmp.txt
 	rm priority_tmp.txt

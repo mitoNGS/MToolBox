@@ -319,7 +319,7 @@ def main_functional_analysis(merg, d, g, best, haplo, hapconto, PATH, FILENAME, 
 		#scrivo l'intestazione
 		#aggiungere campi:
 		# 
-		header = ['Sample',"Variant Allele",'HF','CI_lower;CI_upper','RSRS','MHCS','rCRS','Haplogroup','Other Haplogroups','Locus','Nt Variability','Codon Position','Aa Change','Aa Variability','Disease Score','MutPred pred','MutPred prob','PolyPhen-2 HumDiv pred','PolyPhen-2 HumDiv prob','PolyPhen-2 HumVar pred','PolyPhen-2 HumVar prob','PANTHER pred','PANTHER prob','PhD-SNP pred','PhD-SNP prob','SNPs&GO pred','SNPs&GO prob','Mitomap Associated Disease(s)','Mitomap Homoplasmy','Mitomap Heteroplasmy','Somatic Mutations','SM Homoplasmy','SM Heteroplasmy','OMIM link','dbSNP ID','MAMIT link','AC/AN 1000 Genomes','1000 Genomes Homoplasmy','1000 Genomes Heteroplasmy']
+		header = ['Sample',"Variant Allele",'HF','CI_lower;CI_upper','RSRS','MHCS','rCRS','Haplogroup','Other Haplogroups','Locus','Nt Variability','Codon Position','Aa Change','Aa Variability','tRNA Annotation','Disease Score','RNA predictions','MutPred pred','MutPred prob','PolyPhen-2 HumDiv pred','PolyPhen-2 HumDiv prob','PolyPhen-2 HumVar pred','PolyPhen-2 HumVar prob','PANTHER pred','PANTHER prob','PhD-SNP pred','PhD-SNP prob','SNPs&GO pred','SNPs&GO prob','Mitomap Associated Disease(s)','Mitomap Homoplasmy','Mitomap Heteroplasmy','Somatic Mutations','SM Homoplasmy','SM Heteroplasmy','ClinVar','OMIM link','dbSNP ID','Mamit-tRNA link','PhastCons20Way','PhyloP20Way','AC/AN 1000 Genomes','1000 Genomes Homoplasmy','1000 Genomes Heteroplasmy']
 		o.write('\t'.join(header)+'\n')
 
 
@@ -394,7 +394,7 @@ def main_functional_analysis(merg, d, g, best, haplo, hapconto, PATH, FILENAME, 
 		#mut = sorted(ord, key=itemgetter(14), reverse=True) # mutpred probability
 		#mut = sorted(allvar, key=itemgetter(16), reverse=True) # mutpred probability
 		#mut = sorted(varbest, key=itemgetter(16), reverse=True) # mutpred probability
-		dis = sorted(varbest, key=itemgetter(14), reverse=True) # % disease (ex-mean pathogenicity score)
+		dis = sorted(varbest, key=itemgetter(15), reverse=True) # % disease (ex-mean pathogenicity score)
 		vrb = sorted(dis, key=itemgetter(10)) # nt variability
 		hpg = sorted(vrb, key=itemgetter(7)) # genomes haplogroup defining
 		mrg = sorted(hpg, key=itemgetter(5), reverse=True) # MHCS

@@ -13,7 +13,7 @@ raw_file=open(sys.argv[1],"r").readlines()
 file=[line.strip('\n').split('\t') for line in raw_file]
 output=open("prioritized_variants.txt", "w")
 
-header=['Variant Allele','Sample','Locus','Nt Variability','Codon Position','Aa Change','Aa Variability','Disease Score','Mitomap Associated Disease(s)','Mitomap Homoplasmy','Mitomap Heteroplasmy','Somatic Mutations','SM Homoplasmy','SM Heteroplasmy','OMIM link', 'dbSNP ID', 'MAMIT link','AC/AN 1000 Genomes','1000 Genomes Homoplasmy','1000 Genomes Heteroplasmy\n']
+header=['Variant Allele','Sample','Locus','Nt Variability','Codon Position','Aa Change','Aa Variability','tRNA Annotation','Disease Score','RNA predictions','Mitomap Associated Disease(s)','Mitomap Homoplasmy','Mitomap Heteroplasmy','Somatic Mutations','SM Homoplasmy','SM Heteroplasmy','ClinVar','OMIM link', 'dbSNP ID', 'Mamit-tRNA link','PhastCons20Way','PhyloP20Way','AC/AN 1000 Genomes','1000 Genomes Homoplasmy','1000 Genomes Heteroplasmy\n']
 header='\t'.join(header)
 output.write(header)
 
