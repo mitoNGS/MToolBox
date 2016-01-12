@@ -3,17 +3,25 @@
 function usage() {
 
     cat<<EOF    
-Usage: gmap_build_index.sh -D <path_to_database> -n <database_name> -f <file.fa> -k <kmer> 
+Usage: 
+gmap_build_index.sh -D <path_to_database> -n <database_name> -f <file.fa> -k <kmer> 
 
+	Mandatory options:
 	-D Destination directory for installation  [ex. /usr/local/share/gmapdb]
 	-n database name [ex. hg19RCRS]
 	-f single o multifasta file [ex. hg19RCRS.fa]
 	-k kmer [ex. 12]
+
+	Optional:
+	-c assumes fasta file is gzipped [default=false]
+
 EOF
 
 }
 
-while getopts ":hD:n:f:k:" opt; do
+decompress_gzip=false
+
+while getopts ":hD:n:f:ck:" opt; do
 	case $opt in
 		h)
 			usage
@@ -27,6 +35,9 @@ while getopts ":hD:n:f:k:" opt; do
 			;;
 		f)
 			fasta=$OPTARG
+			;;
+		c)
+			decompress_gzip=true
 			;;
 		k)	
 			kmer=$OPTARG
@@ -54,11 +65,15 @@ else
 	echo 'OK!'
 fi
 
-export PATH=$GMAP:$PATH
 
 echo 'Building gmap indexes...'
 
-gmap_build -D $database_path -d $database_name $fasta -s numeric-alpha -k $kmer
-
+if $decompress_gzip
+then
+	echo "file $fasta is compressed..."
+	gmap_build -D $database_path -d $database_name -g $fasta -s numeric-alpha -k $kmer
+else
+	gmap_build -D $database_path -d $database_name $fasta -s numeric-alpha -k $kmer
+fi
 
 echo 'Done'
