@@ -67,7 +67,7 @@ List of compressed files of gsnap indexes in the genome_index folder (https://so
 The default directory for decompressed folders is */usr/local/share/gmapdb/*, otherwise you must specify the actual path using the *mapExome.py* options ```-M``` and ```-H```, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
 
 The MToolBox folder includes the *MITOMAP_HMTDB_known_indels.vcf* file, containing 127 known indels annotated in MITOMAP and HMTDB and the related *intervals_file.list* used by GATK *GenomeAnalysisTK.jar* module.
-The MToolBox folder also includes 2 tab-separated files, *variant_info.txt* (previously called *patho_table.txt*) and *site_info.txt* (previously called *sitevar_modified.txt*) containing variant-specific and site-specific information, respectively, used in the annotation step.
+The MToolBox folder also includes 2 tab-separated files, *patho_table.txt* and *sitevar_modified.txt*, containing variant-specific and site-specific information, respectively, used in the annotation step.
 
 
 ###INSTALLATION
