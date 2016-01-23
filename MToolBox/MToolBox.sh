@@ -49,7 +49,7 @@ usage()
 
 version()
 {
-	VERSION=$(echo "MToolBox v0.3.1")
+	VERSION=$(echo "MToolBox v0.3.2")
 	echo $VERSION
 }
 
