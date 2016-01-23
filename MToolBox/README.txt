@@ -115,7 +115,7 @@ Most relevant options:
 
 -o (MToolBox.sh) to set the specific path to the output folder.
 
--l (MToolBox.sh) to indicate a list of samples (without path) to be analyzed. Comma separated file names or a "list.txt" file in the input folder should be provided. 
+-l (MToolBox.sh) . Indicate a list of file names to be analyzed. Argument of the option can be a list of comma separated file names or a txt file with one file name per line. 
 
 -X (MToolBox.sh) to enable extraction of mitochondrial reads from the input file, avoiding realignment of all the reads. Useful only for BAM input files
 
