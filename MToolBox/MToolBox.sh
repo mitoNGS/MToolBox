@@ -1,5 +1,4 @@
 #!/bin/bash
-#export PATH=/Volumes/RAID5/UTENTI_FTP/1000genomes/MToolBox:$PATH
 
 
 check_exit_status()
@@ -30,7 +29,7 @@ usage()
 		-p	path to input folder.
 		-i	input file format. Mandatory argument [bam|sam|fastq|fasta]. FASTQ files may be compressed or uncompressed.
 		-o	path to output folder.
-		-l	list of samples to be analyzed. [comma separated sample names or list.txt file]
+		-l	list of samples to be analyzed. [comma separated sample names or file with txt|tsv|lst extension]
 		-X	extraction of mitochondrial reads from bam file, avoiding realignment of all bam file input
 		-m	options for mapExome script [see mapExome.py -h for details]
 		-M	remove duplicate reads with PicardTools MarkDuplicates after mapExome [default: no]
@@ -230,15 +229,17 @@ fastq_input()
 		else			
 			sampleIDs=$(ls *fastq* | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')
 		fi
-	elif [ -s list.txt ]
-	#samples in list.txt
-	then
-		sampleIDs=$(cat list.txt | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')	
-	else
-	#list of files defined
-		sampleIDs=$(echo "${list}" | sed 'y/,/\n/' | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')	
+	else 
+		list_files=$(echo $list | grep 'txt\|tsv\|lst')
+		if [ "$list_files" != "" ]; then	
+			#samples in list.txt
+			sampleIDs=$(cat $list | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')	
+		else
+		#list of files defined
+			sampleIDs=$(echo "${list}" | sed 'y/,/\n/' | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')	
+		fi
+		echo ""
 	fi
-	echo ""
 		
 	for i in $sampleIDs; do
 		if [[ "${output_name}" ]]
@@ -435,10 +436,10 @@ fasta_input()
 		echo "Files to be analyzed:"
 		if [[ "${list}" ]]
 		then
-			if [ -s list.txt ]
-			#samples in list.txt
-			then
-				filelist=$(cat list.txt | tr '\n' '\t')
+			list_files=$(echo $list | grep 'txt\|tsv\|lst')
+			if [ "$list_files" != "" ]; then
+				#samples in list.txt
+				filelist=$(cat $list | tr '\n' '\t')
 			else
 			#list of input files defined
 				filelist=$(echo "${list}" | tr ',' '\t')
@@ -548,13 +549,15 @@ sam_input()
 	#all the input files
 	then
 		sam_samples=$(ls *.sam | awk 'BEGIN{FS="."}{print $1}')
-	elif [ -s list.txt ]
-	#samples in list.txt
-	then
-		sam_samples=$(cat list.txt | awk 'BEGIN{FS="."}{print $1}')
 	else
-	#list of input files defined
-		sam_samples=$(echo "${list}" | sed 's/,/\n/g' | awk 'BEGIN{FS="."}{print $1}')
+		list_files=$(echo $list | grep 'txt\|tsv\|lst')
+		if [ "$list_files" != "" ]; then
+			#samples in txt|tsv|lst file
+			sam_samples=$(cat $list | awk 'BEGIN{FS="."}{print $1}')
+		else
+			#list of input files defined
+			sam_samples=$(echo "${list}" | sed 's/,/\n/g' | awk 'BEGIN{FS="."}{print $1}')
+		fi
 	fi	
 		
 	if [[ "${output_name}" ]]
@@ -592,13 +595,15 @@ bam_input()
 	#all the input files
 	then
 		bam_samples=$(ls *.bam | awk 'BEGIN{FS="."}{print $1}')
-	elif [ -s list.txt ]
-	#samples in list.txt
-	then
-		bam_samples=$(cat list.txt | awk 'BEGIN{FS="."}{print $1}')
 	else
-	#list of input files defined
-		bam_samples=$(echo "${list}" | sed 's/,/\n/g' | awk 'BEGIN{FS="."}{print $1}')
+		list_files=$( echo $list | grep 'txt\|tsv\|lst\|')
+		if [ "$list_files" != "" ]; then
+			#samples in list.txt
+			bam_samples=$(cat $list | awk 'BEGIN{FS="."}{print $1}')
+		else
+			#list of input files defined
+			bam_samples=$(echo "${list}" | sed 's/,/\n/g' | awk 'BEGIN{FS="."}{print $1}')
+		fi
 	fi	
 		
 	if $MitoExtraction
