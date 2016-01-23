@@ -324,7 +324,11 @@ def main_mt_hpred():
 	#	print i
 
 if __name__ == "__main__":
-	main_mt_hpred()
+	try:
+		main_mt_hpred()
+	except:
+		sys.stderr.write('Unable to compute haplogroup. Exit')
+		sys.exit(1)
 #	path = os.getcwd()
 #	for infile in glob.glob(os.path.join(path, 'OUT_*')):
 #		main_mt_hpred()
