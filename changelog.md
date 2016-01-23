@@ -1,6 +1,6 @@
 ###CHANGELOG - 21 September 2015
 
-Update to MToolBox version 0.3.1a with the following change:
+Update to MToolBox version 0.3.2 with the following change:
 
  - A bug in patho-table.txt has been fixed. 313 new stop-gain mutations and 6 new missense variants are now included.
 
