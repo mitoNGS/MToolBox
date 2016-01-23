@@ -97,8 +97,8 @@ for i in d_user_assembleMTgenome:
 				pass
 				print d_user_assembleMTgenome['-r']+d_user_assembleMTgenome[i]
 			else: sys.exit(1)			
-		if check_file(d_user_assembleMTgenome[i], d_def_assembleMTgenome[i]) == True: pass
-		else: sys.exit(1)
+		#if check_file(d_user_assembleMTgenome[i], d_def_assembleMTgenome[i]) == True: pass
+		#else: sys.exit(1)
 print "OK."
 
 print "\nChecking mt-classifier parameters..."
