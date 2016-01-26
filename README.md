@@ -154,7 +154,7 @@ this command will run MToolBox on 2 bam files (-i bam -l mysample1.bam,mysample2
 ###MTOOLBOX OUTPUTS
 
 MToolBox default outputs are:
-- *VCF_file.vcf* contains all the mitochondrial variant positions against RSRS and other meta-information. 
+- *VCF_file.vcf* contains all the mitochondrial variant positions against RSRS/RCRS and other meta-information. 
 - *mt_classification_best_results.csv* reports for each sequence the best haplogroup prediction. If the sorting results in more than one best haplogroup prediction with equal probability, the output will enclose all of them.
 - *prioritized_variants.txt* contains annotation only for prioritized variants for each sample analyzed, defined as variants recognized by the three reference sequences (rCRS, RSRS and MHCS), sorted per increasing nucleotide variability.
 - *summary_<date_time>.txt* reporting a brief summary of selected options, predicted haplogroups, number of total and prioritized variants for each sample and, for NGS data only, coverage of reconstructed genomes, number of homoplasmic and heteroplasmic variants.
