@@ -4,7 +4,7 @@ function usage() {
 
     cat<<EOF    
 Usage: 
-gmap_build_index.sh -D <path_to_database> -n <database_name> -f <file.fa> -k <kmer> 
+build_gsnap_index.sh -D <path_to_database> -n <database_name> -f <file.fa> -k <kmer> 
 
 	Mandatory options:
 	-D Destination directory for installation  [ex. /usr/local/share/gmapdb]
