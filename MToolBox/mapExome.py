@@ -40,6 +40,7 @@ humandb='hg19RSRS'
 mqual=30
 thread=8
 folder=os.path.join(os.getcwd(),'OUTfolder2')
+
 for o,a in opts:
 	if o == "-h":
 		usage()
@@ -60,6 +61,7 @@ def rev(seq):
 	d={'A':'T','T':'A','C':'G','G':'C','N':'N'}
 	s=''.join([d[x] for x in seq])
 	return s[::-1]
+
 
 if not os.path.exists(folder): os.mkdir(folder)
 
