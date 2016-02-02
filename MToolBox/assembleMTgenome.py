@@ -47,6 +47,7 @@ Options:
 	-g		min. gap lentgh [10]
 	-o		output base name [mtDNAassembly]
 	-s		samtools executable [/usr/local/bin/samtools]
+	-v		samtools version [default is 0]
 	-t		minimum distance from read end(s) for indels to be detected. Values < 5 will be ignored. [5]
 	-z		heteroplasmy threshold for variants to be reported in consensus FASTA [0.8]
 	-F		generate fasta output [no]
@@ -60,7 +61,7 @@ Options:
 	"""
 
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "hf:i:q:c:d:o:g:a:r:s:FCUPNA:D:z:t:")
+	opts, args = getopt.getopt(sys.argv[1:], "hf:i:q:c:d:o:g:a:r:s:v:FCUPNA:D:z:t:")
 except getopt.GetoptError, err:
 	print str(err) 
 	usage()
@@ -75,6 +76,7 @@ cov=5
 glen=10
 basename='mtDNAassembly'
 sexe='samtools'
+sversion=0
 crf=0
 crc=0
 cru=0
@@ -98,6 +100,7 @@ for o,a in opts:
 	elif o == "-o": basename = a
 	elif o == "-r": fasta_dir = a
 	elif o == "-s": sexe = a
+	elif o == "-v": sversion = float(a)
 #	elif o == "-t": tail = int(a)
 	elif o == "-t":
 		if int(a)<5:
@@ -120,6 +123,7 @@ mtdnafile=fasta_dir+mtdna_fasta
 hgenome=fasta_dir+hgenome_fasta
 print mtdnafile
 print hgenome
+print 'samtools version is {0}'.format(sversion)
 
 sample_name = os.getcwd().split('/')[-1].split('_')[1]
 print "assembleMTgenome for sample", sample_name
@@ -222,7 +226,10 @@ if ext=='sam':
 	ext='bam'
 if ext=='bam':
 	print 'Sorting and indexing BAM...'
-	cmd1='%s sort %s.bam %s-sorted' %(sexe,basext,basext)
+	if int(sversion) == 0:
+		cmd1='%s sort %s.bam %s-sorted' %(sexe,basext,basext)
+	else:
+		cmd1='%s sort %s.bam -o %s-sorted.bam' %(sexe,basext,basext)
 	cmd2='%s index %s-sorted.bam' %(sexe,basext)
 	os.system(cmd1)
 	os.system(cmd2)
