@@ -20,23 +20,15 @@ usage()
 	USAGE="""
 	MToolBox: a tool for heteroplasmy annotation and accurate functional analysis of mitochondrial variants from high throughput sequencing data.
 	Written by Domenico Simone, Claudia Calabrese and Maria Angela Diroma 2013-2014.
-	https://sourceforge.net/projects/mtoolbox/
+	https://github.com/mitoNGS/MToolBox/
 
 	You must run the MToolBox command on only one of the supported input file formats (bam, sam, fastq, fastq.gz, fasta).
 
-	Input & workflow execution options (must include -i):
+	MToolBox.sh options:
 
-		-p	path to input folder.
-		-i	input file format. Mandatory argument [bam|sam|fastq|fasta]. FASTQ files may be compressed or uncompressed.
-		-o	path to output folder.
-		-l	list of samples to be analyzed. [comma separated sample names or file with txt|tsv|lst extension]
-		-X	extraction of mitochondrial reads from bam file, avoiding realignment of all bam file input
-		-m	options for mapExome script [see mapExome.py -h for details]
-		-M	remove duplicate reads with PicardTools MarkDuplicates after mapExome [default: no]
-		-I	perform local realignment of reads on known indels with GATK IndelRealigner [default: no]
-		-a	options for assembleMTgenome script [see assembleMTgenome.py -h for details]
-		-c	options for mt-classifier script [see mt-classifier.py -h for details]
-		-r	reference sequence to use for read mapping (VCF output will use the same reference) [RSRS|rCRS; default: RSRS]
+		-m	options for the mapExome script [see mapExome.py -h for details]
+		-a	options for the assembleMTgenome script [see assembleMTgenome.py -h for details]
+		-c	options for the mt-classifier script [see mt-classifier.py -h for details]
 
 	Help options:
 
@@ -49,37 +41,46 @@ usage()
 
 version()
 {
-	VERSION=$(echo "MToolBox v0.3.2")
+	VERSION=$(echo "MToolBox v1.0")
 	echo $VERSION
 }
+
 
 # Default command lines and behaviours for scripts and programs used in the workflow
 #assembleMTgenome_OPTS=""
 #mt_classifier_OPTS=""
 #mapExome_OPTS=""
-UseMarkDuplicates=false
-UseIndelRealigner=false
-MitoExtraction=false
+#UseMarkDuplicates=false
+#UseIndelRealigner=false
+#MitoExtraction=false
 # export folder where MToolBox.sh is placed, it is the same folder of PicardTools and GATK jars
 me=`basename $0`
 export mtoolbox_folder=$(which $me | sed "s/$me//g")
 export externaltoolsfolder=${mtoolbox_folder}ext_tools/
 
 
+#if [ -f config.sh ];then
+#	echo "sourcing config.sh file...done."
+#	source config.sh
+#else
+#	echo -e "config.sh file not found. Exit\n"
+#	exit 1
+#fi
+
 # Environment variables for executables and files required by MToolBox
-export ref=RSRS
-export fasta_path=/usr/local/share/genomes/
-export mtdb_fasta=chrRSRS.fa
-export hg19_fasta=hg19RSRS.fa
-export gsnapexe=/usr/local/bin/gsnap
-export gsnapdb=/usr/local/share/gmapdb/
-export mtdb=chrRSRS
-export humandb=hg19RSRS
-export samtoolsexe=/usr/local/bin/samtools
-export muscleexe=/usr/local/bin/muscle
+#export ref=RSRS
+#export fasta_path=/usr/local/share/genomes/
+#export mtdb_fasta=chrRSRS.fa
+#export hg19_fasta=hg19RSRS.fa
+#export gsnapexe=/usr/local/bin/gsnap
+#export gsnapdb=/usr/local/share/gmapdb/
+#export mtdb=chrRSRS
+#export humandb=hg19RSRS
+#export samtoolsexe=/usr/local/bin/samtools
+#export muscleexe=/usr/local/bin/muscle
 
 
-while getopts ":hva:c:f:p:o:i:l:m:r:j:MIX" opt; do
+while getopts ":hva:c:f:m:" opt; do
 	case $opt in
 		h)
 			usage
@@ -98,33 +99,9 @@ while getopts ":hva:c:f:p:o:i:l:m:r:j:MIX" opt; do
 		f)
 			variants_functional_annotation_OPTS=$OPTARG
 			;;
-		p)
-			input_path=$OPTARG
-			;;
-		o)
-			output_name=$OPTARG
-			;;		
-		i)
-			input_type=$OPTARG
-			;;			
-		l)
-			list=$OPTARG
-			;;
 		m)
 			mapExome_OPTS=$OPTARG
 			;;
-		r)
-			ref=$(echo $OPTARG | tr '[:lower:]' '[:upper:]')
-			;;
-		M)
-			UseMarkDuplicates=true
-			;;
-		I)
-			UseIndelRealigner=true
-			;;
-		X)
-			MitoExtraction=true
-			;;						
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
 			exit 1
@@ -136,18 +113,28 @@ while getopts ":hva:c:f:p:o:i:l:m:r:j:MIX" opt; do
 	esac
 done
 
-# define reference
-if [[ $ref == 'RCRS' ]]
-then 
-	export mtdb_fasta=chrRCRS.fa
-	export hg19_fasta=hg19RCRS.fa
-	export mtdb=chrRCRS
-	export humandb=hg19RCRS
-elif [[ $ref != 'RSRS' ]]
-then
-	echo "Reference name not valid. Abort."
+
+config=${mtoolbox_folder}data/config.sh
+
+if [ -f "$config" ];then
+	source $config
+else
+	echo -e "config.sh file not found. Exit\n"
 	exit 1
 fi
+
+# define reference
+#if [[ $ref == 'RCRS' ]]
+#then 
+#	export mtdb_fasta=chrRCRS.fa
+#	export hg19_fasta=hg19RCRS.fa
+#	export mtdb=chrRCRS
+#	export humandb=hg19RCRS
+#elif [[ $ref != 'RSRS' ]]
+#then
+#	echo "Reference name not valid. Abort."
+#	exit 1
+#fi
 
 
 # The following lines are commented since the involved parameters
@@ -204,6 +191,7 @@ in-out_folders()
 	if [[ "${output_name}" ]]
 	then
 		mkdir ${output_name}
+		echo 'output files will be placed in '${output_name}
 	fi
 }
 
@@ -419,7 +407,7 @@ fastq_input()
 	echo ""
 	echo "WARNING: values of tail < 5 are deprecated and will be replaced with 5"
 	echo ""	
-	for i in $(ls -d OUT_*); do outhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg19_fasta} -s ${samtoolsexe} -FCP ${assembleMTgenome_OPTS}; cd ..; done > logassemble.txt
+	for i in $(ls -d OUT_*); do outhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg19_fasta} -s ${samtoolsexe} -v ${samtools_version} -FCP ${assembleMTgenome_OPTS}; cd ..; done > logassemble.txt
 	echo ""
 	echo "##### GENERATING VCF OUTPUT..."
 	# ... AND VCF OUTPUT
@@ -681,38 +669,36 @@ bam_input()
 } 
 
 	
-if (( $# >= 1 ))
+if [[ $input_type = 'fasta' ]]
 then
-	if [[ $input_type = 'fasta' ]]
-	then
-		echo "Input type is fasta."
-		in-out_folders
-		fasta_input
-	elif [[ $input_type = 'fastq' ]]
-	then
-		echo "Input type is fastq."
-		in-out_folders
-		fastq_input
-		fasta_input
-	elif [[ $input_type = 'sam' ]]
-	then
-		echo "Input type is sam."
-		in-out_folders
-		sam_input
-		fastq_input
-		fasta_input
-	elif [[ $input_type = 'bam' ]]
-	then
-		echo "Input type is bam."
-		in-out_folders
-		bam_input
-		fastq_input
-		fasta_input
-	else
-		echo "Input format not recognized."
-		exit 1
-	fi
+	echo "Input type is fasta."
+	in-out_folders
+	fasta_input
+elif [[ $input_type = 'fastq' ]]
+then
+	echo "Input type is fastq."
+	in-out_folders
+	fastq_input
+	fasta_input
+elif [[ $input_type = 'sam' ]]
+then
+	echo "Input type is sam."
+	in-out_folders
+	sam_input
+	fastq_input
+	fasta_input
+elif [[ $input_type = 'bam' ]]
+then
+	echo "Input type is bam."
+	in-out_folders
+	bam_input
+	fastq_input
+	fasta_input
 else
-	echo "Input type not specified."
+	echo "Input format not recognized."
 	exit 1
 fi
+#else
+#	echo "Input type not specified."
+#	exit 1
+#fi
