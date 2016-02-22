@@ -26,6 +26,7 @@ usage()
 
 	MToolBox.sh options:
 
+		-i	config file [MANDATORY]
 		-m	options for the mapExome script [see mapExome.py -h for details]
 		-a	options for the assembleMTgenome script [see assembleMTgenome.py -h for details]
 		-c	options for the mt-classifier script [see mt-classifier.py -h for details]
@@ -72,11 +73,14 @@ export externaltoolsfolder=${mtoolbox_folder}ext_tools/
 #export muscleexe=/usr/local/bin/muscle
 
 
-while getopts ":hva:c:f:m:" opt; do
+while getopts ":hi:va:c:f:m:" opt; do
 	case $opt in
 		h)
 			usage
 			exit 1
+			;;
+		i)
+			config=$OPTARG
 			;;
 		v)
 			version
@@ -109,19 +113,20 @@ done
 setup=${mtoolbox_folder}/setup.sh
 
 if [ -f "$setup" ];then
+	echo "setting up MToolBox environmental variables..."
 	source $setup
 else
-	echo -e "setup.sh file not found. Please make sure to set up the correct MToolBox environment through the conf.sh file"
+	echo -e "setup.sh file not found. Setting MToolBox environment sourcing conf.sh file\n"
 fi
 
 #MANDATORY conf.sh file to set up MToolBox variables
-config=${mtoolbox_folder}/config.sh
 
-if [ -f "$config" ];then
-	source $config
-else
-	echo -e "config.sh file not found. Please provide $config file before starting MToolBox.\n"
+if [ "$config-" == "-" ];then
+	echo -e "config.sh file not found. Please provide $config file before running MToolBox.\n"
 	exit 1
+else
+	echo "setting up MToolBox variables in $config ..."
+	source $config
 fi
 
 # define reference
