@@ -255,7 +255,7 @@ mtdb_fasta=chrRSRS.fa
 hg19_fasta=hg19RSRS.fa
 mtdb=chrRSRS
 humandb=hg19RSRS
-samtools_version=1.3
+samtools_version=$samtools_version
 EOF
 
 exit 0
