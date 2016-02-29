@@ -18,7 +18,7 @@
 ##
 ##OPTIONAL. If MToolBox default installation (./install.sh) was used, samtools_version is 1.3
 ##
-#samtools_version=
+samtools_version=1.3
 ##
 ##OPTIONAL. If MToolBox default installation (./install.sh) was used. musclexe path is $MTOOLBOX_BIN/muscle3.8.31_i86linux64. Otherwise, please specify the FULL PATH to muscle executables.
 ##
