@@ -53,8 +53,8 @@ List of fasta files and index .fai files in the genome_fasta folder (https://sou
 - *chrRSRS.fa.fai*
 - *hg19RSRS.fa*
 - *hg19RSRS.fa.fai*
-- *chrRCRS.fa*
-- *chrRCRS.fa.fai*
+- *chrM.fa* (i.e. rCRS)
+- *chrM.fa.fai* 
 - *hg19RCRS.fa*
 - *hg19RCRS.fa.fai*
 
@@ -63,6 +63,8 @@ The default directory for these files is */usr/local/share/genomes/*, otherwise 
 List of compressed files of gsnap indexes in the genome_index folder (https://sourceforge.net/projects/mtoolbox/files/genome_index/):
 - *chrRSRS.tar.gz*
 - *hg19RSRS.tar.gz*
+- *chrM.tar.gz*
+- *hg19RCRS.tar.gz*
 
 The default directory for decompressed folders is */usr/local/share/gmapdb/*, otherwise you must specify the actual path using the *mapExome.py* options ```-M``` and ```-H```, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
 

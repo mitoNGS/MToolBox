@@ -13,10 +13,10 @@ SYSTEM REQUIREMENTS
 
 - UNIX-based OS
 - Python2.7 (www.python.org)
-- samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options)
+- samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options). Please be aware that the current version of MToolBox does not support samtools versions >= 1.0. 
 - MUSCLE (http://www.drive5.com/muscle/downloads.htm) installed in /usr/local/bin/muscle (otherwise you should specify the actual path using mt-classifier.py options)
 - GSNAP (https://github.com/julian-gehring/GMAP-GSNAP; newest version of GMAP-GSNAP at http://research-pub.gene.com/gmap/) installed in /usr/local/bin/gsnap (otherwise you must specify the actual path using mapExome.py options). 
-  WARNING: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2013-09-11. We cannot guarantee that such indexes will work with later versions of GSNAP and we strongly recommend to regenerate the indexes with the aligner version the user may want to choose.
+  WARNING: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2015-12-31.v7. We cannot guarantee that such indexes will work with later or previous versions of GSNAP and we strongly recommend to regenerate the indexes with the aligner version the user may want to choose.
 
   To generate GMAP/GSNAP database you can visit this link http://research-pub.gene.com/gmap/src/README or use the build_gsnap_index.sh script provided within the mitoNGS repo, to help the MToolBox users building GMAP/GSNAP databases. To check the usage of the script please type:
   
@@ -56,8 +56,8 @@ List of fasta files and index .fai files in the genome_fasta folder (https://sou
 - chrRSRS.fa.fai
 - hg19RSRS.fa
 - hg19RSRS.fa.fai
-- chrRCRS.fa
-- chrRCRS.fa.fai
+- chrM.fa
+- chrM.fa.fai
 - hg19RCRS.fa
 - hg19RCRS.fa.fai
 
@@ -66,6 +66,8 @@ The default directory for these files is /usr/local/share/genomes/, otherwise yo
 List of compressed files of gsnap indexes in the genome_index folder (https://sourceforge.net/projects/mtoolbox/files/genome_index/):
 - chrRSRS.tar.gz
 - hg19RSRS.tar.gz
+- chrM.tar.gz
+- hg19RCRS.tar.gz
 
 The default directory for decompressed folders is /usr/local/share/gmapdb/, otherwise you must specify the actual path using the mapExome.py options -M and -H, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
 
