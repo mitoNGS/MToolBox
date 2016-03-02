@@ -62,9 +62,9 @@ The default directory for these files is */usr/local/share/genomes/*, otherwise 
 
 List of compressed files of gsnap indexes in the genome_index folder (https://sourceforge.net/projects/mtoolbox/files/genome_index/):
 - *chrRSRS.tar.gz*
-- *hg19RSRS.tar.gz*
+- *hg19RSRS.tar.gz* [currently unavailable]
 - *chrM.tar.gz*
-- *hg19RCRS.tar.gz* (i.e. rCRS)
+- *hg19RCRS.tar.gz* (i.e. rCRS) [currently unavailable]
 
 The default directory for decompressed folders is */usr/local/share/gmapdb/*, otherwise you must specify the actual path using the *mapExome.py* options ```-M``` and ```-H```, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
 
