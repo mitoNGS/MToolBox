@@ -49,7 +49,7 @@ usage()
 
 version()
 {
-	VERSION=$(echo "MToolBox v0.3.2")
+	VERSION=$(echo "MToolBox v0.3.3")
 	echo $VERSION
 }
 
@@ -139,9 +139,9 @@ done
 # define reference
 if [[ $ref == 'RCRS' ]]
 then 
-	export mtdb_fasta=chrRCRS.fa
+	export mtdb_fasta=chrM.fa
 	export hg19_fasta=hg19RCRS.fa
-	export mtdb=chrRCRS
+	export mtdb=chrM
 	export humandb=hg19RCRS
 elif [[ $ref != 'RSRS' ]]
 then
