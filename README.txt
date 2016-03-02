@@ -13,19 +13,13 @@ SYSTEM REQUIREMENTS
 
 - UNIX-based OS
 - Python2.7 (www.python.org)
-- samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options)
+- samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options). Please be aware that the current version of MToolBox does not support samtools versions >= 1.0. 
 - MUSCLE (http://www.drive5.com/muscle/downloads.htm) installed in /usr/local/bin/muscle (otherwise you should specify the actual path using mt-classifier.py options)
 - GSNAP (https://github.com/julian-gehring/GMAP-GSNAP; newest version of GMAP-GSNAP at http://research-pub.gene.com/gmap/) installed in /usr/local/bin/gsnap (otherwise you must specify the actual path using mapExome.py options). 
-  WARNING: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2013-09-11. We cannot guarantee that such indexes will work with later versions of GSNAP and we strongly recommend to regenerate the indexes with the aligner version the user may want to choose.
+  WARNING: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2015-12-31.v7. We cannot guarantee that such indexes will work with later or previous versions of GSNAP and we strongly recommend to regenerate the indexes with the aligner version the user may want to choose.
 
-  To generate GMAP/GSNAP database you can visit this link http://research-pub.gene.com/gmap/src/README or use the build_gsnap_index.sh script provided within the mitoNGS repo, to help the MToolBox users building GMAP/GSNAP databases. To check the usage of the script please type:
-  
-  build_gsnap_index.sh -h
- 
-  Usage example to build the GMAP/GSNAP database in the current working directory:
-  
-  build_gsnap_index.sh -D . -n hg19RCRS -f hg19RCRS.fa -k 12 
-  
+WARNING: due to the file size of the nuclear GSNAP databases generated with the GSNAP version 2015-12-31.v7 (~20GB) we were unable to upload the hg19RCRS/hg19RSRS databases to the MToolBox sourceforge webpage at https://sourceforge.net/projects/mtoolbox/files/genome_index/. MToolBox users may follow the guidelines to build GSNAP databases available at https://github.com/mitoNGS/MToolBox/blob/master/how_to_build_db.md.
+Further information about how to to generate GMAP/GSNAP database can be found at the http://research-pub.gene.com/gmap/src/README
 
 MTOOLBOX SCRIPTS
 ================
@@ -56,8 +50,8 @@ List of fasta files and index .fai files in the genome_fasta folder (https://sou
 - chrRSRS.fa.fai
 - hg19RSRS.fa
 - hg19RSRS.fa.fai
-- chrRCRS.fa
-- chrRCRS.fa.fai
+- chrM.fa
+- chrM.fa.fai
 - hg19RCRS.fa
 - hg19RCRS.fa.fai
 
@@ -65,7 +59,9 @@ The default directory for these files is /usr/local/share/genomes/, otherwise yo
 
 List of compressed files of gsnap indexes in the genome_index folder (https://sourceforge.net/projects/mtoolbox/files/genome_index/):
 - chrRSRS.tar.gz
-- hg19RSRS.tar.gz
+- hg19RSRS.tar.gz [currently unavailable]
+- chrM.tar.gz
+- hg19RCRS.tar.gz [currently anavailable]
 
 The default directory for decompressed folders is /usr/local/share/gmapdb/, otherwise you must specify the actual path using the mapExome.py options -M and -H, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
 
@@ -115,7 +111,7 @@ Most relevant options:
 
 -o (MToolBox.sh) to set the specific path to the output folder.
 
--l (MToolBox.sh) to indicate a list of samples (without path) to be analyzed. Comma separated file names or a "list.txt" file in the input folder should be provided. 
+-l (MToolBox.sh) . Indicate a list of file names to be analyzed. Argument of the option can be a list of comma separated file names or a txt file with one file name per line. 
 
 -X (MToolBox.sh) to enable extraction of mitochondrial reads from the input file, avoiding realignment of all the reads. Useful only for BAM input files
 
@@ -283,6 +279,33 @@ https://groups.google.com/forum/?hl=IT#!forum/mtoolbox-users
 
 CHANGELOGS
 ==========
+
+March 1, 2016
+=================
+Update to MToolBox version 0.3.3 with the following change:
+
+- GSNAP databases available at
+  https://sourceforge.net/projects/mtoolbox/files/genome_index/
+ generated with the GSNAP version 2013-09-11 have been removed, due to an
+inconsistency betw
+een the mitochodrial reference rCRS sequence fasta and index database name.
+New GSNAP nuclea
+r-mitochondrial and mitochondrial databases have been uploaded, generated with
+the GSNAP ver
+sion 2015-12-31.v7. Please, be aware that these databases might not be
+compatible with previ
+ous GSNAP versions.
+
+-  Mitochondrial rCRS reference fasta and GSNAP database default names used in
+   the MToolBox.
+sh script were changed as following:
+
+chrRCRS.fa --> chrM.fa
+chrRCRS (GSNAP db) --> chrM
+
+to reflect changes in GSNAP databases uploaded at
+https://sourceforge.net/projects/mtoolbox/
+files/genome_index/.
 
 September 21, 2015
 ==================
