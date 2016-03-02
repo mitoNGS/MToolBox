@@ -22,7 +22,7 @@ The MToolBox pipeline includes:
   build_gsnap_index.sh -D . -n hg19RCRS -f hg19RCRS.fa -k 12 
   ```
 
-- samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options). **Please be aware that the current version of MToolBox is not supporting samtools versions equal or greater than 1.0**
+- samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options). **Please be aware that the current version of MToolBox does not support samtools versions >= 1.0**
 - MUSCLE (http://www.drive5.com/muscle/downloads.htm) installed in */usr/local/bin/muscle* (otherwise you should specify the actual path using mt-classifier.py options)
 
 
