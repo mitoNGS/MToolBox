@@ -284,28 +284,15 @@ March 1, 2016
 =================
 Update to MToolBox version 0.3.3 with the following change:
 
-- GSNAP databases available at
-  https://sourceforge.net/projects/mtoolbox/files/genome_index/
- generated with the GSNAP version 2013-09-11 have been removed, due to an
-inconsistency betw
-een the mitochodrial reference rCRS sequence fasta and index database name.
-New GSNAP nuclea
-r-mitochondrial and mitochondrial databases have been uploaded, generated with
-the GSNAP ver
-sion 2015-12-31.v7. Please, be aware that these databases might not be
-compatible with previ
-ous GSNAP versions.
+- GSNAP databases available at https://sourceforge.net/projects/mtoolbox/files/genome_index/ generated with the GSNAP version 2013-09-11 have been removed, due to an inconsistency between the mitochodrial reference rCRS sequence fasta and index database name.
+New GSNAP nuclear-mitochondrial and mitochondrial databases have been uploaded, generated with the GSNAP version 2015-12-31.v7. Please, be aware that these databases might not becompatible with previous GSNAP versions.
 
--  Mitochondrial rCRS reference fasta and GSNAP database default names used in
-   the MToolBox.
-sh script were changed as following:
+-  Mitochondrial rCRS reference fasta and GSNAP database default names used in the MToolBox.sh script were changed as following:
 
 chrRCRS.fa --> chrM.fa
 chrRCRS (GSNAP db) --> chrM
 
-to reflect changes in GSNAP databases uploaded at
-https://sourceforge.net/projects/mtoolbox/
-files/genome_index/.
+to reflect changes in GSNAP databases uploaded at https://sourceforge.net/projects/mtoolbox/files/genome_index/.
 
 September 21, 2015
 ==================
