@@ -8,7 +8,7 @@
 
 The current MToolBox pipeline versions only support samtools versions lower than 1. Please visit [this site](http://sourceforge.net/projects/samtools/files/samtools/), to get samtools versions lower than 1 (i.e. 0.1.xx) 
 
-If gsnap is not installed, please look at the [gsnap website](http://research-pub.gene.com/gmap/), to get the latest or one of the previous GSNAP versions 
+If GSNAP is not installed, please have a look at the [gsnap website](http://research-pub.gene.com/gmap/), to get the latest or one of the previous GSNAP versions 
 
 2) Create the directories where you want to place your GSNAP database and fasta indexes:
 
@@ -16,7 +16,7 @@ If gsnap is not installed, please look at the [gsnap website](http://research-pu
 
 ```mkdir genomes```
 
-3) For user's convenience, fasta files of rCRS/RSRS mitochondrial reference sequence and nuclear reference sequence (GRCh37/hg19) can be dowloaded from the [MToolBox sourceforge page](https://sourceforge.net/projects/mtoolbox/). If you have wget installed you can do:
+3) For user's convenience, fasta files of rCRS/RSRS mitochondrial reference sequence and nuclear reference sequence (GRCh37/hg19) can be dowloaded from the [MToolBox sourceforge page](https://sourceforge.net/projects/mtoolbox/). If you have wget alreadt installed, you can do:
 
 ```
 cd genomes
@@ -53,9 +53,9 @@ and remove tar.gz files
 
 ```cd ..```
 
-With this command line you are using the default kmer length (15). To choose the best kmer length for your machine memory requirements, please look at the GMAP/GSNAP [readme here](http://research-pub.gene.com/gmap/src/README)
+With this command line you are using the default kmer length (15). To choose the best kmer length for your machine memory requirements, please have a look at the GMAP/GSNAP [readme](http://research-pub.gene.com/gmap/src/README)
 
-**NOTE ON GSNAP DATABASE FOR MTOOLBOX**: If you do not want to use the mitochondrial fasta sequences available from the [MToolBox sourceforge page](https://sourceforge.net/projects/mtoolbox/files/) and prefer to use your mitochondrial fasta reference, please be sure to use the **same** mitochondrial chromosome name of the fasta header (e.g. *>chrMT*) as mitochondrial GSNAP database name (*chrMT* in this example)
+**NOTE ON GSNAP DATABASE FOR MTOOLBOX**: If you do not want to use the mitochondrial fasta sequences available from the [MToolBox sourceforge page](https://sourceforge.net/projects/mtoolbox/files/genome_fasta/) and prefer to use your mitochondrial fasta reference, please be sure to use the **same** mitochondrial chromosome name of the fasta header (e.g. *>chrMT*) as mitochondrial GSNAP database name (*chrMT* in this example)
 
 5) Create fasta index with samtools
 
