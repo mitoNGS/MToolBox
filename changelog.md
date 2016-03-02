@@ -6,8 +6,9 @@ Update to MToolBox version 0.3.3 with the following change:
 
 -  Mitochondrial rCRS reference fasta and GSNAP database default names used in the MToolBox.sh script were changed as following:
 
-chrRCRS.fa --> chrM.fa
-chrRCRS (GSNAP db) --> chrM
+`chrRCRS.fa` --> `chrM.fa`
+
+`chrRCRS` (GSNAP db) --> `chrM`
 
 to reflect changes in GSNAP databases uploaded at https://sourceforge.net/projects/mtoolbox/files/genome_index/. 
 
