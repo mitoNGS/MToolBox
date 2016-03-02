@@ -55,7 +55,7 @@ and remove tar.gz files
 
 With this command line you are using the default kmer length (15). To choose the best kmer length for your machine memory requirements, please look at the GMAP/GSNAP [readme here](http://research-pub.gene.com/gmap/src/README)
 
-**NOTE ON GSNAP DATABASE FOR MTOOLBOX**: If you do not want to use your own mitochondrial fasta sequnces, please make sure to use the **same** mitochondrial chromosome name of the fasta header (e.g. *>chrMT*) as mitochondrial GSNAP database name (*chrMT* in this example)
+**NOTE ON GSNAP DATABASE FOR MTOOLBOX**: If you do not want to use the mitochondrial fasta sequences available from the [MToolBox sourceforge page](https://sourceforge.net/projects/mtoolbox/files/) and prefer to use your mitochondrial fasta reference, please be sure to use the **same** mitochondrial chromosome name of the fasta header (e.g. *>chrMT*) as mitochondrial GSNAP database name (*chrMT* in this example)
 
 5) Create fasta index with samtools
 
