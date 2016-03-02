@@ -13,7 +13,7 @@ The MToolBox pipeline includes:
 - GSNAP (https://github.com/julian-gehring/GMAP-GSNAP; newest version of GMAP-GSNAP at http://research-pub.gene.com/gmap/) installed in */usr/local/bin/gsnap* (otherwise you must specify the actual path using mapExome.py options). 
   **WARNING: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2015-12-31.v7. We cannot guarantee that such indexes will work with previous or later versions of GSNAP and we strongly recommend to regenerate the indexes with the aligner version the user may want to choose**.
 
-  To generate GMAP/GSNAP database you can visit this link http://research-pub.gene.com/gmap/src/README or use the *build_gsnap_index.sh* script provided within the mitoNGS repo, to help the MToolBox users building GMAP/GSNAP databases. To check the usage of the script please type:
+**WARNING: due to the file size of the nuclear GSNAP databases generated with the GSNAP version 2015-12-31.v7 (~20GB) we were unable to upload the hg19RCRS/hg19RSRS databases to the [MToolBox sourceforge webpage] (https://sourceforge.net/projects/mtoolbox/files/genome_index/). MToolBox users may follow the guidelines to build GSNAP databases available [here](https://github.com/mitoNGS/MToolBox/blob/master/how_to_build_db.md) or use the *build_gsnap_index.sh* script provided within the mitoNGS repo, to help the MToolBox users building GMAP/GSNAP databases**. To check the usage of the script please type:
   ```
   build_gsnap_index.sh -h
  ```
@@ -21,11 +21,10 @@ The MToolBox pipeline includes:
   ```
   build_gsnap_index.sh -D . -n hg19RCRS -f hg19RCRS.fa -k 12 
   ```
-or follow the guidelines provided [here](https://github.com/mitoNGS/MToolBox/blob/master/how_to_build_db.md). 
+Further information about how to to generate GMAP/GSNAP database can be found at the [GSNAP readme] (http://research-pub.gene.com/gmap/src/README).
 
 - samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options). **Please be aware that the current version of MToolBox does not support samtools versions >= 1.0**
 - MUSCLE (http://www.drive5.com/muscle/downloads.htm) installed in */usr/local/bin/muscle* (otherwise you should specify the actual path using mt-classifier.py options)
-
 
 ###MTOOLBOX SCRIPTS
 
