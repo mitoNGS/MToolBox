@@ -1,6 +1,6 @@
 ###How to build GSNAP databases and fasta index used by MToolBox
 
-1) Be sure you have GSNAP and samtools installed on your machine:
+1) Be sure to have GSNAP and samtools installed on your machine:
 
 ```which gsnap```
 
