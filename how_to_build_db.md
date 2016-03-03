@@ -16,7 +16,7 @@ If GSNAP is not installed, please have a look at the [gsnap website](http://rese
 
 ```mkdir genomes```
 
-3) For user's convenience, fasta files of rCRS/RSRS mitochondrial reference sequence and nuclear reference sequence (GRCh37/hg19) can be dowloaded from the [MToolBox sourceforge page](https://sourceforge.net/projects/mtoolbox/). If you have wget alreadt installed, you can do:
+3) For user's convenience, fasta files of rCRS/RSRS mitochondrial reference sequence and nuclear reference sequence (GRCh37/hg19) can be dowloaded from the [MToolBox sourceforge page](https://sourceforge.net/projects/mtoolbox/). If you have wget already installed:
 
 ```
 cd genomes
