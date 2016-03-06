@@ -32,6 +32,7 @@ usage()
 		-l	list of samples to be analyzed. [comma separated sample names or file with txt|tsv|lst extension]
 		-X	extraction of mitochondrial reads from bam file, avoiding realignment of all bam file input
 		-m	options for mapExome script [see mapExome.py -h for details]
+		-s	full path to samtools [default: /usr/local/bin/samtools]
 		-M	remove duplicate reads with PicardTools MarkDuplicates after mapExome [default: no]
 		-I	perform local realignment of reads on known indels with GATK IndelRealigner [default: no]
 		-a	options for assembleMTgenome script [see assembleMTgenome.py -h for details]
@@ -79,7 +80,7 @@ export samtoolsexe=/usr/local/bin/samtools
 export muscleexe=/usr/local/bin/muscle
 
 
-while getopts ":hva:c:f:p:o:i:l:m:r:j:MIX" opt; do
+while getopts ":hva:c:f:p:o:i:l:m:s:r:j:MIX" opt; do
 	case $opt in
 		h)
 			usage
@@ -112,6 +113,9 @@ while getopts ":hva:c:f:p:o:i:l:m:r:j:MIX" opt; do
 			;;
 		m)
 			mapExome_OPTS=$OPTARG
+			;;
+		s)
+			samtools_path=$OPTARG
 			;;
 		r)
 			ref=$(echo $OPTARG | tr '[:lower:]' '[:upper:]')
@@ -150,20 +154,6 @@ then
 fi
 
 
-# The following lines are commented since the involved parameters
-# are specified elsewhere
-#
-# Set thresholds for hf and tail
-#export hfthreshold=0.8
-#export taillength=7
-#
-
-#if (( $taillength < 5 ))
-#then
-#	echo "Minumum tail length required >= 5. Tail length will be set to 5."
-#	export taillength=5
-#i
-
 # Check python version (2.7 required)
 echo ""
 echo "Check python version... (2.7 required)"
@@ -192,6 +182,15 @@ check_files.py \
 rc=$?
 if [[ $rc != 0 ]] ; then
 	exit $rc
+fi
+
+
+if [ "$samtools_path-" == "-" ]; 
+then
+	echo "samtools path is $samtoolsexe"
+else
+	echo "samtools path is $samtools_path"
+	samtoolsexe=$samtools_path
 fi
 
 # Function definition
@@ -418,7 +417,9 @@ fastq_input()
 	echo "##### ASSEMBLING MT GENOMES WITH ASSEMBLEMTGENOME..."
 	echo ""
 	echo "WARNING: values of tail < 5 are deprecated and will be replaced with 5"
-	echo ""	
+	echo ""
+	echo "samtools path is $samtoolsexe"
+	echo "for i in $(ls -d OUT_*); do outhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg19_fasta} -s ${samtoolsexe} -FCP ${assembleMTgenome_OPTS}; cd ..; done > logassemble.txt "
 	for i in $(ls -d OUT_*); do outhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg19_fasta} -s ${samtoolsexe} -FCP ${assembleMTgenome_OPTS}; cd ..; done > logassemble.txt
 	echo ""
 	echo "##### GENERATING VCF OUTPUT..."

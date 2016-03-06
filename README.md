@@ -118,6 +118,8 @@ MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a
 
 ```-r``` (*MToolBox.sh*) to choose the mitochondrial reference sequence for read mapping. Please note that the selected reference sequence will be used as reference for the VCF output file. Allowed values are RCRS and RSRS. Default is RSRS.
 
+```-s``` (*MToolBox.sh*) to set the full path to samtools if not installed in ```/usr/local/bin/```
+
 ```-M``` (*MToolBox.sh*) to enable duplicate read removal by MarkDuplicates.
 
 ```-I``` (*MToolBox.sh*) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar.
@@ -152,6 +154,13 @@ MToolBox.sh -i bam -l mysample1.bam,mysample2.bam -p /path/to/input/folder/ -X -
 ```
 this command will run MToolBox on 2 bam files (-i bam -l mysample1.bam,mysample2.bam) placed in the input folder (-p /path/to/input/folder/). Only reads previously mapped to the mitochondrial genome will be considered in the analysis (-X), avoiding the re-mapping of all the reads cointained in the input files. Only variants with heteroplasmic fraction HF>0.9 will be reported in the FASTA consensus sequence (-a "-z 0.9"). All the results will be placed in the specified output folder (-o /path/to/output/folder/).
 
+3) Usage of rCRS as reference sequence and database/fasta/executables installed in a user-defined directory
+
+If gsnap (and related databases), samtools, muscle executables and fasta reference sequences are not installed in the default directory used by MToolBox (```/usr/local/bin/```), here is an example of the command line to run MToolBox, using the options to point to the correct gsnap (executable and databases), samtools, muscle executables and fasta sequence locations (in the following example: bam file is used as input, rCRS is used as reference sequence, instead of the default RSRS reference sequence):
+
+```
+MToolBox.sh -i bam -m "-g /path/to/gsnap/gsnap -D /path/to/genome_index/ -M chrM -H hg19RCRS " -a "-r /path/to/genome_fasta/ -f chrM.fa -a hg19RCRS.fa -s /path/to/samtools/samtools " -c "-m /path/to/muscle/muscle" -s /path/to/samtools/samtools
+```
 
 ###MTOOLBOX OUTPUTS
 

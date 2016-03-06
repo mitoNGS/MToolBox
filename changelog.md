@@ -1,4 +1,9 @@
-###CHANGELOG - 1 March 206
+###CHANGELOG - 6 March 2016
+
+- an error in the samtools path specification has been fixed in the MToolBox.sh script. From now on the users MUST specify the full path to samtools, if they are not installed in /usr/local/bin/ default directory, using the MToolBox.sh `-s` option. We apologize with the MToolBox users for this inconvenience.
+
+
+###CHANGELOG - 1 March 2016
 
 Update to MToolBox version 0.3.3 with the following change:
 
