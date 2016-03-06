@@ -159,7 +159,7 @@ this command will run MToolBox on 2 bam files (-i bam -l mysample1.bam,mysample2
 If gsnap (and related databases), samtools, muscle executables and fasta reference sequences are not installed in the default directory used by MToolBox (```/usr/local/bin/```), here is an example of the command line to run MToolBox, using the options to point to the correct gsnap (executable and databases), samtools, muscle executables and fasta sequence locations (in the following example: bam file is used as input, rCRS is used as reference sequence, instead of the default RSRS reference sequence):
 
 ```
-MToolBox.sh -i bam -m "-g /path/to/gsnap/gsnap -D /path/to/genome_index/ -M chrM -H hg19RCRS " -a "-r /path/to/genome_fasta/ -f chrM.fa -a hg19RCRS.fa -s /path/to/samtools/samtools " -c "-m /path/to/muscle/muscle" -s /path/to/samtools/samtools
+MToolBox.sh -i bam -r RCRS -m "-g /path/to/gsnap/gsnap -D /path/to/genome_index/ -M chrM -H hg19RCRS " -a "-r /path/to/genome_fasta/ -f chrM.fa -a hg19RCRS.fa -s /path/to/samtools/samtools " -c "-m /path/to/muscle/muscle" -s /path/to/samtools/samtools
 ```
 
 ###MTOOLBOX OUTPUTS
