@@ -1,6 +1,7 @@
 #!/bin/bash
 
 
+
 check_exit_status()
 {
 rc=$?
@@ -113,20 +114,24 @@ done
 setup=${mtoolbox_folder}/setup.sh
 
 if [ -f "$setup" ];then
-	echo "setting up MToolBox environmental variables..."
+	echo -e '\nsetting up MToolBox environmental variables...'
 	source $setup
+	echo -e '...done\n'
 else
-	echo -e "setup.sh file not found. Setting MToolBox environment sourcing conf.sh file\n"
+	echo -e '\nsetup.sh file not found. Setting MToolBox environment sourcing conf.sh file\n'
 fi
 
 #MANDATORY conf.sh file to set up MToolBox variables
+#current_dir=$(pwd)
+#echo $current_dir 
 
 if [ "$config-" == "-" ];then
-	echo -e "config.sh file not found. Please provide $config file before running MToolBox.\n"
+	echo -e '\nconfig.sh file not found. Please provide a config.sh file before running MToolBox.\n'
 	exit 1
 else
-	echo "setting up MToolBox variables in $config ..."
+	echo -e '\nsetting up MToolBox variables in $config ...'
 	source $config
+	echo -e '...done\n'
 fi
 
 # define reference
@@ -227,10 +232,10 @@ fastq_input()
 		list_files=$(echo $list | grep 'txt\|tsv\|lst')
 		if [ "$list_files" != "" ]; then	
 			#samples in list.txt
-			sampleIDs=$(cat $list | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')	
+			sampleIDs=$(cat $list | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')
 		else
 		#list of files defined
-			sampleIDs=$(echo "${list}" | sed 'y/,/\n/' | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')	
+			sampleIDs=$(echo "${list}" | sed 'y/,/\n/' | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')
 		fi
 		echo ""
 	fi
@@ -481,11 +486,13 @@ fasta_input()
 	echo "Haplogroup predictions based on RSRS Phylotree build 16"
 	echo "SampleID,Best predicted haplogroup(s)" > ${hpbest}
 	for i in $(ls -d OUT_*); do inhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; mt-classifier.py -i ${inhandle}-contigs.fasta -s ${hpbest} -b ${inhandle} -m ${muscleexe} ${mt_classifier_OPTS}; cd ..; done
+	check_exit_status
 
 	# Functional annotation of variants
 	#for i in $(ls -d OUT_*); do cd $i; variants_functional_annotation.py $hpbest ; cd ..; done
 	variants_functional_annotation.py #${hpbest}
 	# Collect all prioritized variants from all the samples
+	check_exit_status
 	for i in $(ls -d OUT_*/*annotation.csv); do tail -n+2 $i | awk 'BEGIN {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") {print $1"\t"$2"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14"\t"$15"\t"$16"\t"$17"\t"$30"\t"$31"\t"$32"\t"$33"\t"$34"\t"$35"\t"$36"\t"$37"\t"$38"\t"$39"\t"$40"\t"$41"\t"$42"\t"$43"\t"$44}}' >> priority_tmp.txt; done
 	for i in $(ls -d OUT_*/*annotation.csv); do tail -n+2 $i | awk 'BEGIN {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") count++} END {print $1"\t"NR"\t"count}' >> variant_number.txt; done
 	prioritization.py priority_tmp.txt
@@ -528,7 +535,7 @@ fasta_input()
 	then
 		echo -e "Selected input format\t$(echo "$input_type")\nReference sequence used for haplogroup prediction\tRSRS\n\n==============================\n\n$(cat summary_tmp.txt)\n\n==============================\n\nTotal number of prioritized variants\t$(awk 'END{print NR-1}' prioritized_variants.txt)" > summary_`date +%Y%m%d_%H%M%S`.txt
 	else		
-		echo -e "Selected input format\t$(echo "$input_type")\nReference sequence chosen for mtDNA read mapping\t$(echo "$ref")\nReference sequence used for haplogroup prediction\tRSRS\nDuplicate read removal?\t$(echo "$UseMarkDuplicates")\nLocal realignment around known indels?\t$(echo "$UseIndelRealigner")\nMinimum distance of indels from read end\t$(echo "$REdistance")\nHeteroplasmy threshold for FASTA consensus sequence\t$(echo "$HFthreshold")\n\nWARNING: If minimum distance of indels from read end is < 5, it is deprecated and replaced with 5\n\n==============================\n\n$(cat summary_tmp.txt | sed "s/thrsld/$HFthreshold/g")\n\n==============================\n\nTotal number of prioritized variants\t$(awk 'END{print NR-1}' prioritized_variants.txt)"  >  summary_`date +%Y%m%d_%H%M%S`.txt
+		echo -e "Selected input format\t$(echo "$input_type")\nReference sequence chosen for mtDNA read mapping\t$(echo "$ref")\nReference sequence used for haplogroup prediction\tRSRS\nDuplicate read removal?\t$(echo "$UseMarkDuplicates")\nLocal realignment around known indels?\t$(echo "$UseIndelRealigner")\nMinimum distance of indels from read end\t$(echo "$REdistance")\nHeteroplasmy threshold for FASTA consensus sequence\t$(echo "$HFthreshold")\n\nWARNING: If minimum distance of indels from read end set < 5, it has been replaced with 5\n\n==============================\n\n$(cat summary_tmp.txt | sed "s/thrsld/$HFthreshold/g")\n\n==============================\n\nTotal number of prioritized variants\t$(awk 'END{print NR-1}' prioritized_variants.txt)"  >  summary_`date +%Y%m%d_%H%M%S`.txt
 	fi	
 	rm summary_tmp.txt
 	echo ""
@@ -590,7 +597,7 @@ bam_input()
 	then
 		bam_samples=$(ls *.bam | awk 'BEGIN{FS="."}{print $1}')
 	else
-		list_files=$( echo $list | grep 'txt\|tsv\|lst\|')
+		list_files=$( echo $list | grep 'txt\|tsv\|lst')
 		if [ "$list_files" != "" ]; then
 			#samples in list.txt
 			bam_samples=$(cat $list | awk 'BEGIN{FS="."}{print $1}')
