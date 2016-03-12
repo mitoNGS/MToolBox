@@ -458,7 +458,7 @@ for i in contigs:
 					dict_seq[p_info[0]] = p_info[1][0] # check THIS
 				elif p_info[-1] == 'ins':
 					# in the consensus, the ins is reported as the nuc of pos of the ins + the inserted bases
-					dict_seq[p_info[0]+'.1'] = p_info[1][0][1:]
+					dict_seq[p_info[0]] = p_info[1][0]
 					# alternatively it could be
 					# dict_seq[p_info[0]] = p_info[1][0]
 				elif p_info[-1] == 'del':
