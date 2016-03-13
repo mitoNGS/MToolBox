@@ -1,6 +1,8 @@
 ###CHANGELOG - 12 March 2016
 
-- a bug in the inclusions of *insertions*/*deletions* into the consensus fasta sequence has been fixed in the assembleMTgenome.py.WARNING: We discourage MToolBox users to set the HF threshold (using the `assembleMTgenome.py -z` parameter) to values <0.5 since this might evidence some ambiguities between low heteroplasmy insertions / deletions and mismatches that cannot handled by IUPAC ambiguity encoding. In this case, we decided to *arbitrary* report in the fasta consensus sequence:
+- a bug in the inclusions of *insertions*/*deletions* into the consensus fasta sequence has been fixed in the `assembleMTgenome.py -z` option.
+
+WARNING: We discourage MToolBox users to set the HF threshold (using the `assembleMTgenome.py -z` parameter) to values <0.5 since this might evidence some ambiguities between low heteroplasmy insertions / deletions and mismatches that cannot handled by IUPAC ambiguity encoding. In this case, we decided to *arbitrary* report in the fasta consensus sequence:
 -the *insertion* event, with an ambiguity of three mutations types (insertion/deletion/mismatch )
 -the *deletion* event, with an ambiguity of two mutations types (deletion and mismatch)
 
