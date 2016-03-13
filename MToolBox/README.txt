@@ -314,6 +314,17 @@ to reflect changes in GSNAP databases uploaded at
 https://sourceforge.net/projects/mtoolbox/
 files/genome_index/.
 
+March 12, 2016
+==================
+
+- a bug in the inclusions of insertions into the consensus fasta sequence has  been fixed in the assembleMTgenome.py.WARNING: We discourage MToolBox users to set the HF threshold (using the `assembleMTgenome.py -z` parameter) to values <0.5 since this might evidence some ambiguities between low heteroplasmy insertions / deletions and mismatches that cannot handled by IUPAC ambiguity encoding. In this case, we decided to *arbitrary* report in the fasta consensus sequence:
+
+-the *insertion* event, with an ambiguity of three mutations types (insertion/deletion/mismatch )
+-the *deletion* event, with an ambiguity of two mutations types (deletion and mismatch) 
+
+
+We would also like to remind the MToolBox users that the consensus fasta file (and related `annotation.csv` file) might not report the full set of mitochondrial insertions and deletions found in the sample under study if they follow below the chosen HF, due to the limit imposed by the IUPAC ambiguity encoding. However, the full set of variations found is still available in the `VCF_file.vcf`, disregarding of their HF.
+
 September 21, 2015
 ==================
 

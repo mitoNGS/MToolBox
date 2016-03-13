@@ -450,19 +450,32 @@ for i in contigs:
 		# of the consensus information
 		#
 		#print "CONSENSUS SINGLE: ", consensus_single
-		for p_info in consensus_single:
-			if p_info[0] in dict_seq.keys():
-				#print "P_INFO: ", p_info
-				# maybe I don't need to consider mismatch but I'll do anyway
-				if p_info[-1] == 'mism':
-					dict_seq[p_info[0]] = p_info[1][0] # check THIS
-				elif p_info[-1] == 'ins':
-					# in the consensus, the ins is reported as the nuc of pos of the ins + the inserted bases
-					dict_seq[p_info[0]] = p_info[1][0]
-					# alternatively it could be
-					# dict_seq[p_info[0]] = p_info[1][0]
-				elif p_info[-1] == 'del':
-					for deleted_pos in p_info[1]:
+		dict_consensus_single={}
+		for position in consensus_single:
+			if position[0] not in dict_consensus_single:
+				dict_consensus_single[position[0]]=[position[1:]]
+			else:
+				dict_consensus_single[position[0]].append(position[1:])
+		for position in dict_consensus_single:
+			if len(dict_consensus_single[position])>1:
+				mut_type=map(lambda x:x[-1], dict_consensus_single[position])
+				if 'ins' in mut_type:
+						for item in dict_consensus_single[position]:
+							if item[-1]=='ins':
+								dict_consensus_single[position]=item
+				elif 'ins' not in mut_type and 'del' in mut_type:
+						for item in dict_consensus_single[position]:
+							if item[-1]=='del':
+								dict_consensus_single[position]=item
+						
+		for p_info in dict_consensus_single:
+			if p_info in dict_seq.keys():
+				if dict_consensus_single[p_info][-1] == 'mism':
+					dict_seq[p_info] = dict_consensus_single[p_info][0][0] # check THI
+				elif dict_consensus_single[p_info][-1] == 'ins':
+					dict_seq[p_info] = dict_consensus_single[p_info][0][0]
+				elif dict_consensus_single[p_info][-1] == 'del':
+					for deleted_pos in dict_consensus_single[p_info][0][0]:
 						del(dict_seq[deleted_pos])
 		# sort positions in dict_seq and join to have the sequence
 		contig_seq = ''
