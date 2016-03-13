@@ -4,7 +4,8 @@
 
 WARNING: We discourage MToolBox users to set the HF threshold (using the `assembleMTgenome.py -z` parameter) to values <0.5 since this might evidence some ambiguities between low heteroplasmy insertions / deletions and mismatches that cannot be handled by IUPAC ambiguity encoding. In this case, we decided to *arbitrarily* report in the fasta consensus sequence:
 
--the *insertion* event, with an ambiguity of three mutations types (insertion/deletion/mismatch )
+-the *insertion* event, with an ambiguity of three mutations types (insertion/deletion/mismatch)
+
 -the *deletion* event, with an ambiguity of two mutations types (deletion and mismatch)
 
 We would also like to remind the MToolBox users that the consensus fasta file (and related `annotation.csv` file) might not report the full set of mitochondrial insertions and deletions found in the sample under study if they follow below the chosen HF, due to the limit imposed by the IUPAC ambiguity encoding. However, the full set of variations found is still available in the `VCF_file.vcf`, disregarding of their HF.
