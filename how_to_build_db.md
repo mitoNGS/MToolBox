@@ -21,23 +21,17 @@ If GSNAP is not installed, please have a look at the [gsnap website](http://rese
 ```
 cd genomes
 
-wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/chrM.fa.tar.gz
+wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/chrM.fa.gz
 
-wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg19RCRS.fa.tar.gz
+wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg19RCRS.fa.gz
 
-wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/chrRSRS.fa.tar.gz
+wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/chrRSRS.fa.gz
 
-wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg19RSRS.fa.tar.gz
+wget http://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg19RSRS.fa.gz
 ```
 then decompress files...
 
-```for i in `ls *.tar.gz` ; do tar xvzf $i; done```
-
-and remove tar.gz files
-
-```rm *tar.gz```
-
-```cd ..```
+```for i in `ls *.gz` ; do gunzip $i; done```
 
 4) Generate the GSNAP databases in the gmapdb folder by doing (time consuming step):
 
