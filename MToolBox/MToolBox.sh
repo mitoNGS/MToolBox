@@ -114,7 +114,7 @@ done
 setup=${mtoolbox_folder}/setup.sh
 
 if [ -f "$setup" ];then
-	echo -e '\nsetting up MToolBox environmental variables...'
+	echo -e '\nsetting up MToolBox environment variables...'
 	source $setup
 	echo -e '...done\n'
 else
@@ -129,7 +129,7 @@ if [ "$config-" == "-" ];then
 	echo -e '\nconfig.sh file not found. Please provide a config.sh file before running MToolBox.\n'
 	exit 1
 else
-	echo -e '\nsetting up MToolBox variables in $config ...'
+	echo -e '\nsetting up MToolBox variables in "${config}" ...'
 	source $config
 	echo -e '...done\n'
 fi
@@ -613,8 +613,16 @@ bam_input()
 		if [[ "${output_name}" ]]
 		#output folder defined
 		then
-			for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; samtools sort $i.bam ${output_name}/$i.sorted; samtools index ${output_name}/$i.sorted.bam; samtools view -b ${output_name}/$i.sorted.bam MT M chrMT chrM > ${output_name}/$i.MT.bam; echo "Done."; done
-			echo ""
+			if [ "$samtools_version" -lt 1 ]
+			then
+				echo "Using Samtools version 0x..."
+				for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; ${samtoolsexe} sort $i.bam ${output_name}/$i.sorted; ${samtoolsexe} index ${output_name}/$i.sorted.bam; ${samtoolsexe} view -b ${output_name}/$i.sorted.bam MT M chrMT chrM > ${output_name}/$i.MT.bam; echo "Done."; done
+				echo ""
+			else
+				echo "Using Samtools version 1x..."
+				for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; ${samtoolsexe} sort $i.bam -o ${output_name}/$i.sorted.bam; ${samtoolsexe} index ${output_name}/$i.sorted.bam; ${samtoolsexe} view -b ${output_name}/$i.sorted.bam MT M chrMT chrM > ${output_name}/$i.MT.bam; echo "Done."; done
+				echo ""
+			fi
 			for i in $(ls ${output_name}/*.MT.bam); do echo "Converting bam to fastq..." ${i}; n=$(echo $i | awk 'BEGIN{FS="."}{print $1}'); java -Xmx4g \
 				-Djava.io.tmpdir=`pwd`/tmp \
 				-jar ${externaltoolsfolder}SamToFastq.jar \
@@ -632,8 +640,16 @@ bam_input()
 			rm -r ${output_name}/processed_bam
 		else
 		#no output folder defined
-			for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; samtools sort $i.bam $i.sorted; samtools index $i.sorted.bam; samtools view -b $i.sorted.bam MT M chrMT chrM > $i.MT.bam; echo "Done."; done
-			echo ""	
+			if [ "$samtools_version" -lt 1 ]
+			then
+				echo 'Using Samtools version 0x...'
+				for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; ${samtoolsexe} sort $i.bam $i.sorted; ${samtoolsexe} index $i.sorted.bam; ${samtoolsexe} view -b $i.sorted.bam MT M chrMT chrM > $i.MT.bam; echo "Done."; done
+				echo ""	
+			else
+				echo 'Using Samtools version 1x...'
+				for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; ${samtoolsexe} sort $i.bam -o $i.sorted.bam; ${samtoolsexe} index $i.sorted.bam; ${samtoolsexe} view -b $i.sorted.bam MT M chrMT chrM > $i.MT.bam; echo "Done."; done
+                                echo ""
+			fi
 			for i in $(ls *.MT.bam); do echo "Converting bam to fastq..." ${i}; n=$(echo $i | awk 'BEGIN{FS="."}{print $1}'); java -Xmx4g \
 				-Djava.io.tmpdir=`pwd`/tmp \
 				-jar ${externaltoolsfolder}SamToFastq.jar \

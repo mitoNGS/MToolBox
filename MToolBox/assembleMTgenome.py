@@ -122,9 +122,9 @@ for o,a in opts:
 # DS
 mtdnafile=fasta_dir+mtdna_fasta
 hgenome=fasta_dir+hgenome_fasta
-print mtdnafile
-print hgenome
-print 'samtools version is {0}'.format(sversion)
+print "Path to mitochondrial reference genome: {0}\n".format(mtdnafile)
+print "Path to nuclear and mitochondrial reference genome: {0}\n".format(hgenome)
+print 'Samtools version is {0}\n'.format(sversion)
 
 try:
 	sample_name = os.getcwd().split('/')[-1].split('_')[1]
