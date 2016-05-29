@@ -127,7 +127,9 @@ print "Path to nuclear and mitochondrial reference genome: {0}\n".format(hgenome
 print 'Samtools version is {0}\n'.format(sversion)
 
 try:
-	sample_name = os.getcwd().split('/')[-1].split('_')[1]
+	sample_name = os.getcwd().split('/')[-1].split('_')[1:]
+	if len(sample_name)!=1:
+		sample_name="_".join(sample_name)
 	print "assembleMTgenome for sample", sample_name
 except:
 	sample_name = ''
