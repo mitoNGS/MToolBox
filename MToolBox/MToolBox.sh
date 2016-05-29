@@ -129,7 +129,7 @@ if [ "$config-" == "-" ];then
 	echo -e '\nconfig.sh file not found. Please provide a config.sh file before running MToolBox.\n'
 	exit 1
 else
-	echo -e '\nsetting up MToolBox variables in "${config}" ...'
+	echo  'setting up MToolBox variables in $config ...'
 	source $config
 	echo -e '...done\n'
 fi
