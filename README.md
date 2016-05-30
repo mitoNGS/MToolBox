@@ -9,6 +9,7 @@ The MToolBox pipeline includes:
 ###SYSTEM REQUIREMENTS
 
 - UNIX-based OS. ***WARNING: MToolBox v.1.0 current installation is only compatible with Linux OS***
+
 All the following dependancies will be installed by default running the `install.sh` script (see the ###INSTALLATION section in this README):
 - Python2.7 (www.python.org, provided within the Anaconda distribution, https://www.continuum.io/downloads) 
 - GSNAP (http://research-pub.gene.com/gmap/)
@@ -51,7 +52,7 @@ then, from the MToolBox folder, run the `install.sh`script:
 ```
 install.sh
 ```
-to get a FULL installation of all the MToolBox dependancies. This may take a while, so please be patience till the full process is successfully completed. We ***STRONGLY*** raccomend to use the default versions provided by the install script The default software versions available in the installation script are:
+to get a FULL installation of all the MToolBox dependancies. This may take a while, so please be patience until the full process is successfully completed. We ***STRONGLY*** raccomend to use the default versions provided by the install script:
 - GSNAP 2015-12-31.v7 
 - Anaconda distribution 2-2.5.0
 - Zlib v 1.2.8
@@ -60,7 +61,7 @@ to get a FULL installation of all the MToolBox dependancies. This may take a whi
 
 The default Kmer value for GSNAP database generation is 15. 
 
-Though we ***STRONGLY*** raccomend to use the default versions provided by the install script, please use the following options to change any of the previous versions or parameters:
+However, if you want to change any of the previous versions or parameters, please specify the following options:
 ```
 install.sh -g <gsnap_version> <anaconda_version> -z <zlib_version> -m <muscle_file> -s <samtools_version> -k <kmer_to_build_gsnap_db>
 ```
@@ -101,10 +102,10 @@ ref=
  ```
 where `input_type` can accept `bam|fastq|fastq.gz|fasta|sam`, `ref` can accept `RSRS|RCRS`.
 An example of the config file required by MToolBox is provided by the `test_config.sh` file. 
-All the other arguments are OPTIONAL, if the default installation of MToolBox was completed successfully.
-In case the user would like to use some custom installation of the MToolBox software dependancies, please fill in the argument value in the config file with the ***FULL PATH*** to the installation. For further help, please read carefully the instructions reported within the `test_config.sh` file.
+All the other arguments are OPTIONAL, if the default installation of MToolBox was successfully completed.
+In case the user would like to use some custom installation of the MToolBox software dependancies, please provide the ***FULL PATH*** to the installation as argument value. For further help, please read carefully the instructions within the `test_config.sh` file.
 
-The basic command must be executed inside the folder containing your input files, otherwise set the `input_path` and `output_name` value in the config file. 
+The run MToolBox command must be executed inside the folder containing input files (where also output files will be placed), otherwise set the `input_path` and `output_name` value in the config file. 
 
 For a complete list of *MToolBox.sh* options please run as follows:
 
@@ -118,7 +119,7 @@ Please note that only one of the supported input types at the time can be used w
 
 ###MTOOLBOX PROGRAMS OPTIONS
 
-Besides the mandatory ```-i``` option, the execution of MToolBox can be fine-tuned by tweaking parameters of the *mapExome.py*, *assembleMTgenome.py* and *mt-classifier* scripts by running MToolBox as follows:
+Besides the mandatory ```-i``` option, the execution of MToolBox can be fine-tuned by tweaking parameters of the *mapExome.py* and *assembleMTgenome.py* scripts by running MToolBox as follows:
 ```
 MToolBox.sh -i <config.sh> -m "<mapExome_options>" -a "<assembleMTgenome_options>"
 
@@ -128,6 +129,7 @@ MToolBox.sh -i <config.sh> -m "<mapExome_options>" -a "<assembleMTgenome_options
 ```-t``` (*mapExome.py*) to set the number of threads used by gsnap. Default is 8.
 
 ```-t``` (*assembleMTgenome.py*) to set the minimum distance from the read end required to retain an indel for variant calling. Default is 5. Please note that only values >= 5 are allowed.
+
 ```-z``` (*assembleMTgenome.py*) to set the minimum heteroplasmy threshold for variants to be reported in the FASTA consensus sequence. Default is 0.80.
 
 **For the full list of MToolBox options, please run as follows**:
@@ -144,7 +146,7 @@ assembleMTgenome.py -h
 ```
 MToolBox.sh -i test_config.sh -m "-t 20" -a "-t 10 -z 0.6"
 ```
-The command will run MToolBox on the set of samples specified within the `test_config.sh` file, setting the number of GSNAP threads 20 (-m "-t 20.."), the minimum nucleotide distance allowed from read end to retain indels to 10 (-a "-t 10") and the an heteroplasmy threshold to select nucleotide variants of the fasta consensus sequence of 0.6 (-a "-z 0.6"). 
+This command will run MToolBox on the set of samples specified within the `test_config.sh` file, setting the number of GSNAP threads 20 (-m "-t 20.."), the minimum nucleotide distance allowed from read end to retain indels to 10 (-a "-t 10") and the heteroplasmy threshold to retain nucleotide variants in the FASTA consensus sequence of 0.6 (-a "-z 0.6"). 
 
 ###MTOOLBOX OUTPUTS
 
@@ -223,7 +225,7 @@ MToolBox default outputs are:
 	43. *1000 Genomes Homoplasmy* = annotation of homoplasmy status in 1000 Genomes variants;
 	44. *1000 Genomes Heteroplasmy* = annotation of the heteroplasmy status in 1000 Genomes variants.
 
-	**WARNING**! Please note that the heteroplasmy fractions and the related confidence interval will be reported only for variants found against the reference sequence chosen for read mapping.
+**WARNING**! Please note that the heteroplasmy fractions and the related confidence interval will be reported only for variants found against the reference sequence chosen for read mapping.
 
 
 ###NOTE ON FILE NAMES
