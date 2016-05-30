@@ -14,12 +14,12 @@ TO INSTALL ALL THE DEPENDANCIES REQUIRED BY MTOOLBOX:
 TO UPDATE ONLY ONE SPECIFIC SOTWARE:
 ./install.sh -i <software_name> 
 
-	-g	default is 2015-12-31.v7
-	-a	default is 2-2.5.0
-	-z	default is 1.2.8
-	-m 	default is muscle3.8.31_i86linux64
-	-s 	default is 1.3
-	-k	default is 15
+	-g	GSNAP version: default is 2015-12-31.v7
+	-a	Anaconda version: default is 2-2.5.0
+	-z	Zlib version: default is 1.2.8
+	-m 	MUSCLE version: default is muscle3.8.31_i86linux64
+	-s 	Samtools version: default is 1.3
+	-k	Kmer used for GSNAP database: default is 15
 	-i	install only one specific software [gsnap | anaconda | muscle | zlib | samtools | gsnap_db]		
 
 Help options:
