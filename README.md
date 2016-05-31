@@ -105,7 +105,7 @@ An example of the config file required by MToolBox is provided by the `test_conf
 All the other arguments are OPTIONAL, if the default installation of MToolBox was successfully completed.
 In case the user would like to use some custom installation of the MToolBox software dependancies, please provide the ***FULL PATH*** to the installation as argument value. For further help, please read carefully the instructions within the `test_config.sh` file.
 
-The run MToolBox command must be executed inside the folder containing input files (where also output files will be placed), otherwise set the `input_path` and `output_name` value in the config file. 
+The MToolBox command must be executed inside the folder containing input files (where also output files will be placed), otherwise set the `input_path` and `output_name` value in the config file, if you want to specify dirrent directories. 
 
 For a complete list of *MToolBox.sh* options please run as follows:
 
