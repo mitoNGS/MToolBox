@@ -52,7 +52,7 @@ then, from the MToolBox folder, run the `install.sh`script:
 ```
 install.sh
 ```
-to get a FULL installation of all the MToolBox dependancies. This may take a while, so please be patience until the full process is successfully completed. We ***STRONGLY*** raccomend to use the default versions provided by the install script:
+to get a FULL installation of all the MToolBox dependancies. This may take a while, so please be patient until the full process is successfully completed. We ***STRONGLY*** raccomend to use the default versions provided by the install script:
 - GSNAP 2015-12-31.v7 
 - Anaconda distribution 2-2.5.0
 - Zlib v 1.2.8
