@@ -52,9 +52,9 @@ version()
 #assembleMTgenome_OPTS=""
 #mt_classifier_OPTS=""
 #mapExome_OPTS=""
-#UseMarkDuplicates=false
-#UseIndelRealigner=false
-#MitoExtraction=false
+UseMarkDuplicates=false
+UseIndelRealigner=false
+MitoExtraction=false
 # export folder where MToolBox.sh is placed, it is the same folder of PicardTools and GATK jars
 me=`basename $0`
 export mtoolbox_folder=$(which $me | sed "s/$me//g")
@@ -368,7 +368,7 @@ fastq_input()
 	for i in $(ls -d OUT_*); do cd ${i}; ${samtoolsexe} index OUT.sam.bam; cd ..; done
 	
 	# REALIGN KNOWN INDELS WITH GATK
-	if $UseIndelRealigner
+	if [ "$UseIndelRealigner" = true ]
 	then
 		echo ""
 		echo "##### REALIGNING KNOWN INDELS WITH GATK INDELREALIGNER..."
@@ -387,10 +387,11 @@ fastq_input()
 		-compress 0;
 		check_exit_status; cd ..; done
 	else
+		echo "Skip Indel Realigner..."
 		for i in $(ls -d OUT_*); do cd ${i}; cat OUT.sam.bam > OUT.realigned.bam; cd ..; done
 	fi
 	# MARK DUPLICATES WITH PICARD TOOLS
-	if $UseMarkDuplicates
+	if [ "$UseMarkDuplicates" = true ]
 	then
 		echo ""
 		echo "##### ELIMINATING PCR DUPLICATES WITH PICARDTOOLS MARKDUPLICATES..."
@@ -405,6 +406,7 @@ fastq_input()
 		REMOVE_DUPLICATES=true \
 		TMP_DIR=`pwd`/tmp; cd ..; done
 	else
+		echo ""Skipping Mark Duplicates...""
 		for i in $(ls -d OUT_*); do cd ${i}; cat OUT.realigned.bam > OUT.sam.bam.marked.bam; cd ..; done
 	fi
 	# RE-CONVERT BAM OUTPUT FROM MARKDUPLICATES IN SAM.
@@ -607,9 +609,10 @@ bam_input()
 		fi
 	fi	
 		
-	if $MitoExtraction
+	if [ "$MitoExtraction" = true ]
 	#extract mitochondrial reads from bam input files and then convert in fastq files
 	then
+		echo "Extracting mitochondrial DNA from input bam file..."
 		if [[ "${output_name}" ]]
 		#output folder defined
 		then
@@ -666,7 +669,7 @@ bam_input()
 			tar -czf processed_bam.tar.gz processed_bam	
 			rm -r processed_bam			
 		fi	
-	else	
+	else
 	#convert all bam input files in fastq files 
 		if [[ "${output_name}" ]]
 		#output folder defined
