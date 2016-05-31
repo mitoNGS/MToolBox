@@ -50,7 +50,7 @@ export PATH="/path/to/MToolBox/:$PATH"
 ```
 then, from the MToolBox folder, run the `install.sh`script:
 ```
-install.sh
+./install.sh
 ```
 to get a FULL installation of all the MToolBox dependancies. This may take a while, so please be patient until the full process is successfully completed. We ***STRONGLY*** raccomend to use the default versions provided by the install script:
 - GSNAP 2015-12-31.v7 
@@ -61,14 +61,14 @@ to get a FULL installation of all the MToolBox dependancies. This may take a whi
 
 The default Kmer value for GSNAP database generation is 15. 
 
-However, if you want to change any of the previous versions or parameters, please specify the following options:
+However, if you want to change any of the previous versions or parameters when you run the full installation, please specify the following options:
 ```
-install.sh -g <gsnap_version> <anaconda_version> -z <zlib_version> -m <muscle_file> -s <samtools_version> -k <kmer_to_build_gsnap_db>
+./install.sh -g <gsnap_version> <anaconda_version> -z <zlib_version> -m <muscle_file> -s <samtools_version> -k <kmer_to_build_gsnap_db>
 ```
 
-To install/update just one of the MToolBox software dependancies, please do:
+To re-install/update just one of the MToolBox software dependancies, please do:
 ```
-install.sh -i <software_name>
+./install.sh -i <software_name> 
 ```
 Where the software names are:
 ```
@@ -79,9 +79,15 @@ zlib
 samtools
 gsnap_db
 ```
+
+For example, to update the GSNAP version, use:
+```
+./install.sh -i gsnap -g 2016-05-25
+```
+
 To get the install help:
 ```
-install.sh -h
+./install.sh -h
 ```
 ###RUNNING MTOOLBOX
 

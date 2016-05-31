@@ -8,12 +8,16 @@ Written by Domenico Simone, Claudia Calabrese and Maria Angela Diroma 2013-2014.
 	
 Usage:
 
-TO INSTALL ALL THE DEPENDANCIES REQUIRED BY MTOOLBOX:
+FOR FULL INSTALLATION (strongly raccomended):
+./install.sh 
+
+TO CHANGE SOME OF THE SOFTWARE VERSIONS/KMER PARAMETER DURING THE FULL INSTALLATION OF MTOOLBOX:
 ./install.sh -g <gsnap_version> -z <zlib_version> -m <muscle_file> -s <samtools_version> -k <kmer_to_build_gsnap_db>
 
 TO UPDATE ONLY ONE SPECIFIC SOTWARE:
 ./install.sh -i <software_name> 
 
+followed, in case, by one of the options to specify the software version/kmer parameter:
 	-g	GSNAP version: default is 2015-12-31.v7
 	-a	Anaconda version: default is 2-2.5.0
 	-z	Zlib version: default is 1.2.8
