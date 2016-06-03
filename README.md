@@ -8,6 +8,6 @@ The MToolBox pipeline includes:
 - the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization.
 >>>>>>> e78420893ba421737f6632f17cdf3c03c9b14ebd
 
-####For the previous verision of MToolBox (v.0.3.3), please go to https://github.com/mitoNGS/MToolBox/releases.
+####For the previous version of MToolBox (v.0.3.3), please go to https://github.com/mitoNGS/MToolBox/releases.
 
 ####For further information, please visit the official [MToolBox Wiki](https://github.com/robertopreste/MToolBox/wiki).
