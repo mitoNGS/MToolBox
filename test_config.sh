@@ -19,7 +19,7 @@
 ##
 #samtools_version=1.3
 ##
-##OPTIONAL. If MToolBox default installation (install.sh) was used. musclexe path is $MTOOLBOX_BIN/muscle3.8.31_i86linux64. Otherwise, please specify the FULL PATH to muscle executables.
+##OPTIONAL. If MToolBox default installation (install.sh) was used, musclexe path is $MTOOLBOX_BIN/muscle3.8.31_i86linux64. Otherwise, please specify the FULL PATH to muscle executables.
 ##
 #muscleexe=
 ##
@@ -29,11 +29,11 @@
 ##
 #####################SET FILE NAMES OF REFERENCE SEQUENCE AND DATABASE TO BE USED FOR THE MAPPING STEP#######
 ##
-#OPTIONAL. If MToolBox default installation  (install.sh) was used, fasta_path is $MTOOLBOX_DIR/genome_fasta/. Otherwise, please specify the FULL PATH to fasta and fasta.fai reference sequences to be used in the mapping step
+#OPTIONAL. If MToolBox default installation (install.sh) was used, fasta_path is $MTOOLBOX_DIR/genome_fasta/. Otherwise, please specify the FULL PATH to fasta and fasta.fai reference sequences to be used in the mapping step.
 ##
 #fasta_path=
 ##
-#OPTIONAL. If MToolBox default installation  (install.sh) was used, gsnapdb is $MTOOLBOX_DIR/gmapdb/. Otherwise, please specify the FULL PATH to gsnap/gmap database executables
+#OPTIONAL. If MToolBox default installation (install.sh) was used, gsnapdb is $MTOOLBOX_DIR/gmapdb/. Otherwise, please specify the FULL PATH to gsnap/gmap database executables
 ##
 #gsnapdb=
 ##
@@ -45,7 +45,7 @@
 ##
 #hg19_fasta=hg19RSRS.fa
 ##
-#OPTIONAL. If MToolBox dafault installation (istall.sh) was used, mtdb is chrRSRS. To use the rCRS database, please set mtdb=chrM. Otherwise, please specify the name of the mitochondrial gsnap database you want to use.
+#OPTIONAL. If MToolBox dafault installation (install.sh) was used, mtdb is chrRSRS. To use the rCRS database, please set mtdb=chrM. Otherwise, please specify the name of the mitochondrial gsnap database you want to use.
 ##
 #mtdb=chrRSRS
 ##
