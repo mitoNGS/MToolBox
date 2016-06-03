@@ -1,3 +1,7 @@
+###CHANGELOG - 3 June 2016
+
+Update to *MToolBox v.1.0*. The full installation of the pipeline is now possible by running the `install.sh` script provided here: https://github.com/mitoNGS/MToolBox/blob/MToolBox_devel/install.sh. This script will install all the MToolBox dependancies and creates a `setup.sh` file in the MToolBox directory with all the paths to executables and GSNAP databases and references needed by MToolBox, that is sourced by the `MToolBox.sh` file. The users are just asked to fill in the config.sh file, which is the only mandatory argument required by `MToolBox.sh`. The users must assign a value to the mandatory options in the config.sh file and, optionally, they can change other MToolBox arguments. For the full list of MToolBox arguments that can be specified through the config file, please have a look at the `test_config.sh` file provided in the MToolBox github repository (https://github.com/mitoNGS/MToolBox/blob/MToolBox_devel/test_config.sh). However, `mapExome.py` and `assemblyMTgenome.py` options can be still changed within the MToolBox command line, using the `-m` and `-a` option, respectively.
+
 ###CHANGELOG - 21 September 2015
 
 Update to MToolBox version 0.3.2 with the following change:
