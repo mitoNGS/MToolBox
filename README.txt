@@ -1,11 +1,12 @@
 MToolBox - README
 =================
 
-MToolBox is a highly automated bioinformatics pipeline to reconstruct and analyze human mitochondrial DNA from high throughput sequencing data. MToolBox includes an updated computational strategy to assemble mitochondrial genomes from Whole Exome and/or Genome Sequencing (PMID: 22669646) and an improved fragment-classify tool (PMID:22139932) for haplogroup assignment, functional and prioritization analysis of mitochondrial variants. MToolBox provides pathogenicity scores, profiles of genome variability and disease-associations for mitochondrial variants. MToolBox provides also a Variant Call Format file (version 4.0) featuring, for the first time, allele-specific heteroplasmy.
+MToolBox is a highly automated bioinformatics pipeline to reconstruct and analyze human mitochondrial DNA from high throughput sequencing data. MToolBox includes an updated computational strategy to assemble mitochondrial genomes from Whole Exome and/or Genome Sequencing (PMID: 22669646) and an improved fragment-classify tool (PMID:22139932) for haplogroup assignment, functional and prioritization analysis of mitochondrial variants. MToolBox provides pathogenicity scores, profiles of genome variability and disease-associations for mitochondrial variants. MToolBox also provides a Variant Call Format file (version 4.0) featuring, for the first time, allele-specific heteroplasmy.
+
 The MToolBox pipeline includes:
 
 - an extended version of a previously published computational strategy for mtDNA genome assembly (PMID: 22669646). The pipeline has been integrated with the detection of insertions and deletions (indels) and the assessment of the heteroplasmic fraction (HF) and related confidence interval (CI) for each mt variant. HF and CI are integrated as genotype specific meta-information in a Variant Call Format (version 4.0) file;
-- the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization
+- the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization.
 
 
 SYSTEM REQUIREMENTS
@@ -321,7 +322,7 @@ February 28, 2015
 Update to MToolBox version 0.3 with the following new options and changes:
 
  - fastq.gz is a further possible input format file. Installation of zlib libraries is therefore required. 
- - users can specify the path of the working directories using Ðp (path to input folder) and Ðo (path to output folder) options.
+ - users can specify the path of the working directories using ï¿½p (path to input folder) and ï¿½o (path to output folder) options.
  - users can specify a list of files to be used as input through -l option. It accepts a text file containing one sample name for each line. This list should be named as "list.txt" and placed in the input folder. Alternatively, users can provide comma-separated names with the same option. It is mandatory to report in such list the filename extension (e.g. mysample.sam or mysample.R1.fastq).
  - users can use -X option to allow the extraction from a BAM file of mitochondrial reads mapped onto a mitochondrial reference sequence. This option can be useful when using Whole Genome or Exome sequencing BAM files containing a huge amount ofnuclear reads. The option works only with the BAM format.
 
