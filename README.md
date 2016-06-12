@@ -10,4 +10,4 @@ The MToolBox pipeline includes:
 
 ####For the previous version of MToolBox (v.0.3.3), please go to https://github.com/mitoNGS/MToolBox/releases.
 
-####For further information, please visit the official [MToolBox Wiki](https://github.com/robertopreste/MToolBox/wiki).
+####For further information, please visit the official [MToolBox Wiki](https://github.com/mitoNGS/MToolBox/wiki).
