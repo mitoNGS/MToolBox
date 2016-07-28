@@ -37,7 +37,7 @@
 ##
 #gsnapdb=
 ##
-##OPTIONAL. If MToolBox default installation (install.sh) was used, mtdb_fasta is chrRSRS.fa (RSRS). To use rCRS sequence as reference, please set mtdb_fasta=MT.fa Otherwise, please specify the file name of the mitochondrial reference fasta sequence you want to use.
+##OPTIONAL. If MToolBox default installation (install.sh) was used, mtdb_fasta is chrRSRS.fa (RSRS). To use rCRS sequence as reference, please set mtdb_fasta=chrM.fa Otherwise, please specify the file name of the mitochondrial reference fasta sequence you want to use.
 ##
 #mtdb_fasta=chrRSRS.fa
 ##
