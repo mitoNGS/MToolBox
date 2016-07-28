@@ -45,7 +45,7 @@
 ##
 #hg19_fasta=hg19RSRS.fa
 ##
-#OPTIONAL. If MToolBox dafault installation (install.sh) was used, mtdb is chrRSRS. To use the rCRS database, please set mtdb=chrM. Otherwise, please specify the name of the mitochondrial gsnap database you want to use.
+#OPTIONAL. If MToolBox dafault installation (install.sh) was used, mtdb is chrRSRS. To use the rCRS database, please set mtdb=chrM Otherwise, please specify the name of the mitochondrial gsnap database you want to use.
 ##
 #mtdb=chrRSRS
 ##
