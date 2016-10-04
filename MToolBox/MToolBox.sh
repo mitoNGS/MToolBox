@@ -193,7 +193,7 @@ if [[ $rc != 0 ]] ; then
 fi
 
 # Function definition
-in-out_folders()
+in_out_folders()
 { # create output folder and enter input folder
 	if [[ "${input_path}" ]]
 	then
@@ -704,25 +704,25 @@ bam_input()
 if [[ $input_type = 'fasta' ]]
 then
 	echo "Input type is fasta."
-	in-out_folders
+	in_out_folders
 	fasta_input
 elif [[ $input_type = 'fastq' ]]
 then
 	echo "Input type is fastq."
-	in-out_folders
+	in_out_folders
 	fastq_input
 	fasta_input
 elif [[ $input_type = 'sam' ]]
 then
 	echo "Input type is sam."
-	in-out_folders
+	in_out_folders
 	sam_input
 	fastq_input
 	fasta_input
 elif [[ $input_type = 'bam' ]]
 then
 	echo "Input type is bam."
-	in-out_folders
+	in_out_folders
 	bam_input
 	fastq_input
 	fasta_input
