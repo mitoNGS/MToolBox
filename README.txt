@@ -376,4 +376,27 @@ June 5, 2014
 
 - changed the method for estimation of the heteroplasmy confidence interval (CI). For sites with coverage depth <= 40, the heteroplasmy CI is estimated with the Wilson score interval; for larger coverage depth values, the Agresti-Coull interval is used.
 - added the possibility to use fasta inputs to perform haplogroup prediction and functional annotation.
-- added the possibility to use the revised Cambridge Reference Sequence (rCRS) as reference sequence for read mapping. By using rCRS as reference sequence, the VCF output will be rCRS-based. 
+- added the possibility to use the revised Cambridge Reference Sequence (rCRS) as reference sequence for read mapping. By using rCRS as reference sequence, the VCF output will be rCRS-based.
+
+11 December, 2016
+=================
+
+Upload of new files used by GATK IndelsRealigner based on rCRS, with changes
+in reference name. chrRCRS was changed into chrM for all the following
+files in the MToolBox/data directory:
+
+- MITOMAP_HMTDB_known_indels_chrM.vcf
+- chrM.fa
+- chrM.fa.fai
+- chrM.dict
+- intervals_file_chrM.list
+
+GenomeAnalysisTK.jar was removed from the MToolBox/ext_tools directory as it was an outdated version of the tool. Users that would like to run GATK IndelRealigner are now asked to download a newer version of GATK and place it in the MToolBox/ext_tools folder:
+
+cp GenomeAnalysisTK.jar /path/to/MToolBox/MToolBox/ext_tools/
+
+To run GATK IndelRealigner users have to specify 
+
+UseIndelRealigner=true 
+
+in the config.sh file used to run MToolBox. 
