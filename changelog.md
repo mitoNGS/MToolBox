@@ -1,3 +1,22 @@
+###CHANGELOG - 11 December 2016
+
+Upload of new files used by GATK IndelsRealigner based on rCRS, with changes in reference name. `chrRCRS` was changed into `chrM` for all the following files in the MToolBox/data directory:
+
+```
+- MITOMAP_HMTDB_known_indels_chrM.vcf
+- chrM.fa
+- chrM.fa.fai
+- chrM.dict
+- intervals_file_chrM.list
+```
+
+`GenomeAnalysisTK.jar` was removed from the `MToolBox/ext_tools` directory as it was an outdated version of the tool.
+Users that would like to run GATK IndelRealigner are now asked to download a newer version of GATK and place it in the `MToolBox/ext_tools` folder:
+
+`cp GenomeAnalysisTK.jar /path/to/MToolBox/MToolBox/ext_tools/`
+
+To run GATK IndelRealigner users have to specify `UseIndelRealigner=true` in the config.sh file used to run MToolBox.
+
 ###CHANGELOG - 3 June 2016
 
 Update to **MToolBox v.1.0**. The full installation of the pipeline is now possible by running the `install.sh` script provided here: https://github.com/mitoNGS/MToolBox/blob/MToolBox_devel/install.sh. This script will install all the MToolBox dependancies and creates a `setup.sh` file in the MToolBox directory with all the paths to executables and GSNAP databases and references needed by MToolBox, that is sourced by the `MToolBox.sh` file. The users are just asked to fill in the config.sh file, which is the only mandatory argument required by `MToolBox.sh`. The users must assign a value to the mandatory options in the config.sh file and, optionally, they can change other MToolBox arguments. For the full list of MToolBox arguments that can be specified through the config file, please have a look at the `test_config.sh` file provided in the MToolBox github repository (https://github.com/mitoNGS/MToolBox/blob/MToolBox_devel/test_config.sh). However, `mapExome.py` and `assemblyMTgenome.py` options can be still changed within the MToolBox command line, using the `-m` and `-a` option, respectively.
