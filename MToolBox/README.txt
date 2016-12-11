@@ -1,31 +1,25 @@
 MToolBox - README
 =================
 
-MToolBox is a highly automated bioinformatics pipeline to reconstruct and analyze human mitochondrial DNA from high throughput sequencing data. MToolBox includes an updated computational strategy to assemble mitochondrial genomes from Whole Exome and/or Genome Sequencing (PMID: 22669646) and an improved fragment-classify tool (PMID:22139932) for haplogroup assignment, functional and prioritization analysis of mitochondrial variants. MToolBox provides pathogenicity scores, profiles of genome variability and disease-associations for mitochondrial variants. MToolBox provides also a Variant Call Format file (version 4.0) featuring, for the first time, allele-specific heteroplasmy.
+MToolBox is a highly automated bioinformatics pipeline to reconstruct and analyze human mitochondrial DNA from high throughput sequencing data. MToolBox includes an updated computational strategy to assemble mitochondrial genomes from Whole Exome and/or Genome Sequencing (PMID: 22669646) and an improved fragment-classify tool (PMID:22139932) for haplogroup assignment, functional and prioritization analysis of mitochondrial variants. MToolBox provides pathogenicity scores, profiles of genome variability and disease-associations for mitochondrial variants. MToolBox also provides a Variant Call Format file (version 4.0) featuring, for the first time, allele-specific heteroplasmy.
+
 The MToolBox pipeline includes:
 
 - an extended version of a previously published computational strategy for mtDNA genome assembly (PMID: 22669646). The pipeline has been integrated with the detection of insertions and deletions (indels) and the assessment of the heteroplasmic fraction (HF) and related confidence interval (CI) for each mt variant. HF and CI are integrated as genotype specific meta-information in a Variant Call Format (version 4.0) file;
-- the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization
+- the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization.
 
 
 SYSTEM REQUIREMENTS
 ===================
 
-- UNIX-based OS
-- Python2.7 (www.python.org)
-- samtools (https://sourceforge.net/projects/samtools/files/samtools/) installed in /usr/local/bin/samtools (otherwise you must specify the actual path using assembleMTgenome.py options)
-- MUSCLE (http://www.drive5.com/muscle/downloads.htm) installed in /usr/local/bin/muscle (otherwise you should specify the actual path using mt-classifier.py options)
-- GSNAP (https://github.com/julian-gehring/GMAP-GSNAP; newest version of GMAP-GSNAP at http://research-pub.gene.com/gmap/) installed in /usr/local/bin/gsnap (otherwise you must specify the actual path using mapExome.py options). 
-  WARNING: The GSNAP indexes provided in the sourceforge page of MToolBox (http://sourceforge.net/projects/mtoolbox/files/genome_index/) have been generated with GSNAP version 2013-09-11. We cannot guarantee that such indexes will work with later versions of GSNAP and we strongly recommend to regenerate the indexes with the aligner version the user may want to choose.
+- UNIX-based OS. WARNING: MToolBox v.1.0 current installation is only compatible with Linux OS. 
+All the following dependencies will be installed by default running the install.sh script (see the Installation section):
 
-  To generate GMAP/GSNAP database you can visit this link http://research-pub.gene.com/gmap/src/README or use the build_gsnap_index.sh script provided within the mitoNGS repo, to help the MToolBox users building GMAP/GSNAP databases. To check the usage of the script please type:
-  
-  build_gsnap_index.sh -h
- 
-  Usage example to build the GMAP/GSNAP database in the current working directory:
-  
-  build_gsnap_index.sh -D . -n hg19RCRS -f hg19RCRS.fa -k 12 
-  
+- Python 2.7 (www.python.org, provided within the Anaconda distribution, https://www.continuum.io/downloads)
+- GSNAP (http://research-pub.gene.com/gmap/)
+- Samtools (https://sourceforge.net/projects/samtools/files/samtools/)
+- MUSCLE (http://www.drive5.com/muscle/downloads.htm)
+- ZLIB (http://zlib.net/)
 
 MTOOLBOX SCRIPTS
 ================
@@ -47,83 +41,88 @@ MToolBox.sh is the shell script invoking all the following programs:
 
 OTHER FILES REQUIRED 
 ====================
+By default, MToolBox adopts the RSRS (Reconstructed Sapiens Reference Sequence, PMID: 22482806) as mitochondrial reference genome and hg19 as nuclear reference genome. Alternatively, users can choose to use the rCRS (revised Cambridge Reference Sequence). Fasta files of hg19 nuclear genome and mitochondrial DNA used by MToolBox are available at https://sourceforge.net/projects/mtoolbox/ where have been uploaded for users' convenience. However, with the v.1.0 of the pipeline they are now downloaded and installed by default by the install.sh MToolBox script, together with the required GSNAP databases.
 
-By default, MToolBox adopts the RSRS (Reconstructed Sapiens Reference Sequence, PMID: 22482806) as mitochondrial reference genome and hg19 as nuclear reference genome. Alternatively, the user can choose to use the rCRS (revised Cambridge Reference Sequence).
-For user's convenience, fasta files and related gsnap indexes for the two reference sequences can be downloaded at https://sourceforge.net/projects/mtoolbox/.
-
-List of fasta files and index .fai files in the genome_fasta folder (https://sourceforge.net/projects/mtoolbox/files/genome_fasta/) :
-- chrRSRS.fa
-- chrRSRS.fa.fai
-- hg19RSRS.fa
-- hg19RSRS.fa.fai
-- chrRCRS.fa
-- chrRCRS.fa.fai
-- hg19RCRS.fa
-- hg19RCRS.fa.fai
-
-The default directory for these files is /usr/local/share/genomes/, otherwise you must specify the actual path using the assembleMTgenome.py options -r (for further details please refer to "RUNNING MTOOLBOX" section). 
-
-List of compressed files of gsnap indexes in the genome_index folder (https://sourceforge.net/projects/mtoolbox/files/genome_index/):
-- chrRSRS.tar.gz
-- hg19RSRS.tar.gz
-
-The default directory for decompressed folders is /usr/local/share/gmapdb/, otherwise you must specify the actual path using the mapExome.py options -M and -H, respectively (for further details please refer to "RUNNING MTOOLBOX" section).
-
-The MToolBox folder includes the MITOMAP_HMTDB_known_indels.vcf file, containing 127 known indels annotated in MITOMAP and HMTDB and the related intervals_file.list used by GATK GenomeAnalysisTK.jar module.
-The MToolBox folder also includes 2 tab-separated files, variant_info.txt (previously called patho_table.txt) and site_info.txt (previously called sitevar_modified.txt) containing variant-specific and site-specific information, respectively, used in the annotation step.
-
+The MToolBox folder includes the MITOMAP_HMTDB_known_indels.vcf file, containing 127 known indels annotated in MITOMAP and HMTDB and the related intervals_file.list used by GATK GenomeAnalysisTK.jar module. The MToolBox folder also includes 2 tab-separated files, patho_table.txt and sitevar_modified.txt, containing variant-specific and site-specific information, respectively, used in the annotation step.
 
 INSTALLATION
 ============
 
-Simply add the MToolBox path to your system PATH with the following command:
+Add the MToolBox path to your system PATH with the following command:
 
 export PATH="/path/to/MToolBox/:$PATH"
 
+then, from the MToolBox folder, run the install.sh script:
 
-RUNNING MTOOLBOX
-================
-Basic execution of MToolBox can be run as follows:
+./install.sh
 
-MToolBox.sh -i <input_format>
+to get a FULL installation of all the MToolBox dependancies. This may take a while, so please be patient until the full process is successfully completed. We STRONGLY recommend to use the default versions provided by the install script:
 
+    GSNAP 2015-12-31.v7
+    Anaconda distribution 2-2.5.0
+    Zlib version 1.2.8
+    MUSCLE version 3.8.31
+    samtools version 1.3
 
-Please note that you MUST specify the -i option (sam|bam|fastq|fasta).
-The basic command must be executed inside the folder containing your input files, otherwise see MTOOLBOX PROGRAM OPTIONS section to specify input/output folders paths. Please note that only one of the supported formats can be used within a single MToolBox run. MToolBox also accepts compressed fastq files (FASTQ.GZ). 
+The default Kmer value for GSNAP database generation is 15. However, if you want to change any of the previous versions or parameters when you run the full installation, please specify the following options:
+
+./install.sh -g <gsnap_version> <anaconda_version> -z <zlib_version> -m <muscle_file> -s <samtools_version> -k <kmer_to_build_gsnap_db>
+
+To re-install/update just one of the MToolBox software dependencies, please do:
+
+./install.sh -i <software_name> 
+
+where the possible software names are:
+
+gsnap
+anaconda
+muscle
+zlib
+samtools
+gsnap_db
+
+For example, to update the GSNAP version, use:
+
+./install.sh -i gsnap -g 2016-05-25
+
+To get the install help:
+
+./install.sh -h
+
 For a complete list of MToolBox.sh options please run as follows:
-
 	
-MToolBox.sh -h
+RUN MTOOLBOX
+============
+Add MToolBox to your system PATH with the following command:
 
+export PATH="/path/to/MToolBox/:$PATH"
+
+Then, in the directory where you want to execute MToolBox, run the pipeline as following:
+
+MToolBox.sh -i <conf.sh>
+
+Please note that you MUST specify the -i option that takes a config file as an argument, inside of which the user MUST specify 2 mandatory arguments:
+
+input_type=
+ref=
+
+where input_type can accept bam|fastq|fastq.gz|fasta|sam, and ref can accept RSRS|RCRS. An example of the config file required by MToolBox is provided by the test_config.sh file. All the other arguments are OPTIONAL, if the default installation of MToolBox was successfully completed. In case the user would like to use some custom installation of the MToolBox software dependencies, please provide the FULL PATH to the installation as argument value. For further help, please read carefully the instructions within the test_config.sh file.
+
+The MToolBox command must be executed inside the folder containing input files (where also output files will be placed), otherwise set the input_path and output_name value in the config file, if you want to specify different directories. 
+
+For a complete list of MToolBox.sh options please run as follows:
+MToolBox.sh -h
 
 IMPORTANT: if you wish to run again MToolBox in the same folder, it is preferable that you delete all the files produced during the previous execution.
 
 
 MTOOLBOX PROGRAMS OPTIONS
 =========================
-
 Besides the mandatory -i option, the execution of MToolBox can be fine-tuned by tweaking parameters of the mapExome.py and assembleMTgenome.py scripts by running MToolBox as follows:
 
-MToolBox.sh -i <input_format> -r <reference_sequence> -m "<mapExome_options>" -a "<assembleMTgenome_options>" -c "<mt-classifier_options>"
-
+MToolBox.sh -i <config.sh> -m "<mapExome_options>" -a "<assembleMTgenome_options>"
 
 Most relevant options:
-
--i (MToolBox.sh) to choose the input file(s) format (mandatory).
-
--p (MToolBox.sh) to set the specific path to the input folder.
-
--o (MToolBox.sh) to set the specific path to the output folder.
-
--l (MToolBox.sh) . Indicate a list of file names to be analyzed. Argument of the option can be a list of comma separated file names or a txt file with one file name per line. 
-
--X (MToolBox.sh) to enable extraction of mitochondrial reads from the input file, avoiding realignment of all the reads. Useful only for BAM input files
-
--r (MToolBox.sh) to choose the mitochondrial reference sequence for read mapping. Please note that the selected reference sequence will be used as reference for the VCF output file. Allowed values are RCRS and RSRS. Default is RSRS.
-
--M (MToolBox.sh) to enable duplicate read removal by MarkDuplicates.
-
--I (MToolBox.sh) to enable mapped reads realignment around indels annotated in MITOMAP and HMTDB by GenomeAnalysisTK.jar.
 
 -t (mapExome.py) to set the number of threads used by gsnap. Default is 8.
 
@@ -139,18 +138,12 @@ For the full list of mapExome and assembleMTgenome options, please run as follow
 
 mapExome.py -h
 assembleMTgenome.py -h
-mt-classifier.py -h
 
 Usage examples:
 
-MToolBox.sh -i fastq -M -I -m "-t 20 -M /path/to/gsnapdb/chrRSRS/ -H /path/to/gsnapdb/hg19RSRS/" -a "-t 10"
+MToolBox.sh -i test_config.sh -m "-t 20" -a "-t 10 -z 0.6"
 
-this command, launched in the input folder, will take all the fastq files as input (-i fastq), enable duplicate read removal (-M), enable mapped reads realignment (-I); also, the number of threads used by gsnap will be set to 20 (-m "-t 20..") and the custom path for gsnap mitochondrial and nuclear indexes will be set (-M and -H respectively). Finally, the minimum nucleotide distance from read end to retain indels will be set to 10 (-a "-t 10").
-
-MToolBox.sh -i bam -l mysample1.bam,mysample2.bam -p /path/to/input/folder/ -X -a "-z 0.9" -o /path/to/output/folder/
-
-this command will analyze 2 bam files (-i bam -l mysample1.bam,mysample2.bam) in the input folder (-p /path/to/input/folder/). Only reads previously mapped to the mitochondrial genome will be considered in the analysis (-X), avoiding the re-mapping of all the reads cointained in the input files. Only variants with heteroplasmic fraction HF>0.9 will be reported in the FASTA consensus sequence (-a "-z 0.9"). Finally, all the results will be written in the specified output folder (-o /path/to/output/folder/).
-
+This command will run MToolBox on the set of samples specified within the test_config.sh file, setting the number of GSNAP threads 20 (-m "-t 20.."), the minimum nucleotide distance allowed from read end to retain indels to 10 (-a "-t 10") and the heteroplasmy threshold to retain nucleotide variants in the FASTA consensus sequence of 0.6 (-a "-z 0.6"). 
 
 MTOOLBOX OUTPUTS
 ================
@@ -284,6 +277,11 @@ https://groups.google.com/forum/?hl=IT#!forum/mtoolbox-users
 CHANGELOGS
 ==========
 
+June 3, 2016
+============
+
+Update to MToolBox v.1.0. The full installation of the pipeline is now possible by running the install.sh script provided here: https://github.com/mitoNGS/MToolBox/blob/MToolBox_devel/install.sh. This script will install all the MToolBox dependancies and creates a setup.sh file in the MToolBox directory with all the paths to executables and GSNAP databases and references needed by MToolBox, that is sourced by the MToolBox.sh file. The users are just asked to fill in the config.sh file, which is the only mandatory argument required by MToolBox.sh. The users must assign a value to the mandatory options in the config.sh file and, optionally, they can change other MToolBox arguments. For the full list of MToolBox arguments that can be specified through the config file, please have a look at the test_config.sh file provided in the MToolBox github repository (https://github.com/mitoNGS/MToolBox/blob/MToolBox_devel/test_config.sh). However, mapExome.py and assemblyMTgenome.py options can be still changed within the MToolBox command line, using the -m and -a option, respectively.
+
 September 21, 2015
 ==================
 
@@ -321,7 +319,7 @@ February 28, 2015
 Update to MToolBox version 0.3 with the following new options and changes:
 
  - fastq.gz is a further possible input format file. Installation of zlib libraries is therefore required. 
- - users can specify the path of the working directories using Ðp (path to input folder) and Ðo (path to output folder) options.
+ - users can specify the path of the working directories using ï¿½p (path to input folder) and ï¿½o (path to output folder) options.
  - users can specify a list of files to be used as input through -l option. It accepts a text file containing one sample name for each line. This list should be named as "list.txt" and placed in the input folder. Alternatively, users can provide comma-separated names with the same option. It is mandatory to report in such list the filename extension (e.g. mysample.sam or mysample.R1.fastq).
  - users can use -X option to allow the extraction from a BAM file of mitochondrial reads mapped onto a mitochondrial reference sequence. This option can be useful when using Whole Genome or Exome sequencing BAM files containing a huge amount ofnuclear reads. The option works only with the BAM format.
 
@@ -378,4 +376,27 @@ June 5, 2014
 
 - changed the method for estimation of the heteroplasmy confidence interval (CI). For sites with coverage depth <= 40, the heteroplasmy CI is estimated with the Wilson score interval; for larger coverage depth values, the Agresti-Coull interval is used.
 - added the possibility to use fasta inputs to perform haplogroup prediction and functional annotation.
-- added the possibility to use the revised Cambridge Reference Sequence (rCRS) as reference sequence for read mapping. By using rCRS as reference sequence, the VCF output will be rCRS-based. 
+- added the possibility to use the revised Cambridge Reference Sequence (rCRS) as reference sequence for read mapping. By using rCRS as reference sequence, the VCF output will be rCRS-based.
+
+11 December, 2016
+=================
+
+Upload of new files used by GATK IndelsRealigner based on rCRS, with changes
+in reference name. chrRCRS was changed into chrM for all the following
+files in the MToolBox/data directory:
+
+- MITOMAP_HMTDB_known_indels_chrM.vcf
+- chrM.fa
+- chrM.fa.fai
+- chrM.dict
+- intervals_file_chrM.list
+
+GenomeAnalysisTK.jar was removed from the MToolBox/ext_tools directory as it was an outdated version of the tool. Users that would like to run GATK IndelRealigner are now asked to download a newer version of GATK and place it in the MToolBox/ext_tools folder:
+
+cp GenomeAnalysisTK.jar /path/to/MToolBox/MToolBox/ext_tools/
+
+To run GATK IndelRealigner users have to specify 
+
+UseIndelRealigner=true 
+
+in the config.sh file used to run MToolBox. 
