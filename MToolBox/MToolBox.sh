@@ -61,19 +61,6 @@ export mtoolbox_folder=$(which $me | sed "s/$me//g")
 export externaltoolsfolder=${mtoolbox_folder}ext_tools/
 
 
-# Environment variables for executables and files required by MToolBox
-#export ref=RSRS
-#export fasta_path=/usr/local/share/genomes/
-#export mtdb_fasta=chrRSRS.fa
-#export hg19_fasta=hg19RSRS.fa
-#export gsnapexe=/usr/local/bin/gsnap
-#export gsnapdb=/usr/local/share/gmapdb/
-#export mtdb=chrRSRS
-#export humandb=hg19RSRS
-#export samtoolsexe=/usr/local/bin/samtools
-#export muscleexe=/usr/local/bin/muscle
-
-
 while getopts ":hi:va:c:f:m:" opt; do
 	case $opt in
 		h)
@@ -373,17 +360,18 @@ fastq_input()
 		echo ""
 		echo "##### REALIGNING KNOWN INDELS WITH GATK INDELREALIGNER..."
 		echo ""
+		ref_name=$(echo $mtdb_fasta | cut -f 1 -d .)
 		for i in $(ls -d OUT_*); do cd ${i}; \
-		echo "Realigning known indels for file" ${i}"/OUT.sam.bam using" ${mtoolbox_folder}"data/MITOMAP_HMTDB_known_indels.vcf as reference..."
+		echo "Realigning known indels for file" ${i}"/OUT.sam.bam using" ${mtoolbox_folder}"data/MITOMAP_HMTDB_known_indels."${ref_name}" as reference..."
 		java -Xmx4g \
 		-Djava.io.tmpdir=`pwd`/tmp \
 		-jar ${externaltoolsfolder}GenomeAnalysisTK.jar \
 		-T IndelRealigner \
-		-R ${mtoolbox_folder}/data/chr${ref}.fa \
+		-R ${mtoolbox_folder}/data/${ref_name}.fa \
 		-I OUT.sam.bam \
 		-o OUT.realigned.bam \
-		-targetIntervals ${mtoolbox_folder}/data/intervals_file_${ref}.list  \
-		-known ${mtoolbox_folder}/data/MITOMAP_HMTDB_known_indels_${ref}.vcf \
+		-targetIntervals ${mtoolbox_folder}/data/intervals_file_${ref_name}.list  \
+		-known ${mtoolbox_folder}/data/MITOMAP_HMTDB_known_indels_${ref_name}.vcf \
 		-compress 0;
 		check_exit_status; cd ..; done
 	else
