@@ -449,6 +449,10 @@ contigs_wdict = []
 if crf: f=open(contigfile,'w')
 x=1
 for i in contigs:
+	#initialize new_i
+	new_i = i
+	#write fasta header
+	f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 	#print "A contig, ", i
 	if crf:
 		string_seq = i[1]
@@ -468,38 +472,44 @@ for i in contigs:
 		#
 		#print "CONSENSUS SINGLE: ", consensus_single
 		#check if there are repeated positions with different mut type
-		df= pd.DataFrame(consensus_single)
-		positions=df[0]
-		dup_positions = positions[positions.duplicated()].values
-		for x in dup_positions:
-			d = df[df[0]==x][2] #check the mut type. If ins, report ins instead of del or mism 
-			if 'ins' in d.values:
-				idx = d[d!='ins'].index[0]
-				df.drop(df.index[[idx]],inplace=True)
-			elif 'del' in d.values:
-				idx = d[d!='del'].index[0]
-				df.drop(df.index[[idx]],inplace=True) #If ambiguity between mism and del, report deletion instead of mism in the consensus
-			
-		for idx in df.index:
-			if df[0][idx] in dict_seq.keys(): #if position is in the dict
-				if df[2][idx] == 'mism': #if mut type is mism
-					dict_seq[df[0][idx]] = df[1][idx][0] #then substitute the dict value with the correspondent nt sequence
-				elif df[2][idx] == 'ins':
-					dict_seq[df[0][idx]] = df[1][idx][0]
-				elif df[2][idx] == 'del':
-					for deleted_pos in df[1][idx]:
-						del(dict_seq[deleted_pos])
-		# sort positions in dict_seq and join to have the sequence
-		contig_seq = ''
-		#print "dict_seq is", dict_seq.keys()
-		for j in sorted(dict_seq.keys()):
-			contig_seq += dict_seq[j]
-		#print contig_seq
-		new_i = ((i[0][0], i[0][1]), contig_seq)
-		contigs_wdict.append(new_i)
-		f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
-		#f.write('>Contig.%i|%i-%i\n' %(x,i[0][0],i[0][1]))
+		if len(consensus_single) == 0:
+			print 'no variants found in this contig {0}\n'.format(x)
+			pass
+		else:
+			df= pd.DataFrame(consensus_single)
+			positions=df[0]
+			dup_positions = positions[positions.duplicated()].values
+			for x in dup_positions:
+				d = df[df[0]==x][2] #check the mut type. If ins, report ins instead of del or mism 
+				if 'ins' in d.values:
+					idx = d[d!='ins'].index[0]
+					df.drop(df.index[[idx]],inplace=True)
+				elif 'del' in d.values:
+					idx = d[d!='del'].index[0]
+					df.drop(df.index[[idx]],inplace=True) #If ambiguity between mism and del, report deletion instead of mism in the consensus
+				
+			for idx in df.index:
+				if df[0][idx] in dict_seq.keys(): #if position is in the dict
+					if df[2][idx] == 'mism': #if mut type is mism
+						dict_seq[df[0][idx]] = df[1][idx][0] #then substitute the dict value with the correspondent nt sequence
+					elif df[2][idx] == 'ins':
+						dict_seq[df[0][idx]] = df[1][idx][0]
+					elif df[2][idx] == 'del':
+						for deleted_pos in df[1][idx]:
+							del(dict_seq[deleted_pos])
+			# sort positions in dict_seq and join to have the sequence
+			contig_seq = ''
+			#print "dict_seq is", dict_seq.keys()
+			for j in sorted(dict_seq.keys()):
+				contig_seq += dict_seq[j]
+			#print contig_seq
+			new_i = ((i[0][0], i[0][1]), contig_seq)
+			contigs_wdict.append(new_i)
+			#f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
+			#f.write('>Contig.%i|%i-%i\n' %(x,i[0][0],i[0][1]))
+	print 'contig',i
 	dass[i[0]]=[0,0,0,0,0]
+	print 'dass',dass
 	for j in range(0,len(new_i[1]),60):
 		if crf:
 			f.write(new_i[1][j:j+60]+'\n')
