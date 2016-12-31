@@ -188,7 +188,7 @@ in_out_folders()
 	fi
 	if [[ "${output_name}" ]]
 	then
-		mkdir ${output_name}
+		mkdir -p ${output_name}
 		echo 'output files will be placed in '${output_name}
 	fi
 }
