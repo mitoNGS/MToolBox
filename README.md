@@ -19,7 +19,7 @@ mv GenomeAnalysisTK.jar /path/to/MToolBox/MToolBox/ext_tools/
 
 ####For all changelogs, please visit [changelogs](https://github.com/mitoNGS/MToolBox/blob/master/changelog.md). 
 
-####For the previous version of MToolBox (v.0.3.3), please go to https://github.com/mitoNGS/MToolBox/releases.
+####For the previous version of MToolBox (v.0.3.3), please go to https://github.com/mitoNGS/MToolBox/releases. (DEPRECATED)
 
 ####For further information, please visit the official [MToolBox Wiki](https://github.com/mitoNGS/MToolBox/wiki).
 
