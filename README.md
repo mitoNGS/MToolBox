@@ -7,15 +7,17 @@ The MToolBox pipeline includes:
 - an extended version of a previously published computational strategy for mtDNA genome assembly (PMID: 22669646). The pipeline has been integrated with the detection of insertions and deletions (indels) and the assessment of the heteroplasmic fraction (HF) and related confidence interval (CI) for each mt variant. HF and CI are integrated as genotype specific meta-information in a Variant Call Format (version 4.0) file;
 - the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization.
 
-####CHANGELOG as of the 11th of December 2016
+####CHANGELOG - 11th of December 2016
 
-`GenomeAnalysisTK.jar` has been removed from the MToolBox/ext_tools directory.  
+`GenomeAnalysisTK.jar` has been removed from the `MToolBox/ext_tools` directory.  
 Users that would like to run GATK IndelRealigner are now asked to download a newer version of GATK and place it in the
-MToolBox/ext_tools folder:
+`MToolBox/ext_tools` folder:
 
 ```
-cp GenomeAnalysisTK.jar /path/to/MToolBox/MToolBox/ext_tools/
+mv GenomeAnalysisTK.jar /path/to/MToolBox/MToolBox/ext_tools/
 ```
+
+For all changelogs, please visit https://github.com/mitoNGS/MToolBox/blob/master/changelog.md. 
 
 ####For the previous version of MToolBox (v.0.3.3), please go to https://github.com/mitoNGS/MToolBox/releases.
 
