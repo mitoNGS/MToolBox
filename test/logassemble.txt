@@ -1,0 +1,26 @@
+Path to mitochondrial reference genome: /gpfs/MToolBox/genome_fasta/chrM.fa
+
+Path to nuclear and mitochondrial reference genome: /gpfs/MToolBox/genome_fasta/hg19RCRS.fa
+
+Samtools version is 1.3
+
+assembleMTgenome for sample ['simulation100X']
+Converting SAM to BAM...
+Sorting and indexing BAM...
+Creating pileup...
+Reading mtDNA sequence...
+Reading pileup file...
+Assembling...
+Basic statistics:
+Assembled bases: 99.84%
+Mean coverage depth: 117.44
+Number of Contigs: 1
+Base composition [A,C,G,T]: 0.31,0.31,0.13,0.25
+
+
+searching for indels in simulation100X.. please wait...
+
+
+
+
+searching for mismatches in simulation100X.. please wait...
