@@ -507,9 +507,7 @@ for i in contigs:
 			contigs_wdict.append(new_i)
 			#f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 			#f.write('>Contig.%i|%i-%i\n' %(x,i[0][0],i[0][1]))
-	print 'contig',i
 	dass[i[0]]=[0,0,0,0,0]
-	print 'dass',dass
 	for j in range(0,len(new_i[1]),60):
 		if crf:
 			f.write(new_i[1][j:j+60]+'\n')
