@@ -366,6 +366,7 @@ fastq_input()
 		java -Xmx4g \
 		-Djava.io.tmpdir=`pwd`/tmp \
 		-jar ${externaltoolsfolder}GenomeAnalysisTK.jar \
+		-U ALLOW_N_CIGAR_READS \
 		-T IndelRealigner \
 		-R ${mtoolbox_folder}/data/${ref_name}.fa \
 		-I OUT.sam.bam \
