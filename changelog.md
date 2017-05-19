@@ -1,3 +1,6 @@
+###CHANGELOG - 19 May 2017
+changes default zlib version to 1.2.11
+
 ###CHANGELOG - 11 December 2016
 
 Upload of new files used by GATK IndelsRealigner based on rCRS, with changes in reference name. `chrRCRS` was changed into `chrM` for all the following files in the MToolBox/data directory:
