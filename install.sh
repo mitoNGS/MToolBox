@@ -20,7 +20,7 @@ TO UPDATE ONLY ONE SPECIFIC SOTWARE:
 followed, in case, by one of the options to specify the software version/kmer parameter:
 	-g	GSNAP version: default is 2015-12-31.v7
 	-a	Anaconda version: default is 2-2.5.0
-	-z	Zlib version: default is 1.2.8
+	-z	Zlib version: default is 1.2.11
 	-m 	MUSCLE version: default is muscle3.8.31_i86linux64
 	-s 	Samtools version: default is 1.3
 	-k	Kmer used for GSNAP database: default is 15
@@ -37,7 +37,7 @@ gsnap_gmap_version=2015-12-31.v7
 anaconda_version=2-2.5.0
 muscle_file=muscle3.8.31_i86linux64
 samtools_version=1.3
-zlib_version=1.2.8
+zlib_version=1.2.11
 kmer=15
 software_install=all
 
