@@ -121,19 +121,6 @@ else
 	echo -e '...done\n'
 fi
 
-# define reference
-#if [[ $ref == 'RCRS' ]]
-#then 
-#	export mtdb_fasta=chrRCRS.fa
-#	export hg19_fasta=hg19RCRS.fa
-#	export mtdb=chrRCRS
-#	export humandb=hg19RCRS
-#elif [[ $ref != 'RSRS' ]]
-#then
-#	echo "Reference name not valid. Abort."
-#	exit 1
-#fi
-
 
 # The following lines are commented since the involved parameters
 # are specified elsewhere
@@ -179,6 +166,18 @@ if [[ $rc != 0 ]] ; then
 	exit $rc
 fi
 
+# Check if GenomeAnalysisTK.jar exists, if user set UseIndelRealigner=true.
+if [ "$UseIndelRealigner" = true ]
+then
+	if [ -f ${mtoolbox_folder}ext_tools/GenomeAnalysisTK.jar ]; then
+		echo -e "\nGenomeAnalysisTK.jar found. Continue"
+	else
+		echo -e "\nIndels realignment selected but ${mtoolbox_folder}ext_tools/GenomeAnalysisTK.jar was not found. Please download GenomeAnalysisTK.jar and move it to ${mtoolbox_folder}ext_tools/ folder"
+		exit 1
+	fi
+else
+	echo ""
+fi
 # Function definition
 in_out_folders()
 { # create output folder and enter input folder
