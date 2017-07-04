@@ -23,7 +23,7 @@ usage()
 	Written by Domenico Simone, Claudia Calabrese and Maria Angela Diroma 2013-2014.
 	https://github.com/mitoNGS/MToolBox/
 
-	You must run the MToolBox command on only one of the supported input file formats (bam, sam, fastq, fastq.gz, fasta).
+	You must run the MToolBox command on only one of the supported input file formats (bam, sam, fastq, fasta).
 
 	MToolBox.sh options:
 
