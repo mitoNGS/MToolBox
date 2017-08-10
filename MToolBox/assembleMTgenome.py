@@ -496,7 +496,11 @@ for i in contigs:
 						dict_seq[df[0][idx]] = df[1][idx][0]
 					elif df[2][idx] == 'del':
 						for deleted_pos in df[1][idx]:
-							del(dict_seq[deleted_pos])
+							if deleted_pos in dict_seq:
+								del(dict_seq[deleted_pos])
+							else:
+								pass #do not try to delete the position from the contig as the position is not present in it (this happens when the deletion is downstream to the end of the contig!
+ 
 			# sort positions in dict_seq and join to have the sequence
 			contig_seq = ''
 			#print "dict_seq is", dict_seq.keys()
