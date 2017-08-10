@@ -9,6 +9,8 @@ def usage():
 		
 		Options:
 		-r		Reference sequence [RSRS|RCRS]
+		
+		If launched stand-alone needs the VCF_dict_tmp file to be positioned in the working directory
 		"""
 
 reference_sequence="RSRS"
