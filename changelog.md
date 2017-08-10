@@ -1,3 +1,6 @@
+###CHANGELOG - 10 Aug 2017
+An error in the assembleMTgenome.py has been fixed. The pipeline was failing in case of a deletion present in the pileup file but already included in a gap by the mtDNA assembly process
+
 ###CHANGELOG - 19 May 2017
 changes default zlib version to 1.2.11
 
