@@ -400,3 +400,13 @@ To run GATK IndelRealigner users have to specify
 UseIndelRealigner=true 
 
 in the config.sh file used to run MToolBox. 
+
+19 May, 2017 
+=================
+
+Change default zlib version to 1.2.11
+
+10 August, 2017 
+=================
+
+An error in the assembleMTgenome.py has been fixed. The pipeline was failing in case of a deletion present in the pileup file but already included in a gap by the mtDNA assembly process.
