@@ -410,3 +410,15 @@ Change default zlib version to 1.2.11
 =================
 
 An error in the assembleMTgenome.py has been fixed. The pipeline was failing in case of a deletion present in the pileup file but already included in a gap by the mtDNA assembly process.
+
+
+14 August, 2017
+==================
+
+
+
+###CHANGELOG - 14 Aug 2017
+
+An error in the MToolBox.sh script has been fixed. The pipeline was failing is case of multiple *.annotation.csv files.
+
+A new test has been added to the test directory. Old simulated files have been moved to sim_data folder.
