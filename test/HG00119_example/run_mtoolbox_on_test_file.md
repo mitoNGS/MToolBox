@@ -27,7 +27,7 @@ mv SRR043386_2.fastq.gz	SRR043386.R2.fastq.gz
 ls SRR043366.R1.fastq.gz SRR043386.R2.fastq.gz > HG00119.lst
 ```
 
-**Run MToolBox on the HG00119 paired-end dataset:
+**Run MToolBox on the HG00119 paired-end dataset:**
 
 
 First change the full path specified in `input_path` and `output_name` arguments in the `HG00119.conf` file with your paths, and then run:
