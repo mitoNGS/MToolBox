@@ -1,8 +1,7 @@
-##Run MToolBox on HG00119 exome data
+<h1>Run MToolBox on HG00119 exome data</h<h1>
 
 
-
-*Download the HG00119 exomes data*:
+**Download the HG00119 exomes data**:
 
 
 ```
@@ -10,7 +9,7 @@ wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR043/SRR043366/SRR043366_1.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR043/SRR043386/SRR043386_2.fastq.gz
 ```
 
-*When donwload is complete you should have the following md5sum:*
+**When donwload is complete you should have the following md5sum:**
 
 
 ```
@@ -18,7 +17,8 @@ md5sum *.fastq.gz
 a8a41bddd06e39f184ec5f5bd851843b  SRR043366_1.fastq.gz
 4128bc81d768169a5ff72c3fc64a4a9a SRR043366_2.fastq.gz
 ```
-*Move the file name of the paired-end fastq files into MToolBox-compatible file names. For more info about file names, please read [NOTE ON FILE NAMES] (https://github.com/mitoNGS/MToolBox/wiki/Requirements)*
+
+**Move the file name of the paired-end fastq files into MToolBox-compatible file names. For more info about file names, please read:** [NOTE ON FILE NAMES](https://github.com/mitoNGS/MToolBox/wiki/Requirements)
 
 
 ```
@@ -27,7 +27,7 @@ mv SRR043386_2.fastq.gz	SRR043386.R2.fastq.gz
 ls SRR043366.R1.fastq.gz SRR043386.R2.fastq.gz > HG00119.lst
 ```
 
-*Run MToolBox on the HG00119 paired-end dataset:*
+**Run MToolBox on the HG00119 paired-end dataset:
 
 
 First change the full path specified in `input_path` and `output_name` arguments in the `HG00119.conf` file with your paths, and then run:
