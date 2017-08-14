@@ -1,0 +1,17 @@
+Variant Allele	Sample	Locus	Nt Variability	Codon Position	Aa Change	Aa Variability	tRNA Annotation	Disease Score	RNA predictions	Mitomap Associated Disease(s)	Mitomap Homoplasmy	Mitomap Heteroplasmy	Somatic Mutations	SM Homoplasmy	SM Heteroplasmy	ClinVar	OMIM link	dbSNP ID	Mamit-tRNA link	PhastCons20Way	PhyloP20Way	AC/AN 1000 Genomes	1000 Genomes Homoplasmy	1000 Genomes Heteroplasmy
+4448C	SRR043366	MT-TM	0.0				51;II;TS;U;N												http://mamit-trna.u-strasbg.fr/mutations.asp?idAA=19	0.968504	0.797921			
+14641G	SRR043366	MT-ND6	0.0	3	syn	0.0017														0	-1.36904			
+7886A	SRR043366	MT-CO2	0.0	1	G101S	0.0022		0.833												0.0	0.913937	0.0004	N	Y
+8935T	SRR043366	MT-ATP6	0.00018	1	L137F	0.0006		0.812										rs28377547		0.0	-0.0528268	0.0004	N	Y
+10306C	SRR043366	MT-ND3	0.0005	2	N83T	0.0047		0.503												0.0	0.0791811	0.096	N	Y
+7153C	SRR043366	MT-CO1	0.00105	2	M417T	0.0034		0.265												0.00192126	-0.00602362	0.0004	N	Y
+2735A	SRR043366	MT-RNR2	0.00348																	0.850394	0.85352			
+9389G	SRR043366	MT-CO3	0.00649	3	syn	0.0022												rs28462217		0.0	-4.24728	0.0017	Y	Y
+1555G	SRR043366	MT-RNR1	0.00966						1.0	DEAF	Y	N				Aminoglycoside-induced deafness|Deafness, nonsyndromic sensorineural, mitochondrial|Cardiomyopathy, restrictive	http://omim.org/entry/561000#0001	rs267606617		0.00785827	-0.446362	0.0004	N	Y
+16186T	SRR043366	MT-DLOOP	0.0488																	0	-4.55206			
+9899C	SRR043366	MT-CO3	0.0506	3	syn	0.0												rs41345446		0.0	-2.04924	0.0041	Y	Y
+16163G	SRR043366	MT-DLOOP	0.0536															rs41479950		0.0	-4.25014	0.0066	Y	Y
+12633A	SRR043366	MT-ND5	0.131	3	syn	0.0023												rs3926883		0.0	-5.65809	0.0041	Y	Y
+204C	SRR043366	MT-DLOOP	0.204										various tumors	Y	Y			rs3135032		0.0	-2.5255	0.0468	Y	Y
+189G	SRR043366	MT-DLOOP	0.205										elderly muscle & brains, myocyte, POLG/PEO muscle & fibroblasts, various tumors	N	Y			rs371543232		0.0	-4.83854	0.0561	Y	Y
+310C	SRR043366	MT-DLOOP	0.215										normal buccal swab	Y	Y					0.0	0.31622	0.2663	Y	Y

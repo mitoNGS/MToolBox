@@ -1,0 +1,36 @@
+GSNAP version 2015-12-31 called with args: /data/genomics/cc926/tools/MToolBox_v1.0/bin/gmap/bin/gsnap -D /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb/ --gunzip -d chrM -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 --read-group-id=sample --read-group-name=sample --read-group-library=sample --read-group-platform=sample -n 1 -Q -O -t 8 SRR043366.R1.fastq.gz SRR043366.R2.fastq.gz
+Neither novel splicing (-N) nor known splicing (-s) turned on => assume reads are DNA-Seq (genomic)
+Checking compiler assumptions for popcnt: 6B8B4567 __builtin_clz=1 __builtin_ctz=0 __builtin_popcount=17 
+Checking compiler assumptions for SSE2: 6B8B4567 327B23C6 xor=59F066A1
+Finished checking compiler assumptions
+Allocating memory for compressed genome (oligos)...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.genomecomp...done (6,216 bytes, 0.00 sec)
+Allocating memory for compressed genome (bits)...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.genomebits128...done (6,240 bytes, 0.00 sec)
+Pre-loading suffix array....done (66,280 bytes, 0.00 sec)
+Allocating memory for indexij ptrs...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.saindex64meta...done (4,194,312 bytes, 0.00 sec)
+Allocating memory for indexij comp...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.saindex64strm...done (251,872 bytes, 0.00 sec)
+Pre-loading LCP/child/DC arrays...,.done (41,425 bytes, 0.00 sec)
+Allocating memory for lcp guide...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.salcpguide1024...done (4 bytes, 0.01 sec)
+Allocating memory for lcp exceptions...done (0 bytes, 0.00 sec)
+Allocating memory for child guide...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.sachildguide1024...done (72 bytes, 0.00 sec)
+Allocating memory for child exceptions...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.sachildexc...done (488 bytes, 0.00 sec)
+Looking for index files in directory /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM
+  Pointers file is chrM.ref153offsets64meta
+  Offsets file is chrM.ref153offsets64strm
+  Positions file is chrM.ref153positions
+Offsets compression type: bitpack64
+Allocating memory for ref offset pointers, kmer 15, interval 3...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.ref153offsets64meta...done (134,217,744 bytes, 0.13 sec)
+Allocating memory for ref offsets, kmer 15, interval 3...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.ref153offsets64strm...done (88,176 bytes, 0.00 sec)
+Allocating memory for ref positions, kmer 15, interval 3...Attached new memory for /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb//chrM/chrM.ref153positions...done (22,056 bytes, 0.00 sec)
+GMAP modes: pairsearch, indel_knownsplice, segments, improvement
+Starting alignment
+Processed 16088776 queries in 548.16 seconds (29350.51 queries/sec)
+Removed existing memory for shmid 24313865
+Removed existing memory for shmid 24281096
+Removed existing memory for shmid 24248327
+Removed existing memory for shmid 24084482
+Removed existing memory for shmid 24117251
+Removed existing memory for shmid 24150020
+Removed existing memory for shmid 24215558
+Removed existing memory for shmid 24182789
+Removed existing memory for shmid 24051713
+Removed existing memory for shmid 24018944

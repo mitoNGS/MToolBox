@@ -1,0 +1,109 @@
+
+setting up MToolBox environment variables...
+...done
+
+setting up MToolBox variables in config file ...
+...done
+
+
+Check python version... (2.7 required)
+OK.
+
+Checking files to be used in MToolBox execution...
+
+Checking mapExome parameters...
+OK.
+
+Checking assembleMTgenome parameters...
+OK.
+
+Checking mt-classifier parameters...
+OK.
+
+Input type is fastq.
+output files will be placed in /nfs4/suffolk/DataGenomicsC/cc926/mtoolbox_data/HG00119/
+
+##### EXECUTING READ MAPPING WITH MAPEXOME...
+
+
+mapExome for sample SRR043366, files found: SRR043366.R1.fastq.gz SRR043366.R2.fastq.gz
+Mapping onto mtDNA...
+/data/genomics/cc926/tools/MToolBox_v1.0/bin/gmap/bin/gsnap -D /data/genomics/cc926/tools/MToolBox_v1.0/gmapdb/ --gunzip -d chrM -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 --read-group-id=sample --read-group-name=sample --read-group-library=sample --read-group-platform=sample -n 1 -Q -O -t 8 SRR043366.R1.fastq.gz SRR043366.R2.fastq.gz > /nfs4/suffolk/DataGenomicsC/cc926/mtoolbox_data/HG00119//OUT_SRR043366/outmt.sam 2> /nfs4/suffolk/DataGenomicsC/cc926/mtoolbox_data/HG00119//OUT_SRR043366/logmt.txt
+Extracting FASTQ from SAM...
+Mapping onto complete human genome...single reads
+Mapping onto complete human genome...pair reads
+Reading Results...
+Filtering reads...
+Outfile saved on /nfs4/suffolk/DataGenomicsC/cc926/mtoolbox_data/HG00119//OUT_SRR043366/OUT.sam.
+Done.
+
+
+SAM files post-processing...
+
+##### SORTING OUT.sam FILES WITH PICARDTOOLS...
+
+[Mon Aug 14 13:27:08 UTC 2017] net.sf.picard.sam.SortSam INPUT=OUT.sam OUTPUT=OUT.sam.bam SORT_ORDER=coordinate TMP_DIR=[/nfs4/suffolk/DataGenomicsC/cc926/mtoolbox_data/HG00119/OUT_SRR043366/tmp]    VERBOSITY=INFO QUIET=false VALIDATION_STRINGENCY=STRICT COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false
+[Mon Aug 14 13:27:08 UTC 2017] Executing as cc926@sledge04 on Linux 2.6.32-642.4.2.el6.x86_64 amd64; OpenJDK 64-Bit Server VM 1.8.0_121-b13; Picard version: 1.98(1547)
+INFO	2017-08-14 13:27:08	SortSam	Finished reading inputs, merging and writing to output now.
+[Mon Aug 14 13:27:10 UTC 2017] net.sf.picard.sam.SortSam done. Elapsed time: 0.04 minutes.
+Runtime.totalMemory()=2058354688
+Success.
+
+Skip Indel Realigner...
+Skipping Mark Duplicates...
+[Mon Aug 14 13:27:11 UTC 2017] net.sf.picard.sam.SamFormatConverter INPUT=OUT.sam.bam.marked.bam OUTPUT=OUT.sam.bam.marked.bam.marked.sam TMP_DIR=[/nfs4/suffolk/DataGenomicsC/cc926/mtoolbox_data/HG00119/OUT_SRR043366/tmp]    VERBOSITY=INFO QUIET=false VALIDATION_STRINGENCY=STRICT COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false
+[Mon Aug 14 13:27:11 UTC 2017] Executing as cc926@sledge04 on Linux 2.6.32-642.4.2.el6.x86_64 amd64; OpenJDK 64-Bit Server VM 1.8.0_121-b13; Picard version: 1.98(1547)
+[Mon Aug 14 13:27:12 UTC 2017] net.sf.picard.sam.SamFormatConverter done. Elapsed time: 0.03 minutes.
+Runtime.totalMemory()=2058354688
+
+##### ASSEMBLING MT GENOMES WITH ASSEMBLEMTGENOME...
+
+WARNING: values of tail < 5 are deprecated and will be replaced with 5
+
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+
+##### GENERATING VCF OUTPUT...
+Reference sequence used for VCF: RCRS
+
+##### PREDICTING HAPLOGROUPS AND ANNOTATING/PRIORITIZING VARIANTS...
+
+Haplogroup predictions based on RSRS Phylotree build 16
+Your best results file is  mt_classification_best_results.csv
+
+Loading contig sequences from file SRR043366-contigs.fasta
+Loaded 1 contig sequences
+
+Aligning Contigs to mtDNA reference genome...
+
+
+Sequence haplogroup assignment
+
+Classification according to tree: /data/genomics/cc926/tools/MToolBox_v1.0/MToolBox/data/phylotree_r16.pickle
+genome_state is  incomplete
+OrderedDict([('T1a1_152', (53, 53, 53)), ('T1a1', (53, 53, 53))])
+====================
+I'm looking for T1a1_152
+I'm looking for T1a1
+------------------------------
+Contig alignment to MHCS and rCRS
+Aligning contigs to MHCS SeqDiff object
+rCRS SeqDiff object
+Merging seq_diffs...
+Writing results for sequence SRR043366
+Parsing pathogenicity table...
+Parsing variability data...
+Parsing info about haplogroup-defining sites...
+Parsing info about haplogroup assignments...
+/nfs4/suffolk/DataGenomicsC/cc926/mtoolbox_data/HG00119/OUT_SRR043366/SRR043366_merged_diff.csv
+Parsing variant data for sample SRR043366...
+Best haplogroup predictions for sample SRR043366 : ['T1a1_152', 'T1a1']
+Functional annotation for haplogroup T1a1_152
+Functional annotation for haplogroup T1a1
+Looking for prioritized variants...
+
+Prioritization analysis done.
+
+
+Analysis completed!
+
