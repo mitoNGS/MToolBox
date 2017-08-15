@@ -6,7 +6,7 @@
 
 ```
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR043/SRR043366/SRR043366_1.fastq.gz
-wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR043/SRR043386/SRR043386_2.fastq.gz
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR043/SRR043366/SRR043366_2.fastq.gz
 ```
 
 **When donwload is complete you should have the following md5sum:**
