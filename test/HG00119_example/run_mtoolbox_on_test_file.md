@@ -23,8 +23,8 @@ a8a41bddd06e39f184ec5f5bd851843b  SRR043366_1.fastq.gz
 
 ```
 mv SRR043366_1.fastq.gz SRR043366.R1.fastq.gz
-mv SRR043386_2.fastq.gz	SRR043386.R2.fastq.gz
-ls SRR043366.R1.fastq.gz SRR043386.R2.fastq.gz > HG00119.lst
+mv SRR043366_2.fastq.gz	SRR043366.R2.fastq.gz
+ls SRR043366.R1.fastq.gz SRR043366.R2.fastq.gz > HG00119.lst
 ```
 
 **Run MToolBox on the HG00119 paired-end dataset:**
