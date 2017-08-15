@@ -63,7 +63,7 @@ input_path=/path/to/inputfile/
 ##
 output_name=/path/to/output
 ##
-##OPTIONAL. Specify the FULL PATH to the list of files to be analyzed. Default is use all the files with the specified file format extension 
+##OPTIONAL. Specify the list name of files to be analyzed. Default is use all the files with the specified file format extension 
 ##in the current working directory and skip this option
 ##
 list=test_list.lst
