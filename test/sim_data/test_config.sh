@@ -68,7 +68,7 @@ output_name=/path/to/output
 ##
 list=test_list.lst
 ##
-##MANDATORY. Specify the input file format extension. [fasta | bam | sam | fastq | fastq.gz]
+##MANDATORY. Specify the input file format extension. [fasta | bam | sam | fastq ]
 ##
 input_type=fastq
 ##
