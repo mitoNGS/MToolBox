@@ -198,7 +198,7 @@ def data_parsing(file_file, site_file, bestres_file, haptab_file):
 
 	print "Parsing info about haplogroup-defining sites..."
 	haplo = {}
-	htree = tree.HaplogroupTree(pickle_data=open(data_file +'/data/phylotree_r16.pickle', 'rb').read())
+	htree = tree.HaplogroupTree(pickle_data=open(data_file +'/data/phylotree_r17.pickle', 'rb').read())
 	for haplogroup in htree._aplo_dict.keys():
 		haplo[haplogroup] = []
 		# change Transition and Transversion datatypes to SNP_MixIn,
