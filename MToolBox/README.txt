@@ -422,3 +422,11 @@ An error in the assembleMTgenome.py has been fixed. The pipeline was failing in 
 An error in the MToolBox.sh script has been fixed. The pipeline was failing is case of multiple *.annotation.csv files.
 
 A new test has been added to the test directory. Old simulated files have been moved to sim_data folder.
+
+
+###CHANGELOG - 15 Oct 2017
+
+Update to the Phylotree build 17 (http://www.phylotree.org/tree/index.htm). 
+Update of the patho_table.txt file used for functional annotation with nucleotide variablity values calculated on human genomes available at HmtDB as of July 2017. Null values have been also substituted by NAs to improve readability of the file.
+
+
