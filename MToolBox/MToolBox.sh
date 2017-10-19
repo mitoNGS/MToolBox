@@ -339,16 +339,17 @@ fastq_input()
 	echo ""
 	echo "SAM files post-processing..."
 	echo ""
-	# SORT SAM WITH PICARD TOOLS
-	echo "##### SORTING OUT.sam FILES WITH PICARDTOOLS..."
+	# SORT SAM WITH SAMTOOLS
+	echo -e "##### SORTING OUT.sam FILES WITH SAMTOOLS...\n"
 	echo ""
-	for i in $(ls -d OUT_*); do cd ${i}; java -Xmx4g \
-	-Djava.io.tmpdir=`pwd`/tmp \
-	-jar ${externaltoolsfolder}SortSam.jar \
-	SORT_ORDER=coordinate \
-	INPUT=OUT.sam \
-	OUTPUT=OUT.sam.bam \
-	TMP_DIR=`pwd`/tmp; cd ..; done
+	for i in $(ls -d OUT_*); do cd ${i}; $samtoolsexe sort -O bam -T tmp -o OUT.sam.bam OUT.sam; cd ..; done
+	#for i in $(ls -d OUT_*); do cd ${i}; java -Xmx4g \
+	#-Djava.io.tmpdir=`pwd`/tmp \
+	#-jar ${externaltoolsfolder}SortSam.jar \
+	#SORT_ORDER=coordinate \
+	#INPUT=OUT.sam \
+	#OUTPUT=OUT.sam.bam \
+	#TMP_DIR=`pwd`/tmp; cd ..; done
 	check_exit_status
 	# INDEXING BAM FILES WITH SAMTOOLS
 	for i in $(ls -d OUT_*); do cd ${i}; ${samtoolsexe} index OUT.sam.bam; cd ..; done
@@ -394,23 +395,40 @@ fastq_input()
 		REMOVE_DUPLICATES=true \
 		TMP_DIR=`pwd`/tmp; cd ..; done
 	else
-		echo ""Skipping Mark Duplicates...""
+		echo ""Skip Mark Duplicates...""
 		for i in $(ls -d OUT_*); do cd ${i}; cat OUT.realigned.bam > OUT.sam.bam.marked.bam; cd ..; done
 	fi
-	# RE-CONVERT BAM OUTPUT FROM MARKDUPLICATES IN SAM.
-	for i in $(ls -d OUT_*); do cd ${i}; java -Xmx4g -Djava.io.tmpdir=`pwd`/tmp -jar ${externaltoolsfolder}SamFormatConverter.jar INPUT=OUT.sam.bam.marked.bam OUTPUT=OUT.sam.bam.marked.bam.marked.sam TMP_DIR=`pwd`/tmp; cd ..; done
-
-	for i in $(ls -d OUT_*); do cd ${i}; grep -v "^@" *marked.sam > OUT2.sam; mkdir MarkTmp; mv OUT.sam.bam MarkTmp; mv OUT.sam.bam.marked.bam MarkTmp; mv OUT.sam.bam.marked.bam.marked.sam MarkTmp; tar -czf MarkTmp.tar.gz MarkTmp; rm -R MarkTmp/; cd ..; done
+	# RE-CONVERT BAM OUTPUT FROM MARKDUPLICATES IN SAM WITH SAMTOOLS.
+	#for i in $(ls -d OUT_*); do cd ${i}; java -Xmx4g -Djava.io.tmpdir=`pwd`/tmp -jar ${externaltoolsfolder}SamFormatConverter.jar INPUT=OUT.sam.bam.marked.bam OUTPUT=OUT.sam.bam.marked.bam.marked.sam TMP_DIR=`pwd`/tmp; cd ..; done
+	for i in $(ls -d OUT_*); do 
+		cd ${i}
+		#output bam into sam without header
+		$samtoolsexe view -o OUT2.sam OUT.sam.bam.marked.bam 
+		cd ..
+	 done &&
+	for i in $(ls -d OUT_*); do 
+		cd ${i}
+		#grep -v "^@" *marked.sam > OUT2.sam
+		mkdir MarkTmp
+		mv OUT.sam.bam MarkTmp
+		mv OUT.sam.bam.marked.bam MarkTmp
+		#mv OUT.sam.bam.marked.bam.marked.sam MarkTmp
+		tar -czf MarkTmp.tar.gz MarkTmp
+		rm -R MarkTmp/
+		cd ..
+	done
 
 	# ASSEMBLE CONTIGS, GET MT-TABLES...
 	echo ""
-	echo "##### ASSEMBLING MT GENOMES WITH ASSEMBLEMTGENOME..."
-	echo ""
-	echo "WARNING: values of tail < 5 are deprecated and will be replaced with 5"
-	echo ""	
-	for i in $(ls -d OUT_*); do outhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg19_fasta} -s ${samtoolsexe} -v ${samtools_version} -FCP ${assembleMTgenome_OPTS}; cd ..; done > logassemble.txt
-	echo ""
-	echo "##### GENERATING VCF OUTPUT..."
+	echo -e  "##### ASSEMBLING MT GENOMES WITH ASSEMBLEMTGENOME...\n"
+	echo -e  "WARNING: values of tail < 5 are deprecated and will be replaced with 5\n"
+	for i in $(ls -d OUT_*); do 
+		outhandle=$(echo ${i} | sed 's/OUT_//g')
+		cd ${i}
+		assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg19_fasta} -s ${samtoolsexe} -v ${samtools_version} -FCP ${assembleMTgenome_OPTS}
+		cd ..
+	done > logassemble.txt
+	echo -e "##### GENERATING VCF OUTPUT...\n"
 	# ... AND VCF OUTPUT
 	VCFoutput.py -r ${ref}
 }
