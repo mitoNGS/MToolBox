@@ -22,7 +22,7 @@ followed, in case, by one of the options to specify the software version/kmer pa
 	-a	Anaconda version: default is 2-2.5.0
 	-z	Zlib version: default is 1.2.11
 	-m 	MUSCLE version: default is muscle3.8.31_i86linux64
-	-s 	Samtools version: default is 1.3
+	-s 	Samtools version: default is 1.6
 	-k	Kmer used for GSNAP database: default is 15
 	-i	install only one specific software [gsnap | anaconda | muscle | zlib | samtools | gsnap_db]		
 
@@ -36,7 +36,7 @@ Help options:
 gsnap_gmap_version=2015-12-31.v7
 anaconda_version=2-2.5.0
 muscle_file=muscle3.8.31_i86linux64
-samtools_version=1.3
+samtools_version=1.6
 zlib_version=1.2.11
 kmer=15
 software_install=all
