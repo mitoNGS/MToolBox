@@ -242,7 +242,7 @@ def main_mt_hpred():
 	sample_name = contig_file.split('-')[0]
 	
 	# haplogroup tree parsing
-	htrees = [(tree.HaplogroupTree(pickle_data=open(data_file + '/data/phylotree_r16.pickle', 'rb').read()), data_file + '/data/phylotree_r16.pickle')]
+	htrees = [(tree.HaplogroupTree(pickle_data=open(data_file + '/data/phylotree_r17.pickle', 'rb').read()), data_file + '/data/phylotree_r17.pickle')]
 	# mhcs parsing
 	mhcs_dict = parse_mhcs.parse2mhcs_dict(data_file + '/data/mhcs.tab')
 	

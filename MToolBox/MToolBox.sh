@@ -491,7 +491,7 @@ fasta_input()
 	#### Haplogroup prediction and functional annotation
 	# Brand new haplogroup prediction best file
 	hpbest="mt_classification_best_results.csv" # change just this name for changing filename with most reliable haplogroup predictions
-	echo "Haplogroup predictions based on RSRS Phylotree build 16"
+	echo "Haplogroup predictions based on RSRS Phylotree build 17"
 	echo "SampleID,Best predicted haplogroup(s)" > ${hpbest}
 	for i in $(ls -d OUT_*); do inhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; mt-classifier.py -i ${inhandle}-contigs.fasta -s ${hpbest} -b ${inhandle} -m ${muscleexe} ${mt_classifier_OPTS}; cd ..; done
 	#check_exit_status
