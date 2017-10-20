@@ -176,7 +176,7 @@ MToolBox default outputs are:
 	5. P_Hg = the prediction percentage value for the haplogroup (Nph/Nph_exp*100);
 	6. Missing sites = the mutation events that are not present in the query genome but were expected from its respective path to the RSRS. These mutations may also point to a sequencing error;
 - merged\_diff.csv file reports the SNPs between the query genome and each of the three sequences RSRS, rCRS and hg\_MHCS (Macro-Haplogroup Consensus Sequence);
-- \<sample\_name>.csv contains a table where, for all the haplogroups present in the Phylotree Build 15, are reported the same data as in the file \<sequence\_name>.sorted.csv, except for the Missing Sites field;
+- \<sample\_name>.csv contains a table where, for all the haplogroups present in the Phylotree Build 17, are reported the same data as in the file \<sequence\_name>.sorted.csv, except for the Missing Sites field;
 - annotation.csv is a further elaboration of the file \merged\_diff.csv, providing, for each mt variant allele between the query genome and each of the three sequences RSRS, rCRS and hg\_MHCS, several annotations:
 	1. Sample = sample name;
 	2. Variant Allele = nucleotide position in mitochondrial genome followed by the variant allele;
