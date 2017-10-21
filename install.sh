@@ -23,7 +23,7 @@ TO UPDATE ONLY ONE SPECIFIC SOTWARE:
 followed, in case, by one of the options to specify the software version/kmer parameter:
 	-g	GSNAP version: default is 2015-12-31.v7
 	-a	Anaconda version: default is 2-2.5.0
-	-z	Zlib version: default is 1.2.8
+	-z	Zlib version: default is 1.2.11
 	-m 	MUSCLE version: default is muscle3.8.31_i86linux64
 	-s 	Samtools version: default is 1.3
 	-k	Kmer used for GSNAP database: default is 15
@@ -36,15 +36,11 @@ Help options:
 	echo "$USAGE"
 }
 
-### TODO: check if -o option allows the installation of specific software versions with other options
-
 gsnap_gmap_version=2015-12-31.v7
 anaconda_version=2-2.5.0
 anaconda_file=Anaconda$anaconda_version-Linux-x86_64.sh
-### TODO: change muscle_file in muscle_version for better user choice
 muscle_file=muscle3.8.31_i86linux64
 samtools_version=1.3
-# zlib_version=1.2.8 isn't there anymore!?
 zlib_version=1.2.11
 kmer=15
 opsys=linux
@@ -102,7 +98,7 @@ download()
 
 muscle_install()
 {
-	echo "Installing $muscle_file ..."
+	echo "Installing Muscle $muscle_file ..."
 	muscle_file=$muscle_file
 	muscle_url=http://www.drive5.com/muscle/downloads3.8.31/${muscle_file}.tar.gz
 	pushd .
@@ -265,8 +261,6 @@ else
     MTOOLBOX_BIN=$(readlink -f $DIRECTORY)
 fi
 
-### TODO: check if MTOOLBOX_BIN is exported in the setup file
-
 GENOME_FASTA=genome_fasta
 if [ -d "$GENOME_FASTA" ]; then
         echo "$GENOME_FASTA already exists..."
@@ -298,7 +292,7 @@ if [ "$software_install" == 'all' ]; then
 	gsnap_install
 	gsnap_db_install
 
-	echo "Moving fasta files into $GENOME_FASTA"
+	echo "Moving fasta files into $GENOME_FASTA..."
 
 	mv $rcrs_mfasta $GENOME_FASTA
 	mv $rsrs_mfasta $GENOME_FASTA
