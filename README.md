@@ -10,7 +10,7 @@ The MToolBox pipeline includes:
 **As of 24 October 2017**
 
 MToolBox can be now also installed on Mac OS X by specifing `-o` in the `install.sh` command line. For further details please visit:
-[MToolBox installation](https://github.com/mitoNGS/MToolBox/wiki/Installation). 
+[MToolBox installation](https://github.com/mitoNGS/MToolBox/wiki/Installation). Credits to [Roberto Preste](https://github.com/robertopreste).
 
 
 **As of 11 December 2016**
