@@ -7,6 +7,12 @@ The MToolBox pipeline includes:
 - an extended version of a previously published computational strategy for mtDNA genome assembly (PMID: 22669646). The pipeline has been integrated with the detection of insertions and deletions (indels) and the assessment of the heteroplasmic fraction (HF) and related confidence interval (CI) for each mt variant. HF and CI are integrated as genotype specific meta-information in a Variant Call Format (version 4.0) file;
 - the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization.
 
+**As of 24 October 2017**
+
+MToolBox can be now also installed on Mac OS X by specifing `-o` in the `install.sh` command line. For further details please visit:
+[MToolBox installation](https://github.com/mitoNGS/MToolBox/wiki/Installation). 
+
+
 **As of 11 December 2016**
 
 `GenomeAnalysisTK.jar` has been removed from the `MToolBox/ext_tools` directory.  
