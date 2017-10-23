@@ -429,4 +429,6 @@ A new test has been added to the test directory. Old simulated files have been m
 Update to the Phylotree build 17 (http://www.phylotree.org/tree/index.htm). 
 Update of the patho_table.txt file used for functional annotation with nucleotide variablity values calculated on human genomes available at HmtDB as of July 2017. Null values have been also substituted by NAs to improve readability of the file.
 
-
+####CHANGELOG - 24 Oct 2017
+Changes in the install.sh of MToolBox to allow installation on Mac OS X. To run installation for Mac OS please run:
+./install.sh -o

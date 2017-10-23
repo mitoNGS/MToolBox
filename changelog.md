@@ -1,3 +1,8 @@
+###CHANGELOG - 24 Oct 2017
+
+Changes in the `install.sh` of MToolBox to allow installation on Mac OS X. To run installation for Mac OS please run:
+`./install.sh -o`
+
 ###CHANGELOG - 15 Oct 2017
 
 Update to Phylotree build 17 (http://www.phylotree.org/tree/index.htm).
