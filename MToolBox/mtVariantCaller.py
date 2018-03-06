@@ -687,18 +687,6 @@ def getIUPAC(ref_var, dIUPAC):
 			
 
 def mtvcf_main_analysis(mtable, sam, name2, tail=5):
-	"""
-	For a single sample...
-	
-	Inputs:
-	- mt-table
-	- samfile
-	- sample name
-	- tail: distance from read end to disregard indel events
-	
-	Output:
-	dict of { sample : [[pos, Refbase, Covbase, deletions, DelCov, qs, hetfreq, het_ci_low, het_ci_up, 'del'], ...]} 
-	"""
 	mtable=[i.split('\t') for i in mtable]
 	mtable.remove(mtable[0])
 	sam=sam.readlines()
@@ -1019,7 +1007,6 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 
 def get_consensus_single(i, hf=0.8):
 	consensus_value=[]
-	consensus_value_strict=[]
 	if len(i) != 0:
 		#consensus_value = []
 		#for var in dict_of_dicts[i]:
@@ -1030,7 +1017,6 @@ def get_consensus_single(i, hf=0.8):
 				basevar=var[3][index]
 				res=[var[0], [basevar], 'mism']
 				consensus_value.append(res)
-				consensus_value_strict.append(res)
 				#Consensus[i].append(res)
 			elif var[-1] == 'mism' and max(var[6]) < hf:
 				basevar=[var[1]]+var[3]
@@ -1038,24 +1024,12 @@ def get_consensus_single(i, hf=0.8):
 				a=getIUPAC(basevar, dIUPAC)
 				res=[var[0], a, 'mism']
 				consensus_value.append(res)
-				# strict consensus
-				basevar2 = [x[0] for x in zip([var[1]]+var[3], var[6]) if x[1] > 0.2]
-				if len(basevar2) == 1:
-					#a=getIUPAC(basevar2, dIUPAC)
-					res=[var[0], [basevar2[0]], 'mism']
-				else:
-					# I guess there's always going to be at least one value,
-					#  so here it's understood is basevar2 > 1, never 0
-					a=getIUPAC(basevar2, dIUPAC)
-					res=[var[0], a, 'mism']
-				consensus_value_strict.append(res)
 				#Consensus[i].append(res)
 			elif var[-1] == 'ins' and max(var[6]) >= hf:
 				index=var[6].index(max(var[6]))
 				basevar=var[3][index]
 				res=[var[0], [basevar], 'ins']
 				consensus_value.append(res)
-				consensus_value_strict.append(res)
 				#Consensus[i].append(res)
 			elif var[-1] == 'del' and max(var[6]) >= hf:
 				index=var[6].index(max(var[6]))
@@ -1065,11 +1039,10 @@ def get_consensus_single(i, hf=0.8):
 				end_del=start_del+del_length
 				res=[var[0], range(start_del,end_del), 'del']
 				consensus_value.append(res)
-				consensus_value_strict.append(res)
 				#Consensus[i].append(res)
 			else:
 				pass
-	return consensus_value, consensus_value_strict
+	return consensus_value
 
 def get_consensus(dict_of_dicts):
 	"""Dictionary of consensus variants, for fasta sequences"""
