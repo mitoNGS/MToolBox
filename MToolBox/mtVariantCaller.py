@@ -1045,7 +1045,7 @@ def get_consensus_single(i, hf=0.8):
 					res=[var[0], [basevar2[0]], 'mism']
 				else:
 					# I guess there's always going to be at least one value,
-					#  so here it's understood is basevar2 > 1, never 0
+					#  so here it's understood is basevar2 > 1, never 0!
 					a=getIUPAC(basevar2, dIUPAC)
 					res=[var[0], a, 'mism']
 				consensus_value_strict.append(res)

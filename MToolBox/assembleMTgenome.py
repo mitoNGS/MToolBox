@@ -454,7 +454,7 @@ x=1
 for i in contigs:
 	#initialize new_i
 	new_i = i
-	#write fasta header
+	#write fasta header in both files
 	f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 	f2.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 	#print "A contig, ", i
