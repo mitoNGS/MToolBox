@@ -377,7 +377,7 @@ def varnames2(b,i):
 #Heteroplasmic fraction quantification
 def heteroplasmy(cov, Covbase):
 	try:
-		if Covbase >= cov: 
+		if Covbase >= cov:
 			Heteroplasmy=float(cov)/float(Covbase)
 			het=round(Heteroplasmy, 3)
 			return het
@@ -420,7 +420,7 @@ def error(list):
 		list.remove('')
 	except ValueError:
 		pass
-#defines the function searching for and filtering indels within the read sequence	
+#defines the function searching for and filtering indels within the read sequence
 def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 	m=re.compile(r'[a-z]', re.I)
 	if 'I' in CIGAR:
@@ -434,7 +434,7 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 			rscnt=m.split(softclippingright)
 			if len(rscnt)>2:  #if  there are other options on the right end
 				softclippingright=int(rscnt[-2])
-			else:  #if there is only S option 
+			else:  #if there is only S option
 				softclippingright=int(rscnt[0])
 		else:
 			softclippingright=0 # no softclipped bases right
@@ -447,8 +447,8 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 			rhcnt=m.split(hardclippingright)
 			if len(rhcnt)>2:  #if  there are other options on the right end
 				hardclippingright=int(rhcnt[-2])
-			else:  #if there is only H option 
-				hardclippingright=int(rhcnt[0])			
+			else:  #if there is only H option
+				hardclippingright=int(rhcnt[0])
 		else:
 			hardclippingright=0 # no hardclipped bases right
 		left=m.split(pcigar[0])
@@ -497,7 +497,7 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 			rscnt=m.split(softclippingright)
 			if len(rscnt)>2:  #if  there are other options on the right end
 				softclippingright=int(rscnt[-2])
-			else:  #if there is only S option 
+			else:  #if there is only S option
 				softclippingright=int(rscnt[0])
 		else:
 			softclippingright=0 # no softclipped bases right
@@ -510,8 +510,8 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 			rhcnt=m.split(hardclippingright)
 			if len(rhcnt)>2:  #if  there are other options on the right end
 				hardclippingright=int(rhcnt[-2])
-			else:  #if there is only H option 
-				hardclippingright=int(rhcnt[0])			
+			else:  #if there is only H option
+				hardclippingright=int(rhcnt[0])
 		else:
 			hardclippingright=0 # no hardclipped bases right
 		left=m.split(pcigar[0])
@@ -559,9 +559,9 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 		res.append(qsDel)
 		return res
 	else:
-		pass 
+		pass
 
-#defines function searching for point mutations. It produces both the consensus base and variant(s) as output 
+#defines function searching for point mutations. It produces both the consensus base and variant(s) as output
 def findmutations(A,C,G,T,Position, Ref, Cov):
 	oo = []
 	var=[]
@@ -588,14 +588,14 @@ def findmutations(A,C,G,T,Position, Ref, Cov):
 	elif len(var)==1 and Ref not in bases:
 		o=[Position, Ref, Cov, bases, var]
 		return o
-	else:	
+	else:
 		return oo
 
 #Wilson confidence interval lower bound
 def CIW_LOW(het, Covbase):
 	'''The function calculates the heteroplasmic fraction and the related
 	confidence interval with 95% of coverage probability,
-	considering a Wilson score interval when n<=40 
+	considering a Wilson score interval when n<=40
 	CIw= [1/(1+(1/n)*z^2)] * [p + (1/2n)*z^2 +- z(1/n *(p*q) + ((1/(4n^2))*z^2))^1/2]
 	'''
 	p=het
@@ -615,7 +615,7 @@ def CIW_LOW(het, Covbase):
 def CIW_UP(het, Covbase):
 	'''The function calculates the heteroplasmic fraction and the related
 	confidence interval with 95% of coverage probability,
-	considering a Wilson score interval when n<=40 
+	considering a Wilson score interval when n<=40
 	CIw= [1/(1+(1/n)*z^2)] * [p + (1/2n)*z^2 +- z(1/n *(p*q) + ((1/(4n^2))*z^2))^1/2]
 	'''
 	p=het
@@ -631,10 +631,10 @@ def CIW_UP(het, Covbase):
 	else:
 		return wilsonci_up
 
-#Agresti-Coull confidence interval lower bound		
+#Agresti-Coull confidence interval lower bound
 def CIAC_LOW(cov,Covbase):
-	'''The function calculates the heteroplasmic fraction and the related confidence interval 
-	for heteroplasmic fraction with 95% of coverage probability,considering the 
+	'''The function calculates the heteroplasmic fraction and the related confidence interval
+	for heteroplasmic fraction with 95% of coverage probability,considering the
 	Agresti-Coull interval when n>40'''
 	z=1.96
 	n=Covbase
@@ -652,10 +652,10 @@ def CIAC_LOW(cov,Covbase):
 	else:
 		return agresticoull_low
 
-#Agresti-Coull confidence interval upper bound	
+#Agresti-Coull confidence interval upper bound
 def CIAC_UP(cov,Covbase):
-	'''The function calculates the heteroplasmic fraction and the related confidence interval 
-	for heteroplasmic fraction with 95% of coverage probability,considering the 
+	'''The function calculates the heteroplasmic fraction and the related confidence interval
+	for heteroplasmic fraction with 95% of coverage probability,considering the
 	Agresti-Coull interval when n>40'''
 	z=1.96
 	n=Covbase
@@ -670,7 +670,7 @@ def CIAC_UP(cov,Covbase):
 	agresticoull_up=round(P+(z*(math.sqrt(P*Q/N))),3)
 	if agresticoull_up>1.0:
 		return 1.0
-	else:	
+	else:
 		return agresticoull_up
 
 #IUPAC dictionary
@@ -697,12 +697,12 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 	- tail: distance from read end to disregard indel events
 	
 	Output:
-	dict of { sample : [[pos, Refbase, Covbase, deletions, DelCov, qs, hetfreq, het_ci_low, het_ci_up, 'del'], ...]} 
+	dict of { sample : [[pos, Refbase, Covbase, deletions, DelCov, qs, hetfreq, het_ci_low, het_ci_up, 'del'], ...]}
 	"""
 	mtable=[i.split('\t') for i in mtable]
 	mtable.remove(mtable[0])
 	sam=sam.readlines()
-	sam=[i.split('\t') for i in sam]
+	sam=[i.split('\t') for i in sam if i.startswith("@") == False]
 	#table of description of CIGAR characters
 	#M=alignment match (can be match or mismatch)
 	#I=insertion to the reference
@@ -774,7 +774,7 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 			if i[-1]=='delete':
 				pass
 			else:
-				rposDel[i[2]]=[]			
+				rposDel[i[2]]=[]
 				rposDel[i[2]].append(i[3:])
 		else:
 			if i[-1]=='delete':
@@ -939,7 +939,7 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 					#print InsCov
 					if Covbase <=40:
 						het_ci_low=map(lambda x: CIW_LOW(x, Covbase), hetfreq)
-						het_ci_up=map(lambda x: CIW_UP(x, Covbase), hetfreq)					
+						het_ci_up=map(lambda x: CIW_UP(x, Covbase), hetfreq)
 					else:
 						het_ci_low=map(lambda x: CIAC_LOW(x,Covbase), InsCov)
 						het_ci_up=map(lambda x: CIAC_UP(x,Covbase), InsCov)
@@ -966,7 +966,7 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 					#print DelCov
 					if Covbase <=40:
 						het_ci_low=map(lambda x: CIW_LOW(x, Covbase), hetfreq)
-						het_ci_up=map(lambda x: CIW_UP(x, Covbase), hetfreq)	
+						het_ci_up=map(lambda x: CIW_UP(x, Covbase), hetfreq)
 					else:
 						het_ci_low=map(lambda x: CIAC_LOW(x,Covbase), DelCov)
 						het_ci_up=map(lambda x: CIAC_UP(x,Covbase), DelCov)
@@ -990,7 +990,7 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 		#varnames2()
 		a=findmutations(A,C,G,T,Position,Ref,Cov)
 		if len(a) > 0:
-			hetfreq=map(lambda x:heteroplasmy(x,Cov),a[-1])		
+			hetfreq=map(lambda x:heteroplasmy(x,Cov),a[-1])
 			if Cov<=40:
 				het_ci_low=map(lambda x: CIW_LOW(x,Cov),hetfreq)
 				het_ci_up=map(lambda x: CIW_UP(x,Cov),hetfreq)
@@ -1039,16 +1039,11 @@ def get_consensus_single(i, hf=0.8):
 				res=[var[0], a, 'mism']
 				consensus_value.append(res)
 				# strict consensus
-				basevar2 = [x[0] for x in zip([var[1]]+var[3], var[6]) if x[1] > 0.2]
-				if len(basevar2) == 1:
-					#a=getIUPAC(basevar2, dIUPAC)
-					res=[var[0], [basevar2[0]], 'mism']
-				else:
-					# I guess there's always going to be at least one value,
-					#  so here it's understood is basevar2 > 1, never 0!
-					a=getIUPAC(basevar2, dIUPAC)
-					res=[var[0], a, 'mism']
-				consensus_value_strict.append(res)
+				#basevar2 = [x[0] for x in zip([var[1]]+var[3], var[6]) if x[1] > 0.2]
+				index=var[6].index(max(var[6]))
+				basevar2=var[3][index]
+				res_strict=[var[0], [basevar2], 'mism']
+				consensus_value_strict.append(res_strict)
 				#Consensus[i].append(res)
 			elif var[-1] == 'ins' and max(var[6]) >= hf:
 				index=var[6].index(max(var[6]))
@@ -1111,7 +1106,7 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                 r._sample_indexes[sample]=[[0]+aplotypes, variant[2],variant[6], variant[7], variant[8]]
                 r.samples.append(sample)
                 if len(variant[3])>1:
-                    r.REF=r.REF*len(variant[3])                
+                    r.REF=r.REF*len(variant[3])
                 VCF_RECORDS.append(r)
                 present_pos.add(r.POS)
                 r.TYPEVAR=[variant[-1]]*len(variant[3])
@@ -1123,7 +1118,7 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                 r._sample_indexes[sample]=[1,variant[2], variant[6], variant[7], variant[8]]
                 r.samples.append(sample)
                 if len(variant[3])>1:
-                    r.REF=r.REF*len(variant[3])                
+                    r.REF=r.REF*len(variant[3])
                 VCF_RECORDS.append(r)
                 present_pos.add(r.POS)
                 r.TYPEVAR=[variant[-1]]*len(variant[3])
@@ -1167,7 +1162,7 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                                     i._sample_indexes[sample][0].append(aplotype)
                                     i._sample_indexes[sample][2].append(variant[6][x])
                                     i._sample_indexes[sample][3].append(variant[7][x])
-                                    i._sample_indexes[sample][4].append(variant[8][x])									
+                                    i._sample_indexes[sample][4].append(variant[8][x])
                                 else:
                                     i.REF.append(variant[1][x])
                                     #print i.REF, variant[1], i.ALT
@@ -1180,7 +1175,7 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                                     i._sample_indexes[sample][0].append(aplotype)
                                     i._sample_indexes[sample][2].append(variant[6][x])
                                     i._sample_indexes[sample][3].append(variant[7][x])
-                                    i._sample_indexes[sample][4].append(variant[8][x])									
+                                    i._sample_indexes[sample][4].append(variant[8][x])
                                     #print i
                         #for multiple variants of a position in different individuals
                         elif sample not in i.samples and type(variant[1]) == type(list()):
@@ -1281,9 +1276,9 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                                     i._sample_indexes[sample][0].append(genotype)
                                     i._sample_indexes[sample][2].append(variant[6][0])
                                     i._sample_indexes[sample][3].append(variant[7][0])
-                                    i._sample_indexes[sample][4].append(variant[8][0])																										
+                                    i._sample_indexes[sample][4].append(variant[8][0])
                                 else:
-                                    i._sample_indexes.setdefault(sample,[genotype, variant[2], variant[6], variant[7], variant[8]])									                                    
+                                    i._sample_indexes.setdefault(sample,[genotype, variant[2], variant[6], variant[7], variant[8]])
                                 #if a deletion, add a further reference base
                                 #print i
                                 if type(variant[1])== type(list()):
@@ -1302,8 +1297,8 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                                     i._sample_indexes[sample][0].append(genotype)
                                     i._sample_indexes[sample][2].append(variant[6][0])
                                     i._sample_indexes[sample][3].append(variant[7][0])
-                                    i._sample_indexes[sample][4].append(variant[8][0])									
-                                else:                                
+                                    i._sample_indexes[sample][4].append(variant[8][0])
+                                else:
                                     i._sample_indexes.setdefault(sample,[genotype, variant[2], variant[6], variant[7], variant[8]])
     for r in VCF_RECORDS:
         if len(r.REF)>1:
@@ -1322,7 +1317,7 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                 r.REF=[ord[-1]]
             else:
                 r.REF=[r.REF[0]]
-    #gets the index of each sample and assign the definitive genotype to each individual        
+    #gets the index of each sample and assign the definitive genotype to each individual
     for index, sample in enumerate(dict_of_dicts.keys()):
         for r in VCF_RECORDS:
             if sample in r.samples:
@@ -1359,7 +1354,7 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
     out.write('##FORMAT=<ID=DP,Number=.,Type=Integer,Description="Reads covering the REF position">\n')
     out.write('##FORMAT=<ID=HF,Number=.,Type=Float,Description="Heteroplasmy Frequency of variant allele">\n')
     out.write('##FORMAT=<ID=CILOW,Number=.,Type=Float,Description="Value defining the lower limit of the confidence interval of the heteroplasmy fraction">\n')
-    out.write('##FORMAT=<ID=CIUP,Number=.,Type=Float,Description="Value defining the upper limit of the confidence interval of the heteroplasmy fraction">\n')	
+    out.write('##FORMAT=<ID=CIUP,Number=.,Type=Float,Description="Value defining the upper limit of the confidence interval of the heteroplasmy fraction">\n')
     out.write('##INFO=<ID=AC,Number=.,Type=Integer,Description="Allele count in genotypes">\n')
     out.write('##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">\n')
         
@@ -1391,10 +1386,10 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                             CIUP=map(lambda x:str(x), items[1][4])
                             #print CILOW,CIUP
                             confidence_interval_low=",".join(CILOW)
-                            confidence_interval_up=",".join(CIUP)							
+                            confidence_interval_up=",".join(CIUP)
                             individual=str(items[1][0])+':'+str(items[1][1])+':'+heteroplasmy+':'+confidence_interval_low+':'+confidence_interval_up
                         else:
-                            heteroplasmy=str(items[1][2][0])                        
+                            heteroplasmy=str(items[1][2][0])
                             confidence_interval_low=str(items[1][3][0])
                             confidence_interval_up=str(items[1][4][0])
                             individual=str(items[1][0])+':'+str(items[1][1])+':'+heteroplasmy+':'+confidence_interval_low+':'+confidence_interval_up
@@ -1442,7 +1437,7 @@ def FASTAoutput(Consensus, mtDNAseq, names):
         for dirname, dirnames, filenames in os.walk('.'):
             for subdirname in dirnames:
                 if subdirname.startswith('OUT') and subdirname == names[name2]:
-                    fasta_dir=glob.glob(os.path.join(path+'/'+subdirname))[0]				
+                    fasta_dir=glob.glob(os.path.join(path+'/'+subdirname))[0]
                     fasta_out=open(fasta_dir+'/'+name2+'.fasta', "w")
                     fasta_out.write('>'+name2+'_complete_mitochondrial_sequence\n')
                     seq=[]
@@ -1481,4 +1476,3 @@ if __name__ == '__main__':
 	#print Consensus.keys()
 	print "This script is used only when called by assembleMTgenome.py."
 	pass
-
