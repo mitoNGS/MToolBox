@@ -295,6 +295,7 @@ tablefile=basename+'-table.txt'
 statfile=basename+'-statistics.txt'
 coveragefile=basename+'-coverage.txt'
 contigfile=basename+'-contigs.fasta'
+contigfile_strict=basename+'-contigs.strict_consensus.fasta'
 # trackfile=basename+'-UCSCtrack.bed'
 #track=['browser position chrRSRS\nbrowser hide all\n']
 #track.append(mt_track)
@@ -446,13 +447,16 @@ if os.path.exists('../VCF_dict_tmp'):
 else:
 	VCF_dict = {} # global VCF dict
 contigs_wdict = []
-if crf: f=open(contigfile,'w')
+if crf:
+	f=open(contigfile,'w')
+	f2=open(contigfile_strict, 'w')
 x=1
 for i in contigs:
 	#initialize new_i
 	new_i = i
 	#write fasta header
 	f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
+	f2.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 	#print "A contig, ", i
 	if crf:
 		string_seq = i[1]
@@ -465,7 +469,7 @@ for i in contigs:
 			nuc_index += 1
 		#print "original dict_seq is", dict_seq
 		# add info for consensus dictionary
-		consensus_single = get_consensus_single(mut_events[mut_events.keys()[0]],hf=hf)
+		consensus_single, consensus_single_strict = get_consensus_single(mut_events[mut_events.keys()[0]],hf=hf)
 		#print consensus_single
 		# alter dict_seq keys for the implementation
 		# of the consensus information
