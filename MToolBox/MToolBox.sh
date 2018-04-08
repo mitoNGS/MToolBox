@@ -43,7 +43,7 @@ usage()
 
 version()
 {
-	VERSION=$(echo "MToolBox v1.0")
+	VERSION=$(echo "MToolBox v1.1")
 	echo $VERSION
 }
 
@@ -55,6 +55,7 @@ version()
 UseMarkDuplicates=false
 UseIndelRealigner=false
 MitoExtraction=false
+vcf_name=sample
 # export folder where MToolBox.sh is placed, it is the same folder of PicardTools and GATK jars
 me=`basename $0`
 export mtoolbox_folder=$(which $me | sed "s/$me//g")
@@ -130,11 +131,8 @@ fi
 #export taillength=7
 #
 
-#if (( $taillength < 5 ))
-#then
-#	echo "Minumum tail length required >= 5. Tail length will be set to 5."
-#	export taillength=5
-#i
+echo -e "$vcf_name will be used as vcf file name...\n\n"
+
 
 # Check python version (2.7 required)
 echo ""
@@ -196,7 +194,6 @@ fastq_input()
 { # run mapExome directly.
 	# get unique list of sample IDs
 	# sampleIDs=$(ls *fastq* | awk 'BEGIN{FS="."}{count[$1]++}END{for (j in count) print j}')
-
 	# map against mt genome and human genome
 	# for i in $sampleIDs; do datasets=$(echo $i.*fastq*); mapExome_RSRS_SamHeader.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a "${datasets}" -o ${output_name}/OUT_${i}; done &> log_mapexome.txt
 	echo ""
@@ -412,7 +409,7 @@ fastq_input()
 	echo ""
 	echo "##### GENERATING VCF OUTPUT..."
 	# ... AND VCF OUTPUT
-	VCFoutput.py -r ${ref}
+	VCFoutput.py -r ${ref} -s $vcf_name
 }
 
 fasta_input()
