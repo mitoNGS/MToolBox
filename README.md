@@ -7,6 +7,22 @@ The MToolBox pipeline includes:
 - an extended version of a previously published computational strategy for mtDNA genome assembly (PMID: 22669646). The pipeline has been integrated with the detection of insertions and deletions (indels) and the assessment of the heteroplasmic fraction (HF) and related confidence interval (CI) for each mt variant. HF and CI are integrated as genotype specific meta-information in a Variant Call Format (version 4.0) file;
 - the mt-classifier tool, for haplogroup prediction, mt variant functional annotation and prioritization.
 
+
+The MToolBox development and manteinance relies on the work of undegraduates, PhD and Postdocs, which we would like to thank for their invaluable support:
+- [Claudia Calabrese](https://github.com/clody23)
+- [Domenico Simone](https://github.com/domenico-simone)
+- [Mariangela Diroma](https://github.com/ma-diroma)
+- [Roberto Preste](https://github.com/robertopreste)
+- [Rosanna Clima](https://github.com/Ros85)
+- Mariangela Santorsola
+- Ornella Vitale
+- Cristiano Gutta' (past)
+- Francesco Rubino (past)
+ 
+**As of April 2018**
+
+Update of the [Sitevar nucleotide variability](http://www.hmtdb.uniba.it/hmdb/onlinehelp/siteVariability.html). The nucleotide variability of each variant site was estimated on the multi-alignment of 30,860 healthy genomes reported in [HmtDB](http://www.hmtdb.uniba.it/hmdb/). These genomes were derived from primary INSDC databases and individual submissions. Credits to [Rosanna Clima] (https://github.com/Ros85) and Ornella Vitale. 
+
 **As of 24 October 2017**
 
 MToolBox can be now also installed on Mac OS X by specifing `-o` in the `install.sh` command line. For further details please visit:
