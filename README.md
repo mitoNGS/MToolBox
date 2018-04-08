@@ -21,7 +21,17 @@ The MToolBox development and manteinance relies on the work of undegraduates, Ph
  
 **As of April 2018**
 
-Update of the [Sitevar nucleotide variability](http://www.hmtdb.uniba.it/siteVariability). The nucleotide variability of each variant site was estimated on the multi-alignment of 30,860 healthy genomes reported in [HmtDB](http://www.hmtdb.uniba.it/hmdb/). These genomes were derived from primary INSDC databases and individual submissions. Credits to [Rosanna Clima] (https://github.com/Ros85) and Ornella Vitale. 
+Update of the [Sitevar nucleotide variability](http://www.hmtdb.uniba.it/siteVariability). The nucleotide variability of each variant site was estimated on the multi-alignment of 30,860 healthy genomes reported in [HmtDB](http://www.hmtdb.uniba.it/hmdb/). These genomes were derived from primary INSDC databases and individual submissions. Credits to [Rosanna Clima](https://github.com/Ros85) and Ornella Vitale. 
+
+Values of nucleotide variability might have slightly changed for each mt position. Positions with biggest changes compared
+to the previous sitevar calculation are:
+3328
+10956
+14598
+16135
+
+Please note that sorting order of variant alleles in the `annotation.csv` can slightly change based on this nucleotide variability update.
+
 
 **As of 24 October 2017**
 
