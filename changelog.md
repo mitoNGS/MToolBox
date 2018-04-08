@@ -1,4 +1,7 @@
 ###CHANGELOG - 8 April 2018
+
+Update to MToolBox v.1.1
+
 1) Sitevar nucleotide variability reported in the `annotation.csv` file has been updated based on 30,806 healthy complete genomes stored in HmtDB database. 
 
 Values of nucleotide variability might have slightly changed for each mt position. Positions with biggest changes compared
