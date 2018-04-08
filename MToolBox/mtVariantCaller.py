@@ -1052,7 +1052,7 @@ def get_consensus(dict_of_dicts):
 		Consensus[i] = get_consensus_single(dict_of_dicts[i])
 	return Consensus
 
-def VCFoutput(dict_of_dicts, reference='RSRS'):
+def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
     print "Reference sequence used for VCF: %s" % reference
     VCF_RECORDS = []
     present_pos = set()
@@ -1196,7 +1196,11 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
                                     index=i.ALT.index(allele)
                                     aplotype=index+1
                                     hf_index=variant[3].index(allele)
-                                    i._sample_indexes[sample][0].append(aplotype)
+                                    if type(i._sample_indexes[sample][0]) == type(list()):
+                                    	i._sample_indexes[sample][0].append(aplotype)
+                                    else:
+                                        hap = i._sample_indexes[sample][0]
+                                        i._sample_indexes[sample][0] = [hap].append(aplotype)
                                     #print i._sample_indexes[sample], variant[6],variant[7], hf_index, i.POS
                                     i._sample_indexes[sample][2].append(variant[6][hf_index])
                                     i._sample_indexes[sample][3].append(variant[7][hf_index])
@@ -1326,7 +1330,8 @@ def VCFoutput(dict_of_dicts, reference='RSRS'):
     header="\t".join(header.keys())
 
     #writes variant call in the VCF file
-    out=open("VCF_file.vcf","w")
+    #out=open("VCF_file.vcf","w")
+    out = open(name+'.vcf','w')
     out.write('##fileformat=VCFv4.0\n##reference=chr%s\n' % reference)
     out.write('##FORMAT=<ID=GT,Number=.,Type=String,Description="Genotype">\n')
     out.write('##FORMAT=<ID=DP,Number=.,Type=Integer,Description="Reads covering the REF position">\n')
