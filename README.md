@@ -20,11 +20,12 @@ The MToolBox development and manteinance relies on the work of undegraduates, Ph
 - Francesco Rubino (past)
  
 **As of April 2018**
+Update to MToolBox v.1.1
 
 Update of the [Sitevar nucleotide variability](http://www.hmtdb.uniba.it/siteVariability). The nucleotide variability of each variant site was estimated on the multi-alignment of 30,860 healthy genomes reported in [HmtDB](http://www.hmtdb.uniba.it/hmdb/). These genomes were derived from primary INSDC databases and individual submissions. Credits to [Rosanna Clima](https://github.com/Ros85) and Ornella Vitale. 
 
 for more details please check the changelog file.
-
+gg
 **As of 24 October 2017**
 
 MToolBox can be now also installed on Mac OS X by specifing `-o` in the `install.sh` command line. For further details please visit:
