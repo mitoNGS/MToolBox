@@ -132,7 +132,7 @@ try:
 		sample_name="_".join(sample_name)
 	print "assembleMTgenome for sample", sample_name
 except:
-	sample_name = ''
+	sample_name = 'unknown_sample_name'
 	print "no OUT_samplename folder found", sample_name
 
 if not os.path.exists(mtdnafile):
