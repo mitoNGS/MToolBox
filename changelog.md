@@ -3,13 +3,11 @@
 
 Values of nucleotide variability might have slightly changed for each mt position. Positions with biggest changes compared
 to the previous sitevar calculation are:
-3328
 
-10956
-
-14598
-
-16135
+3328    
+10956    
+14598    
+16135    
 
 Please note that sorting order of variant alleles in the `annotation.csv` can slightly change based on this nucleotide variability update.
 
