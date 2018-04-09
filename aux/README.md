@@ -1,4 +1,4 @@
-##Auxiliary scripts for dealing with MToolBox data##
+## Auxiliary scripts for dealing with MToolBox data##
 
 `get_prioritized_var_and_summary.sh` auxiliary script to get the `summary.txt` and `prioritized_variant.txt` files from the MToolBox `annotation.csv` files.
 
