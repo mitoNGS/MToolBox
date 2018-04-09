@@ -7,7 +7,7 @@ def usage():
 	print ''' 
 This script filter the MToolBox vcf file based on Heteroplasmy threshold
 Usage:
-filter_HF.py <sample_name>  <vcf/vcf.gz/txt> <HF_threshold[float]> <DP_threshold[float]> <out_type[vcf|txt]> <outfile.txt> '''
+filter_HF.py <sample_name>  <vcf_file> <HF_threshold[float]> <DP_threshold[float]> <out_type[vcf|txt]> <outfile.txt>\n<vcf_file> can also be .gz file\n\n '''
 
 
 if __name__ == "__main__":
@@ -34,6 +34,9 @@ if __name__ == "__main__":
 		else:
 			if line.startswith('#CHROM') and out_type == 'vcf':
 				out.write(command_string)
+				line = line.split('\t')
+				line[-1] = samplename+'\n'
+				line = '\t'.join(line)
 				out.write(line)
 			elif line.startswith('#CHROM') and out_type == 'txt':
 				header='CHROM\tPOS\tID\tREF\tALT\tDP\tHF\tCIL\tCIU\t'+samplename
