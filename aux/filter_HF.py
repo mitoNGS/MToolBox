@@ -31,7 +31,7 @@ if __name__ == "__main__":
 	for line in ifile:
 		if line.startswith('##'):
 			if out_type == 'vcf':
-				command_string = "##contig=<ID=chrMT,length=16569>\n##filter_VCF_command=filter_vcf.py {0} {1} {2} {3} {4}\n".format(vcf,HFt,DPt,out_type,outfile)
+				command_string = "##contig=<ID=chrMT,length=16569>\n##filter_VCF_command=filter_vcf.py {0} {1} {2} {3} {4} {5}\n".format(vcf,HFt,DPt,out_type,outfile,homo_convert)
 				out.write(line)
 			else:
 				pass

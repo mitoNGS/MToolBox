@@ -8,7 +8,7 @@
 ##INFO=<ID=AC,Number=.,Type=Integer,Description="Allele count in genotypes">
 ##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
 ##contig=<ID=chrMT,length=16569>
-##filter_VCF_command=filter_vcf.py ../test/HG00119_example/HG00119/HG00119.vcf 0.5 50.0 vcf ../test/HG00119_filt.vcf
+##filter_VCF_command=filter_vcf.py ../test/HG00119_example/HG00119/HG00119.vcf 0.5 50.0 vcf ../test/HG00119_filt.vcf Yes
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00119
 chrMT	73	.	A	G	.	PASS	AC=2,AN=2	GT	1/1
 chrMT	152	.	T	C	.	PASS	AC=1,AN=2	GT	0/1
