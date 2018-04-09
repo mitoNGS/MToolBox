@@ -5,21 +5,25 @@ import sys, os
 
 def usage():
 	print ''' 
-This script filter the MToolBox vcf file based on Heteroplasmy threshold
+This script filters the MToolBox vcf file based on Heteroplasmy threshold
 Usage:
-filter_HF.py <sample_name>  <vcf_file> <HF_threshold[float]> <DP_threshold[float]> <out_type[vcf|txt]> <outfile.txt>\n<vcf_file> can also be .gz file\n\n '''
+filter_HF.py <sample_name>  <vcf_file> <HF_threshold[float]> <DP_threshold[float]> <out_type[vcf|txt]> <outfilename> <convert_to_homoplamy[Yes|No]> \n<vcf_file> can also be .gz file\n\n<convert_to_homoplasmy> is boolean and takes Yes or No values and converts HF >= 0.9 to GT=1/1. Useful for haplogroup prediction with other methods (e.g. haplogrep)\n\n'''
 
 
 if __name__ == "__main__":
-	if len(sys.argv[1:]) < 6:
+	if len(sys.argv[1:]) < 7:
 		sys.stderr.write('ERROR: argument missing\n')
 		usage()
 		sys.exit(1)
 
-	samplename,vcf,HFt,DPt,out_type,outfile = sys.argv[1:]
+	samplename,vcf,HFt,DPt,out_type,outfile,homo_convert= sys.argv[1:]
 	HFt = float(HFt)
 	DPt = float(DPt)
 	out = open(outfile,'w')
+	homo_convert = str(homo_convert)
+	if homo_convert not in ['Yes','No']:		
+		sys.stderr.write('Values accepted for <convert_to_homoplasmy> are [Yes|No].\nExit!\n')
+		sys.exit(1)
 	if 'gz' in vcf or 'gzip' or 'bz2' in vcf:
 		ifile = fileinput.input(vcf,openhook=fileinput.hook_compressed)
 	else:	
@@ -64,6 +68,8 @@ if __name__ == "__main__":
 							out.write(res+'\n')
 						else:
 							if HFv == 1:
+								res='\t'.join(map(lambda x:str(x),[line[0],line[1],line[2],line[3],ALTv,'.','PASS','AC=2,AN=2','GT','1/1']))
+							elif HFv >= 0.9 and homo_convert == 'Yes':
 								res='\t'.join(map(lambda x:str(x),[line[0],line[1],line[2],line[3],ALTv,'.','PASS','AC=2,AN=2','GT','1/1']))
 							else:
 								res='\t'.join(map(lambda x:str(x),[line[0],line[1],line[2],line[3],ALTv,'.','PASS','AC=1,AN=2','GT','0/1']))
