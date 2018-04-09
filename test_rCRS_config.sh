@@ -73,6 +73,9 @@ output_name=/path/to/output
 ##
 list=test_list.lst
 ##
+##OPTIONAL. Specifiy the name to assign to the VCF file. If not specified, filename will be set to `unknown_sample_name.vcf`
+vcf_name=test
+##
 ##MANDATORY. Specify the input file format extension. [fasta | bam | sam | fastq ]
 ##
 input_type=fastq
