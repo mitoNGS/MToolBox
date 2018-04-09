@@ -1,6 +1,6 @@
-Path to mitochondrial reference genome: /data/genomics/cc926/tools/MToolBox_v1.0/genome_fasta/chrM.fa
+Path to mitochondrial reference genome: /data/genomics/cc926/tools/MToolBox_v1.1/genome_fasta/chrM.fa
 
-Path to nuclear and mitochondrial reference genome: /data/genomics/cc926/tools/MToolBox_v1.0/genome_fasta/hg19RCRS.fa
+Path to nuclear and mitochondrial reference genome: /data/genomics/cc926/tools/MToolBox_v1.1/genome_fasta/hg19RCRS.fa
 
 Samtools version is 1.3
 
