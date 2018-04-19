@@ -18,7 +18,9 @@ The MToolBox development and manteinance relies on the work of undegraduates, Ph
 - Ornella Vitale
 - Cristiano Gutta' (past)
 - Francesco Rubino (past)
- 
+
+We would also like to thank Professor Marcella Attimonelli (University of Bari), who inspired and supervises the MToolBox project.
+
 **As of April 2018**    
 Update to MToolBox v.1.1
 
