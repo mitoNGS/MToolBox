@@ -83,7 +83,7 @@ Fields updated in the annotation.csv output file:
  - dbSNP ID: release 144, May 26, 2015
  - OMIM link: August 4, 2015 update
  
- **Further details for this update can be found at  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5123245/. 
+ **Further details for this update can be found at**  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5123245/. 
 
 
 ###CHANGELOG - 8 June 2015
