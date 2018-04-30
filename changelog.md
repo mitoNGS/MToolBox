@@ -69,12 +69,12 @@ Update to MToolBox version 0.3.2 with the following change:
  - A bug in patho-table.txt has been fixed. 313 new stop-gain mutations and 6 new missense variants are now included.
 
 New fields added to the annotation.csv output file:
- - tRNA annotation: specific information regarding mitochondrial tRNA genes (position in tRNA; tRNA type; cloverleaf secondary region; mature nucleotide; involvement of the specific position in tRNA folding)
+ - tRNA annotation: specific information regarding mitochondrial tRNA genes (position in tRNA; tRNA type; cloverleaf secondary region; mature nucleotide; involvement of the specific position in tRNA folding). 
  - RNA predictions: score added for 49 variants in rRNA genes (Smith PM et al, 2014, PMID:24092330) and 207 variants in tRNA genes (Yarham JW et al, 2011, PMID:21882289; Blakely EL et al, 2013, PMID:23696415). Scores were retrieved from literature and correlated on a scale from 0 to 1. Threshold for rRNAs=0.51. Threshold for tRNAs= 0.31. Low pathogenicity under the fixed thresholds.
  - ClinVar: ClinVar annotation of associated disease(s) (January 21, 2015 update)
  - PhastCons20Way: PhastCons conservation score calculated on 20 vertebrates using hg38+rCRS as reference sequence
  - PhyloP20Way: PhyloP conservation score calculated on 20 vertebrates using hg38+rCRS as reference sequence
-
+ 
 Fields updated in the annotation.csv output file:
  - Nt variability: SiteVar variability value calculated on 22,691 complete healthy genomes in HmtDB database (May 2015 update)
  - Aa variability: MitVarProt variability value calculated on 22,691 complete healthy genomes in HmtDB database (May 2015 update)
@@ -82,6 +82,9 @@ Fields updated in the annotation.csv output file:
  - Mitomap somatic mutations, SM Homoplasmy, SM Heteroplasmy and Mitomap associated disease(s) only RNA mutations: July 29, 2015 update
  - dbSNP ID: release 144, May 26, 2015
  - OMIM link: August 4, 2015 update
+ 
+ **Further details for this update can be found at  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5123245/. 
+
 
 ###CHANGELOG - 8 June 2015
 
