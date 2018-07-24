@@ -1,7 +1,7 @@
 {
     "__default__" :
     {
-        "account" :    "snic2018-3-22",
+        "account" :    "",
         "time" :       "1:00:00",
         "partition" :  "core",
         "nodes" :      1,
@@ -12,5 +12,10 @@
         "time" :       "2:00:00",
         "nodes" :      1,
         "partition" :  "node",
+    },
+    "gsnap" :
+    {
+        "time" :       "10:00:00",
+        "cores":       8
     }
 }

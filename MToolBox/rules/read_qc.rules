@@ -29,14 +29,13 @@ rule fastqc:
     threads:
         config['general']['threads']
     version:
-        subprocess.getoutput(
-            "fastqc -V"
-            )
+        subprocess.check_output("fastqc -V", shell=True)
     message:
         "QC of read files {input} with {version}"
     shell:
         """
-
+        
+        mkdir -p {params.outDir}
         fastqc -t {threads} -o {params.outDir} {input} > {output.logFile}
 
         """

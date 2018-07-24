@@ -1,0 +1,10 @@
+FileNotFoundError in line 20 of /lustre/browser/mtoolbox_snakemake/MToolBox/MToolBox/Snakefile:
+File b'samples.tsv' does not exist
+  File "/lustre/browser/mtoolbox_snakemake/MToolBox/MToolBox/Snakefile", line 20, in <module>
+  File "/lustrehome/domenico.simone/miniconda2/envs/snakemake3/lib/python3.6/site-packages/pandas/io/parsers.py", line 678, in parser_f
+  File "/lustrehome/domenico.simone/miniconda2/envs/snakemake3/lib/python3.6/site-packages/pandas/io/parsers.py", line 440, in _read
+  File "/lustrehome/domenico.simone/miniconda2/envs/snakemake3/lib/python3.6/site-packages/pandas/io/parsers.py", line 787, in __init__
+  File "/lustrehome/domenico.simone/miniconda2/envs/snakemake3/lib/python3.6/site-packages/pandas/io/parsers.py", line 1014, in _make_engine
+  File "/lustrehome/domenico.simone/miniconda2/envs/snakemake3/lib/python3.6/site-packages/pandas/io/parsers.py", line 1708, in __init__
+  File "pandas/_libs/parsers.pyx", line 384, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas/_libs/parsers.pyx", line 695, in pandas._libs.parsers.TextReader._setup_parser_source

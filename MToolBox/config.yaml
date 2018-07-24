@@ -25,7 +25,8 @@ read_processing:
         java_vm_mem: "128g"
 
 map_exome:
-    gsnap_db_folder: ""
-    gsnap_mt_db: ""
-    gsnap_n_mt_db: ""
+    gsnap_db_folder: "/lustre/browser/bin/MToolBox/gmapdb"
+    gsnap_mt_db: "chrRSRS"
+    gsnap_n_mt_db: "hg19RSRS"
+    gsnap_threads: 10
     RG_tag: "--read-group-id=sample --read-group-name=sample --read-group-library=sample --read-group-platform=sample"

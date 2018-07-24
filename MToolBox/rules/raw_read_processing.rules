@@ -50,9 +50,7 @@ rule trimmomatic:
     #         "java -jar $TRIMMOMATIC_HOME/trimmomatic.jar PE -version"
     #         )
     version:
-        subprocess.getoutput(
-            "trimmomatic -version"
-            )
+        subprocess.check_output("trimmomatic -version", shell=True)
     message:
         "Filtering read datasets for sample {wildcards.sample} with Trimmomatic v{version}"
     log: 
