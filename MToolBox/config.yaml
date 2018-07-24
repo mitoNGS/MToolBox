@@ -25,7 +25,7 @@ read_processing:
         java_vm_mem: "128g"
 
 map_exome:
-    gsnap_db_folder: "/lustre/browser/bin/MToolBox/gmapdb"
+    gsnap_db_folder: "/lustre/browser/mtoolbox_snakemake/test/data"
     gsnap_mt_db: "chrRSRS"
     gsnap_n_mt_db: "hg19RSRS"
     gsnap_threads: 10

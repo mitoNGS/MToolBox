@@ -132,13 +132,13 @@ rule map_MT_PE_SE:
     run:
         if seq_type == "pe":
             print("PE mode")
-            shell("/lustre/browser/bin/MToolBox/bin/gmap/bin/gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --gunzip --nofails --pairmax-dna=500 --query-unk-mismatch=1 {params.RG_tag} -n 1 -Q -O -t {threads} {input[0]} {input[1]} > {output.outmt_sam} 2> {log}")
+            shell("gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --gunzip --nofails --pairmax-dna=500 --query-unk-mismatch=1 {params.RG_tag} -n 1 -Q -O -t {threads} {input[0]} {input[1]} > {output.outmt_sam} 2> {log}")
         if seq_type == "se":
             print("SE mode")
-            shell("/lustre/browser/bin/MToolBox/bin/gmap/bin/gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --gunzip --nofails --pairmax-dna=500 --query-unk-mismatch=1 {params.RG_tag} -n 1 -Q -O -t {threads} {input[0]} > {output.outmt_sam} 2> {log}")
+            shell("gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --gunzip --nofails --pairmax-dna=500 --query-unk-mismatch=1 {params.RG_tag} -n 1 -Q -O -t {threads} {input[0]} > {output.outmt_sam} 2> {log}")
         elif seq_type == "both":
             print("PE + SE mode")
-            shell("/lustre/browser/bin/MToolBox/bin/gmap/bin/gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --gunzip --nofails --pairmax-dna=500 --query-unk-mismatch=1 {params.RG_tag} -n 1 -Q -O -t {threads} {input[0]} {input[1]} {input[2]} > {output.outmt_sam} 2> {log}")
+            shell("gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --gunzip --nofails --pairmax-dna=500 --query-unk-mismatch=1 {params.RG_tag} -n 1 -Q -O -t {threads} {input[0]} {input[1]} {input[2]} > {output.outmt_sam} 2> {log}")
 
 rule sam2fastq:
     input:
@@ -184,7 +184,7 @@ rule map_nuclear_MT_SE:
         "Mapping onto complete human genome (nuclear + mt)... SE reads"
     shell:
         """
-        /lustre/browser/bin/MToolBox/bin/gmap/bin/gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --nofails --query-unk-mismatch=1 -O -t {threads} {input.outmt} > {output.outhumanS} 2> {log.loghumanS}
+        gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --nofails --query-unk-mismatch=1 -O -t {threads} {input.outmt} > {output.outhumanS} 2> {log.loghumanS}
         """
 
 rule map_nuclear_MT_PE:
@@ -209,7 +209,7 @@ rule map_nuclear_MT_PE:
         "Mapping onto complete human genome (nuclear + mt)... PE reads"
     shell:
         """
-        /lustre/browser/bin/MToolBox/bin/gmap/bin/gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --nofails --query-unk-mismatch=1 -O -t {threads} {input.outmt1} {input.outmt2} > {output.outhumanP} 2> {log.loghumanP}
+        gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --nofails --query-unk-mismatch=1 -O -t {threads} {input.outmt1} {input.outmt2} > {output.outhumanP} 2> {log.loghumanP}
         """
 
 rule filtering_mt_alignments:
