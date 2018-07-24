@@ -1,0 +1,219 @@
+"""
+    A snakemake implementation of the MToolBox pipeline for assembly and annotation of human mitochondrial genomes.
+"""
+
+#from scripts import mapExome
+
+# which rules shall not be executed on cluster as separate job?
+localrules: filtering_mt_alignments
+
+def filter_alignments(outmt, outhumanS, outhumanP, OUT):
+    sig=1
+    pai=1
+    print('Reading Results...')
+    if sig:
+        hgoutsam = outhumanS
+        dicsingle={}
+        f = open(hgoutsam, 'r')
+        for i in f:
+            if i.strip()=='': continue
+            l=(i.strip()).split('\t')
+            if l[2]=='*': continue # the read is not mapped
+            # keeping multiple mappings
+            if l[0] in dicsingle:
+                dicsingle[l[0]].append(l)
+            else:
+                dicsingle[l[0]]=[l]
+        f.close()
+    if pai:
+        hgoutsam2 = outhumanP
+        dicpair={}
+        f=open(hgoutsam2)
+        for i in f:
+            if i.strip()=='': continue
+            l=(i.strip()).split('\t')
+            if l[2]=='*': continue
+            if l[0] in dicpair:
+                dicpair[l[0]].append(l)
+            else:
+                dicpair[l[0]]=[l]
+        f.close()
+
+    print('Extracting FASTQ from SAM...')
+    mtoutsam = outmt
+    dics={}
+    f=open(mtoutsam)
+    for i in f:
+        if i.strip()=='' or i.startswith('@'): continue
+        l=(i.strip()).split('\t')
+        if l[2]=='*': continue
+        if l[0] in dics: dics[l[0]].append(l)
+        else: dics[l[0]]=[l]
+    f.close()
+    
+    finalsam = OUT
+    out=open(finalsam,'w')
+    out.write("@SQ	SN:%s	LN:16569\n" % mtdb)
+    out.write("@RG	ID:sample	PL:sample	PU:sample	LB:sample	SM:sample\n")
+    
+    print('Filtering reads...')
+    for i in dics:
+        ll=dics[i]
+        if len(ll)==1: # if the read has one mapping I assume it's SE
+            if i in dicsingle:
+                r=dicsingle[i] # i is a list of lists (splitted sam lines)
+                if len(r)==1: 
+                    # check if read aligned on MT when aligned against nuclear+MT
+                    # fields checked: RNAME, POS
+                    if r[0][2]==ll[0][2] and ll[0][3]==r[0][3]:
+                        #good.append('\t'.join(ll[0])+'\n')
+                        out.write('\t'.join(ll[0])+'\n')
+            else:
+                out.write('\t'.join(ll[0])+'\n')
+        else:
+            if i in dicpair:
+                r=dicpair[i]
+                if len(r) == 2:
+                    if r[0][2]==ll[0][2] and ll[0][3]==r[0][3] and r[1][2]==ll[1][2] and ll[1][3]==r[1][3]:
+                        out.write('\t'.join(ll[0])+'\n')
+                        out.write('\t'.join(ll[1])+'\n')
+            else:
+                out.write('\t'.join(ll[0])+'\n')
+                out.write('\t'.join(ll[1])+'\n')
+    out.close()
+    
+    print('Outfile saved on %s.' %(finalsam))
+    print('Done.')
+
+seq_type = "both"
+
+def gsnap_inputs(wildcards):
+    if (seq_type == "pe"):
+        return expand("{filtered_reads}/{sample}.{strand}.fastq.gz", strand=["R1", "R2"], sample=wildcards.sample, filtered_reads=config['proj_dirs']['filtered_reads'])
+    elif (seq_type == "se"):
+        return expand("{filtered_reads}/{sample}.fastq.gz", sample=wildcards.sample, filtered_reads=config['proj_dirs']['filtered_reads'])
+    elif (seq_type == "both"):
+        return expand("{filtered_reads}/{sample}{strand}.fastq.gz", strand=[".R1", ".R2", ""], sample=wildcards.sample, filtered_reads=config['proj_dirs']['filtered_reads'])
+
+def filtering_reads_input():
+    if (seq_type == "pe"):
+        return "outhumanP.sam"
+        #return expand("{reads}_{strand}.fastq", strand=["R1", "R2"], reads=wildcards.reads)
+    elif (seq_type == "se"):
+        return "outhumanS.sam"
+        #return expand("{reads}.fastq", reads=wildcards.reads)
+    elif (seq_type == "both"):
+        return "outhumanP.sam", "outhumanS.sam"
+        #return expand("{reads}{strand}.fastq", strand=["_R1", "_R2", ""], reads=wildcards.reads)    
+
+def getSeqType(wildcards):
+    pass
+
+rule map_exome_all:
+    input:
+        OUT = expand("OUT_{sample}/{outdir}/OUT.sam",
+                sample=samples["sample"],
+                outdir=config["proj_dirs"]["map_exome"])
+
+rule map_MT_PE_SE:
+    input:
+        gsnap_inputs,
+        #index=gsnap_index
+    output:
+        outmt_sam = "OUT_{sample}/{outdir}/outmt.sam"
+    params:
+        gsnap_db_folder = config['map_exome']['gsnap_db_folder'],
+        gsnap_db = config['map_exome']['gsnap_mt_db']
+    log:
+        "OUT_{sample}/{outdir}/logmt.txt"
+    run:
+        if seq_type == "pe":
+            print("PE mode")
+            shell("gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} --gunzip -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 {RG_tag} -n 1 -Q -O -t {threads} {input.forward} {input.reverse} > {output.outmt_sam} 2> {log}")
+        if seq_type == "se":
+            print("SE mode")
+            shell("gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} --gunzip -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 {RG_tag} -n 1 -Q -O -t {threads} {input.reads} > {output.outmt_sam} 2> {log}")
+        elif seq_type == "both":
+            print("PE + SE mode")
+            shell("gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} --gunzip -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 {RG_tag} -n 1 -Q -O -t {threads} {input.forward} {input.reverse} {input.reads} > {output.outmt_sam} 2> {log}")
+
+rule sam2fastq:
+    input:
+        outmt_sam = "OUT_{sample}/{outdir}/outmt.sam"
+    output:
+        outmt1 = "OUT_{sample}/{outdir}/outmt1.fastq",
+        outmt2 = "OUT_{sample}/{outdir}/outmt2.fastq",
+        outmt = "OUT_{sample}/{outdir}/outmt.fastq"
+    version:
+        subprocess.getoutput(
+            "picard SamToFastq --version"
+            )
+    message:
+        "Converting SAM files to FASTQ with PicardTools v{version}"
+    shell:
+        """
+        java -jar picard.jar SamToFastq \
+            I={input.outmt_sam} \
+            FASTQ={output.outmt1} \
+            SECOND_END_FASTQ={output.outmt2} \
+            UNPAIRED_FASTQ={output.outmt2}
+        """
+
+rule map_nuclear_MT_SE:
+    input:
+        outmt = "OUT_{sample}/{outdir}/outmt.fastq"
+    output:
+        outhumanS = "OUT_{sample}/{outdir}/outhumanS.sam"
+    params:
+        gsnap_db_folder = config['map_exome']['gsnap_db_folder'],
+        gsnap_db = config['map_exome']['gsnap_n_mt_db']
+    # version:
+    #     subprocess.getoutput(
+    #       gsnap --version
+    #       )
+    #     """
+    log:
+        loghumanS = "OUT_{sample}/{outdir}/loghumanS.sam"
+    message:
+        "Mapping onto complete human genome (nuclear + mt)... SE reads"
+    shell:
+        """
+        gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --nofails --query-unk-mismatch=1 -O -t {threads} {input.outmt} > {output.outhumanS} 2> {log.loghumanS}
+        """
+
+rule map_nuclear_MT_PE:
+    input:
+        outmt1 = "OUT_{sample}/{outdir}/outmt1.fastq",
+        outmt2 = "OUT_{sample}/{outdir}/outmt2.fastq"
+    output:
+        outhumanP = "OUT_{sample}/{outdir}/outhumanP.sam"
+    params:
+        gsnap_db_folder = config['map_exome']['gsnap_db_folder'],
+        gsnap_db = config['map_exome']['gsnap_n_mt_db']
+    # version:
+    #     subprocess.getoutput(
+    #       gsnap --version
+    #       )
+    #     """
+    log:
+        loghumanP = "OUT_{sample}/{outdir}/loghumanP.sam"
+    message:
+        "Mapping onto complete human genome (nuclear + mt)... PE reads"
+    shell:
+        """
+        gsnap -D {params.gsnap_db_folder} -d {params.gsnap_db} -A sam --nofails --query-unk-mismatch=1 -O -t {threads} {input.outmt1} {input.outmt1} > {output.outhumanP} 2> {log.loghumanP}
+        """
+
+rule filtering_mt_alignments:
+    input:
+        outmt = "OUT_{sample}/{outdir}/outmt.sam",
+        outhumanS = "OUT_{sample}/{outdir}/outhumanS.sam",
+        outhumanP = "OUT_{sample}/{outdir}/outhumanP.sam"
+    output:
+        OUT = "OUT_{sample}/{outdir}/OUT.sam"
+    run:
+        filter_alignments(input.outmt, \
+                          input.outhumanS, \
+                          input.outhumanP, \
+                          output.OUT)
+        

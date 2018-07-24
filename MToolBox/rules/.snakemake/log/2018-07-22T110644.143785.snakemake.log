@@ -1,0 +1,2 @@
+SyntaxError in line 3 of /lustre/browser/mtoolbox_snakemake/MToolBox/rules/map_exome.rules:
+Missing parentheses in call to 'print'. Did you mean print(seq_type)?

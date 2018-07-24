@@ -1,0 +1,3 @@
+Building DAG of jobs...
+WorkflowError:
+Target rules may not contain wildcards. Please specify concrete files or a rule without wildcards.

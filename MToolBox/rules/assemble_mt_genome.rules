@@ -1,0 +1,6 @@
+rule all_assemble_mt_genome:
+    input:
+        "VCF_file.vcf",
+        expand("OUT_{sample}/{folder}/logassemble.txt",
+        sample=samples["sample"],
+        folder=config["proj_dirs"]["assemble_mt_genome"])

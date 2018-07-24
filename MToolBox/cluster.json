@@ -1,0 +1,16 @@
+{
+    "__default__" :
+    {
+        "account" :    "snic2018-3-22",
+        "time" :       "1:00:00",
+        "partition" :  "core",
+        "nodes" :      1,
+        "cores" :      1      
+    },
+    "trimmomatic" :
+    {
+        "time" :       "2:00:00",
+        "nodes" :      1,
+        "partition" :  "node",
+    }
+}

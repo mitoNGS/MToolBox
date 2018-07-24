@@ -1,0 +1,73 @@
+import pandas as pd
+#from snakemake.utils import validate
+import os, glob, subprocess
+
+def getFastqNames(wildcards):
+    path=config['proj_dirs']['raw_data']
+    #return samples.loc[(wildcards.sample), ['R1', 'R2']].dropna()
+    L = samples.loc[wildcards.sample, ['R1', 'R2']].dropna()
+    M = []
+    for i in L:
+        M.append(path + "/" + i)
+    return M
+
+rule trimmomatic_all:
+    input:
+        expand("{filtered_reads}/{sample}.R{fwd_rev}.fastq.gz", \
+        filtered_reads=config['proj_dirs']['filtered_reads'], \
+        sample=samples["sample"], \
+        fwd_rev=[1, 2]),
+        expand("{filtered_reads}/{sample}.fastq.gz", \
+        filtered_reads=config['proj_dirs']['filtered_reads'], \
+        sample=samples["sample"])
+
+rule trimmomatic:
+    """ QCing and cleaning reads """
+    params:
+        java_cmd = config['read_processing']['trimmomatic']['java_cmd'],
+        jar_file = config['read_processing']['trimmomatic']['jar_file'],
+        mem = config['read_processing']['trimmomatic']['java_vm_mem'],
+        options = config['read_processing']['trimmomatic']['options'],
+        processing_options = config['read_processing']['trimmomatic']['processing_options'],
+        temp_folder = config['general']['temp_dir'],
+        out1P = config['proj_dirs']['filtered_reads'] + "/{sample}.R1.fastq.gz",
+        out2P = config['proj_dirs']['filtered_reads'] + "/{sample}.R2.fastq.gz",
+        out1U = config['proj_dirs']['filtered_reads'] + "/{sample}.1U.fastq.gz",
+        out2U = config['proj_dirs']['filtered_reads'] + "/{sample}.2U.fastq.gz"
+    input:
+        getFastqNames
+        #in1P = "data/raw_reads" + getFastqNames[0],
+        #in2P = "data/raw_reads" + getFastqNames[1]
+    output:
+        out1P = config['proj_dirs']['filtered_reads'] + "/{sample}.R1.fastq.gz",
+        out2P = config['proj_dirs']['filtered_reads'] + "/{sample}.R2.fastq.gz",
+        out1U = config['proj_dirs']['filtered_reads'] + "/{sample}.fastq.gz",
+        #out2U = config['proj_dirs']['filtered_reads'] + "/{sample}.2U.fastq.gz"
+    threads:
+        config['general']['threads']
+    # version:
+    #     subprocess.getoutput(
+    #         "java -jar $TRIMMOMATIC_HOME/trimmomatic.jar PE -version"
+    #         )
+    version:
+        subprocess.getoutput(
+            "trimmomatic -version"
+            )
+    message:
+        "Filtering read datasets for sample {wildcards.sample} with Trimmomatic v{version}"
+    log: 
+        "data/processed_reads/trimmomatic/{sample}.log"
+    shell:
+        """
+
+        #{params.java_cmd} -Xmx{params.mem} -Djava.io.tmpdir={params.temp_folder} -jar {params.jar_file} \
+        
+        trimmomatic PE \
+            {params.options} \
+            -threads {threads} \
+            {input[0]} {input[1]} \
+            {params.out1P} {params.out1U} {params.out2P} {params.out2U} \
+            {params.processing_options} 2> {log}
+        
+        zcat {params.out1U} {params.out2U} | gzip > {output.out1U} 
+        """

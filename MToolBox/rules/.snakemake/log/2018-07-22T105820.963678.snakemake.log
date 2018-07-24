@@ -1,0 +1,3 @@
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce sample1_bowte2.sam (if you use input functions make sure that they don't raise unexpected exceptions).

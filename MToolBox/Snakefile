@@ -1,0 +1,60 @@
+"""
+    A snakemake implementation of the MToolBox pipeline for assembly and annotation of human mitochondrial genomes.
+    
+    Make copies of this Snakefile and config.yaml to your analysis directory and
+    customize as needed.
+"""
+
+__author__ = 'Domenico Simone <domenico.simone@slu.se>'
+
+import pandas as pd
+#from snakemake.utils import validate
+import os, glob, subprocess
+#from scripts import mapExome
+# Define config file
+configfile: "config.yaml"
+
+# Define variables used through the pipeline
+ruleDir = os.path.join(os.path.expanduser(config['pipeline_dir']), 'rules')
+#scriptsDir = os.path.join(os.path.expanduser(config['pipeline_dir']), 'scripts')
+samples = pd.read_table(config["samples_data"], comment='#').set_index("sample", drop=False)
+ALL_FASTQ_FILES=list(samples['R1']) + list(samples['R2'])
+
+#print(samples)
+
+# Import rules
+include: os.path.join(ruleDir, 'read_qc.rules')
+include: os.path.join(ruleDir, 'raw_read_processing.rules')
+include: os.path.join(ruleDir, 'map_exome.rules')
+# include: os.path.join(ruleDir, 'assemble_mt_genome.rules')
+# include: os.path.join(ruleDir, 'mt_classifier.rules')
+# include: os.path.join(ruleDir, 'functional_annotation.rules')
+
+target_inputs = [
+    # qc of raw reads (from read_qc.rules)
+    os.path.join(config["proj_dirs"]["logs"], "fastqc_raw.log"),
+    # expand("{qc_res}/{sample_seqfile}_fastqc.html", \
+    # qc_res=config['proj_dirs']['qc_res'], \
+    # sample_seqfile=ALL_FASTQ_FILES),
+    
+    # quality trimming of raw reads (from raw_read_processing.rules)
+    expand("{filtered_reads}/{sample}.R{fwd_rev}.fastq.gz", \
+    filtered_reads=config['proj_dirs']['filtered_reads'], \
+    sample=samples["sample"], \
+    fwd_rev=[1, 2]),
+    expand("{filtered_reads}/{sample}.fastq.gz", \
+    filtered_reads=config['proj_dirs']['filtered_reads'], \
+    sample=samples["sample"]),
+    
+    # final results from the pipeline
+    expand("OUT_{sample}/{map_exome_dir}/OUT.sam", \
+        sample=samples["sample"], \
+        map_exome_dir=config["proj_dirs"]["map_exome"])
+    #"VCF_file.vcf",
+    #"mt_classification_best_results.csv",
+    #"prioritized_variants.txt",
+    #"summary_<date_time>.txt"
+]
+
+rule all:
+    input: target_inputs

@@ -1,0 +1,37 @@
+{
+  "general" : {
+    "home" : "/crex/proj/uppstore2018116/domenico/thaw_ponds_test_metasssnake",
+    "samples" : "data/samples.tsv",
+    "temp_dir" : "/scratch/",
+    "threads" : 20
+  },
+  "assembly" : {
+    "coas_files_dir" : "/crex/proj/uppstore2018116/moritz6/0000_raws/0200_coasses/"
+  },
+  "binning" : {
+    "bin_mapping_libs" : 20,
+    "bin_map_min" : 15
+  },
+  "read_processing" : {
+    "trimmomatic" : {
+        "trimmomatic_home" : "/sw/apps/bioinfo/trimmomatic/0.36/rackham/",
+      	"options" : "-phred33",
+        "processing_options" : "ILLUMINACLIP:/sw/apps/bioinfo/trimmomatic/0.36/rackham/adapters/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36",
+        "java_cmd" : "java",
+        "jar_file" : "/sw/apps/bioinfo/trimmomatic/0.36/rackham/trimmomatic.jar",
+        "java_vm_mem" : "128g"
+    },
+    "mash" : {
+      "kmer" : 21,
+      "hashes" : 1000
+    },
+    "kaiju" : {
+      "db_path" : "/crex2/proj/sllstore2017039/2017_MG_course/data/kaijudb/kaiju_nr_db/",
+      "db" :  "kaijudb.fmi"
+    },
+    "matam" : {
+      "db_path" : "/home/moritz/dbs/matam/",
+      "max_mem" : 100000
+    }
+  }
+}

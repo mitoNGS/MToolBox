@@ -1,0 +1,42 @@
+"""
+    A snakemake implementation of the MToolBox pipeline for assembly and annotation of human mitochondrial genomes.
+    
+    Make copies of this Snakefile and config.yaml to your analysis directory and
+    customize as needed.
+"""
+
+__author__ = 'Domenico Simone <domenico.simone@slu.se>'
+
+import pandas as pd
+#from snakemake.utils import validate
+import os, glob, subprocess
+
+#samples = pd.read_table(config["samples_data"], comment='#').set_index("sample", drop=False)
+
+#ALL_FASTQ_FILES=list(samples['R1']) + list(samples['R2'])
+
+rule all_read_qc:
+    input:
+        os.path.join(config["proj_dirs"]["logs"], "fastqc_raw.log")
+
+rule fastqc:
+    input:
+        [ os.path.join(config["proj_dirs"]["raw_data"], i) for i in ALL_FASTQ_FILES ]
+    output:
+        logFile = os.path.join(config["proj_dirs"]["logs"], "fastqc_raw.log")
+    params:
+        outDir = config["proj_dirs"]["qc_res"]
+    threads:
+        config['general']['threads']
+    version:
+        subprocess.getoutput(
+            "fastqc -V"
+            )
+    message:
+        "QC of read files {input} with {version}"
+    shell:
+        """
+
+        fastqc -t {threads} -o {params.outDir} {input} > {output.logFile}
+
+        """

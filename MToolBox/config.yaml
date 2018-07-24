@@ -1,0 +1,31 @@
+pipeline_dir: "/lustrehome/domenico.simone/browser_shared/mtoolbox_snakemake/MToolBox"
+
+samples_data: "samples.tsv"
+
+general:
+    threads: 20
+    temp_dir: "/scratch"
+
+proj_dirs:
+    raw_data:               "00_raw_reads"
+    qc_res:                 "00_raw_reads_qc"
+    filtered_reads:         "01_processed_reads"
+    filtered_reads_qc:      "01_processed_reads_qc"
+    map_exome:              "02_map_exome"
+    assemble_mt_genome:     "03_assemble_mt_genome"
+    logs:                   "logs"
+
+read_processing:
+    trimmomatic:
+        trimmomatic_home: "/sw/apps/bioinfo/trimmomatic/0.36/rackham/"
+        options: "-phred33"
+        processing_options: "ILLUMINACLIP:/sw/apps/bioinfo/trimmomatic/0.36/rackham/adapters/TruSeq3-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36"
+        java_cmd: "java"
+        jar_file: "/sw/apps/bioinfo/trimmomatic/0.36/rackham/trimmomatic.jar"
+        java_vm_mem: "128g"
+
+map_exome:
+    gsnap_db_folder: ""
+    gsnap_mt_db: ""
+    gsnap_n_mt_db: ""
+    RG_tag: "--read-group-id=sample --read-group-name=sample --read-group-library=sample --read-group-platform=sample"

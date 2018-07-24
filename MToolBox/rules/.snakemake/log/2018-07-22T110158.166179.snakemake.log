@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 15 of /lustre/browser/mtoolbox_snakemake/MToolBox/rules/map_exome.rules:
+Missing input files for rule bowtie2:
+sample1.fastq
