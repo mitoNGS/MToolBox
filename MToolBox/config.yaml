@@ -1,4 +1,4 @@
-pipeline_dir: "/lustrehome/domenico.simone/browser_shared/mtoolbox_snakemake/MToolBox"
+pipeline_dir: "/lustrehome/domenico.simone/browser_shared/mtoolbox_snakemake/MToolBox/MToolBox"
 
 samples_data: "samples.tsv"
 
