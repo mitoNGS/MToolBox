@@ -7,7 +7,7 @@
 # which rules shall not be executed on cluster as separate job?
 localrules: filtering_mt_alignments
 
-def filter_alignments(outmt, outhumanS, outhumanP, OUT):
+def filter_alignments(outmt, outhumanS, outhumanP, OUT, gsnap_db = "chrRSRS"):
     sig=1
     pai=1
     print('Reading Results...')
@@ -53,7 +53,7 @@ def filter_alignments(outmt, outhumanS, outhumanP, OUT):
     
     finalsam = OUT
     out=open(finalsam,'w')
-    out.write("@SQ	SN:%s	LN:16569\n" % mtdb)
+    out.write("@SQ	SN:%s	LN:16569\n" % gsnap_db)
     out.write("@RG	ID:sample	PL:sample	PU:sample	LB:sample	SM:sample\n")
     
     print('Filtering reads...')
@@ -155,7 +155,6 @@ rule sam2fastq:
     #     "Converting SAM files to FASTQ with PicardTools v{version}"
     shell:
         """
-        #java -jar picard.jar SamToFastq \
         picard SamToFastq \
             I={input.outmt_sam} \
             FASTQ={output.outmt1} \
@@ -219,9 +218,12 @@ rule filtering_mt_alignments:
         outhumanP = "OUT_{sample}/{outdir}/outhumanP.sam"
     output:
         OUT = "OUT_{sample}/{outdir}/OUT.sam"
+    params:
+        gsnap_db = config['map_exome']['gsnap_mt_db']
     run:
         filter_alignments(input.outmt, \
                           input.outhumanS, \
                           input.outhumanP, \
-                          output.OUT)
+                          output.OUT, \
+                          gsnap_db = {params.gsnap_db})
         
