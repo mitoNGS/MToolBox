@@ -10,20 +10,36 @@ dependencies:
   - snakemake=5.2.0=py36_0
   - trimmomatic=0.38=0
   - aioeasywebdav=2.2.0=py36_0
+  - ca-certificates=2018.4.16=0
   - cachetools=2.0.1=py_0
+  - cairo=1.14.6=4
+  - certifi=2018.4.16=py36_0
   - filechunkio=1.8=py_2
+  - fontconfig=2.12.1=6
+  - freetype=2.7=1
   - ftputil=3.4=py_0
+  - glib=2.51.4=0
   - google-api-core=0.1.4=py_0
   - google-auth=1.5.0=py_0
   - google-cloud-core=0.28.1=py_0
   - google-cloud-storage=1.10.0=py_0
   - google-resumable-media=0.3.1=py_0
   - googleapis-common-protos=1.5.3=py_1
+  - graphviz=2.38.0=4
+  - harfbuzz=1.4.3=0
+  - libpng=1.6.28=2
+  - libtiff=4.0.9=he6b73bb_1
+  - libxml2=2.9.5=0
+  - openssl=1.0.2o=0
+  - pango=1.40.4=0
+  - perl=5.26.2=h470a237_0
   - prettytable=0.7.2=py_2
+  - protobuf=3.5.1=py36_3
   - pysftp=0.2.9=py_1
   - python-irodsclient=0.7.0=py_0
   - ratelimiter=1.2.0=py36_0
   - rsa=3.4.2=py_1
+  - sqlite=3.13.0=1
   - xmlrunner=1.7.7=py_0
   - xorg-kbproto=1.0.7=h470a237_2
   - xorg-libice=1.0.9=h470a237_3
@@ -34,19 +50,18 @@ dependencies:
   - xorg-libxrender=0.9.10=h470a237_1
   - xorg-renderproto=0.11.1=h470a237_2
   - xorg-xproto=7.0.31=h470a237_7
+  - zlib=1.2.11=h470a237_3
   - aiohttp=3.3.2=py36h14c3975_0
   - appdirs=1.4.3=py36h28b3542_0
   - asn1crypto=0.24.0=py36_0
   - async-timeout=3.0.0=py36_0
   - attrs=18.1.0=py36_0
   - bcrypt=3.1.4=py36h14c3975_0
+  - biopython=1.71=py36h04863e7_0
   - blas=1.0=mkl
   - boto3=1.7.45=py36_0
   - botocore=1.10.45=py36_0
   - bzip2=1.0.6=h14c3975_5
-  - ca-certificates=2018.03.07=0
-  - cairo=1.14.12=h8948797_3
-  - certifi=2018.4.16=py36_0
   - cffi=1.11.5=py36h9745a5d_0
   - chardet=3.0.4=py36_1
   - configargparse=0.13.0=py36_0
@@ -57,14 +72,9 @@ dependencies:
   - dropbox=8.9.0=py36_0
   - expat=2.2.5=he0dffb1_0
   - font-ttf-dejavu-sans-mono=2.37=h6964260_0
-  - fontconfig=2.13.0=h9420a91_0
-  - freetype=2.9.1=h8a8886c_0
   - fribidi=1.0.4=h14c3975_0
   - gettext=0.19.8.1=hd7bead4_3
-  - glib=2.56.1=h000015b_0
   - graphite2=1.3.11=h16798f4_2
-  - graphviz=2.40.1=h21bd128_2
-  - harfbuzz=1.7.6=hec2c2bc_3
   - icu=58.2=h9c2bf20_1
   - idna=2.7=py36_0
   - idna_ssl=1.0.1=py36_0
@@ -75,20 +85,18 @@ dependencies:
   - jsonschema=2.6.0=py36_0
   - libedit=3.1.20170329=h6b74fdf_2
   - libffi=3.2.1=hd88cf55_4
+  - libgcc=7.2.0=h69d50b8_2
   - libgcc-ng=7.2.0=hdf63c60_3
   - libgfortran=3.0.0=1
   - libgfortran-ng=7.2.0=hdf63c60_3
   - libiconv=1.15=h63c8f33_5
   - libopenblas=0.2.20=h9ac9557_7
-  - libpng=1.6.34=hb9fc6fc_0
-  - libprotobuf=3.5.2=h6f1eeef_0
+  - libprotobuf=3.4.0=0
   - libsodium=1.0.16=h1bed415_0
   - libstdcxx-ng=7.2.0=hdf63c60_3
-  - libtiff=4.0.9=he85c1e1_1
   - libtool=2.4.6=h544aabb_3
   - libuuid=1.0.3=h1bed415_2
   - libxcb=1.13=h1bed415_1
-  - libxml2=2.9.8=h26e45fe_1
   - markupsafe=1.0=py36h14c3975_1
   - mkl=2018.0.3=1
   - mkl_fft=1.0.2=py36h651fb7a_0
@@ -100,16 +108,12 @@ dependencies:
   - numpy-base=1.14.5=py36hdbf6ddf_4
   - openblas=0.2.20=4
   - openblas-devel=0.2.20=7
-  - openjdk=8.0.152=h46b5887_1
-  - openssl=1.0.2o=h20670df_0
+  - openjdk=8.0.121=1
   - pandas=0.23.3=py36h04863e7_0
-  - pango=1.42.1=h8589676_0
   - paramiko=2.4.1=py36_0
   - pcre=8.42=h439df22_0
-  - perl=5.26.2=h14c3975_0
   - pip=10.0.1=py36_0
   - pixman=0.34.0=hceecf20_3
-  - protobuf=3.5.2=py36hf484d3e_1
   - psutil=5.4.6=py36h14c3975_0
   - pthread-stubs=0.3=h0ce48e5_1
   - pyasn1=0.4.3=py36_0
@@ -119,23 +123,21 @@ dependencies:
   - pynacl=1.2.1=py36h14c3975_0
   - pyopenssl=18.0.0=py36_0
   - pysocks=1.6.8=py36_0
-  - python=3.6.6=hc3d631a_0
+  - python=3.6.2=0
   - python-dateutil=2.7.3=py36_0
   - pytz=2018.5=py36_0
   - pyyaml=3.12=py36h14c3975_1
-  - readline=7.0=ha6073c6_4
+  - readline=6.2=2
   - requests=2.19.1=py36_0
   - s3transfer=0.1.13=py36_0
   - setuptools=39.2.0=py36_0
   - six=1.11.0=py36_1
-  - sqlite=3.24.0=h84994c4_0
-  - tk=8.6.7=hc745277_3
+  - tk=8.5.18=0
   - urllib3=1.23=py36_0
   - wheel=0.31.1=py36_0
   - wrapt=1.10.11=py36h14c3975_2
   - xz=5.2.4=h14c3975_4
   - yaml=0.1.7=had09818_2
   - yarl=1.2.6=py36h14c3975_0
-  - zlib=1.2.11=ha838bed_2
 prefix: /lustrehome/domenico.simone/miniconda2/envs/snakemake3
 
