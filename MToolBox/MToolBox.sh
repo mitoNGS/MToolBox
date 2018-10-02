@@ -616,7 +616,7 @@ bam_input()
 				for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; ${samtoolsexe} sort $i.bam -o ${output_name}/$i.sorted.bam; ${samtoolsexe} index ${output_name}/$i.sorted.bam; ${samtoolsexe} view -b ${output_name}/$i.sorted.bam MT M chrMT chrM > ${output_name}/$i.MT.bam; echo "Done."; done
 				echo ""
 			fi
-			for i in $(ls ${output_name}/*.MT.bam); do echo "Converting bam to fastq..." ${i}; n=$(echo $i | awk 'BEGIN{FS="."}{print $1}'); java -Xmx4g \
+			for i in $(ls ${output_name}/*.MT.bam); do echo "Converting bam to fastq..." ${i}; n=$(echo $i | sed 's/\.MT\.bam//g'); java -Xmx4g \
 				-Djava.io.tmpdir=`pwd`/tmp \
 				-jar ${externaltoolsfolder}SamToFastq.jar \
 				INPUT=${n}.MT.bam \
@@ -643,7 +643,7 @@ bam_input()
 				for i in ${bam_samples}; do echo "Sorting, indexing and extraction of mitochondrial reads from bam file..." ${i}.bam; ${samtoolsexe} sort $i.bam -o $i.sorted.bam; ${samtoolsexe} index $i.sorted.bam; ${samtoolsexe} view -b $i.sorted.bam MT M chrMT chrM > $i.MT.bam; echo "Done."; done
                                 echo ""
 			fi
-			for i in $(ls *.MT.bam); do echo "Converting bam to fastq..." ${i}; n=$(echo $i | awk 'BEGIN{FS="."}{print $1}'); java -Xmx4g \
+			for i in $(ls *.MT.bam); do echo "Converting bam to fastq..." ${i}; n=$(echo $i | sed 's/\.MT\.bam//g'); java -Xmx4g \
 				-Djava.io.tmpdir=`pwd`/tmp \
 				-jar ${externaltoolsfolder}SamToFastq.jar \
 				INPUT=${n}.MT.bam \
