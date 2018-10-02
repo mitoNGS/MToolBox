@@ -1,3 +1,7 @@
+###CHANGELOG - 2 October 2018
+
+A bug in the `MToolBox.sh` script has being identified and fixed. The pipeline was failing  when input folders with "." in the filename were used, pointing at incorrect input directory path.
+
 ###CHANGELOG - 8 April 2018
 
 Update to MToolBox v.1.1
