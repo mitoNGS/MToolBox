@@ -1,3 +1,7 @@
+###CHANGELOG - 24 Januray 2019
+
+A bug reported in github issues #64 and #56 has being fixed. The bug was affecting the parsing of insertions/deletions performed by the `mtVariantCaller.py` script.
+
 ###CHANGELOG - 2 October 2018
 
 A bug in the `MToolBox.sh` script has being identified and fixed. The pipeline was failing  when input folders with "." in the filename were used, pointing at incorrect input directory path.
