@@ -637,6 +637,7 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 
 def get_consensus_single(i, hf=0.8):
 	consensus_value=[]
+	consensus_value_strict=[]
 	if len(i) != 0:
 		for var in i:
 			if var[-1] == 'mism' and max(var[6]) >= hf:
@@ -650,6 +651,10 @@ def get_consensus_single(i, hf=0.8):
 				a=getIUPAC(basevar, dIUPAC)
 				res=[var[0], a, 'mism']
 				consensus_value.append(res)
+				index=var[6].index(max(var[6]))
+				basevar2=var[3][index]
+				res_strict=[var[0], [basevar2], 'mism']
+				consensus_value_strict.append(res_strict)
 			elif var[-1] == 'ins' and max(var[6]) >= hf:
 				index=var[6].index(max(var[6]))
 				basevar=var[3][index]
