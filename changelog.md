@@ -1,3 +1,7 @@
+###CHANGELOG - 10 February 2019
+
+A bug in the phylotree build 17 tree parsing has been fixed, causing replacement of `haplogroups.txt` and `phylotree_r17.pickle` files. The bug was causing wrong predictions mostly for X haplogroups. Please update your MToolBox installation with `git pull`.
+
 ###CHANGELOG - 24 Januray 2019
 
 A bug reported in github issues #64 and #56 has been fixed. The bug was affecting the parsing of insertions/deletions performed by the `mtVariantCaller.py` script.
