@@ -21,6 +21,11 @@ The MToolBox development and manteinance relies on the work of undegraduates, Ph
 
 We would also like to thank Professor Marcella Attimonelli (University of Bari), who inspired and supervises the MToolBox project.
 
+**As of February 2019*
+
+A bug in the phylotree build 17 tree parsing has been fixed, causing replacement of `haplogroups.txt` and `phylotree_r17.pickle` files. The bug was causing wrong predictions mostly for X haplogroups. Please update your MToolBox installation with `git pull`.
+
+
 **As of April 2018**    
 Update to MToolBox v.1.1
 
