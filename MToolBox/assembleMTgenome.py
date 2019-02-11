@@ -58,13 +58,13 @@ Options:
 	-N		normalize bed graph [no]
 	-A		add a value to name field of UCSC track [None]
 	-D		add a value to description field of UCSC track [None]
-	
+
 	"""
 
 try:
 	opts, args = getopt.getopt(sys.argv[1:], "hf:i:q:c:d:o:g:a:r:s:v:FCUPNA:D:z:t:")
 except getopt.GetoptError, err:
-	print str(err) 
+	print str(err)
 	usage()
 	sys.exit()
 fasta_dir='/usr/local/share/genomes/'
@@ -111,7 +111,7 @@ for o,a in opts:
 	elif o == "-z": hf = float(a)
 	elif o == "-F": crf = 1
 	elif o == "-C": crc = 1
-	elif o == "-U": cru = 1	
+	elif o == "-U": cru = 1
 	elif o == "-P": pout = 1
 	elif o == "-N": normb = 1
 	elif o == "-A": addv = a
@@ -140,7 +140,7 @@ if not os.path.exists(mtdnafile):
 	sys.exit('File %s does not exist.' %(mtdnafile))
 if not os.path.exists(inputfile):
 	usage()
-	sys.exit('File %s does not exist.' %(inputfile))	
+	sys.exit('File %s does not exist.' %(inputfile))
 
 ext=inputfile.split('.')[-1]
 basext=inputfile.replace('.'+ext,'')
@@ -172,7 +172,7 @@ def normS(s,ref):
 	for i in ns:
 		if i in '.,ACGTNacgtN<>*': ss+=i
 	return (ss.replace('.',ref)).replace(',',ref)
-	
+
 def nuc(seq):
 	d={'A':0,'C':0,'G':0,'T':0,'N':0}
 	for i in seq:
@@ -244,7 +244,7 @@ if ext=='bam':
 	print 'Creating pileup...'
 	cmd3='%s mpileup -B -f %s %s-sorted.bam > %s.pileup' %(sexe,hgenome,basext,basext)
 	os.system(cmd3)
-	
+
 mtdna={}
 x=1
 print 'Reading mtDNA sequence...'
@@ -295,6 +295,7 @@ tablefile=basename+'-table.txt'
 statfile=basename+'-statistics.txt'
 coveragefile=basename+'-coverage.txt'
 contigfile=basename+'-contigs.fasta'
+contigfile_strict=basename+'-contigs.strict_consensus.fasta'
 # trackfile=basename+'-UCSCtrack.bed'
 #track=['browser position chrRSRS\nbrowser hide all\n']
 #track.append(mt_track)
@@ -446,26 +447,29 @@ if os.path.exists('../VCF_dict_tmp'):
 else:
 	VCF_dict = {} # global VCF dict
 contigs_wdict = []
-if crf: f=open(contigfile,'w')
+if crf:
+	f=open(contigfile,'w')
+	f2=open(contigfile_strict, 'w')
 x=1
 for i in contigs:
 	#initialize new_i
 	new_i = i
 	#write fasta header
 	f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
+	f2.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 	#print "A contig, ", i
 	if crf:
 		string_seq = i[1]
 		#print "String seq is", string_seq
 		nuc_index = i[0][0]
 		dict_seq = {}
-		# the sequence string at 
+		# the sequence string at
 		for nuc in string_seq:
 			dict_seq[nuc_index] = nuc
 			nuc_index += 1
 		#print "original dict_seq is", dict_seq
 		# add info for consensus dictionary
-		consensus_single = get_consensus_single(mut_events[mut_events.keys()[0]],hf=hf)
+		consensus_single, consensus_single_strict = get_consensus_single(mut_events[mut_events.keys()[0]],hf=hf)
 		#print consensus_single
 		# alter dict_seq keys for the implementation
 		# of the consensus information
@@ -480,14 +484,14 @@ for i in contigs:
 			positions=df[0]
 			dup_positions = positions[positions.duplicated()].values
 			for x in dup_positions:
-				d = df[df[0]==x][2] #check the mut type. If ins, report ins instead of del or mism 
+				d = df[df[0]==x][2] #check the mut type. If ins, report ins instead of del or mism
 				if 'ins' in d.values:
 					idx = d[d!='ins'].index[0]
 					df.drop(df.index[[idx]],inplace=True)
 				elif 'del' in d.values:
 					idx = d[d!='del'].index[0]
 					df.drop(df.index[[idx]],inplace=True) #If ambiguity between mism and del, report deletion instead of mism in the consensus
-				
+
 			for idx in df.index:
 				if df[0][idx] in dict_seq.keys(): #if position is in the dict
 					if df[2][idx] == 'mism': #if mut type is mism
@@ -500,7 +504,7 @@ for i in contigs:
 								del(dict_seq[deleted_pos])
 							else:
 								pass #do not try to delete the position from the contig as the position is not present in it (this happens when the deletion is downstream to the end of the contig!
- 
+
 			# sort positions in dict_seq and join to have the sequence
 			contig_seq = ''
 			#print "dict_seq is", dict_seq.keys()
@@ -515,8 +519,57 @@ for i in contigs:
 	for j in range(0,len(new_i[1]),60):
 		if crf:
 			f.write(new_i[1][j:j+60]+'\n')
+	# write consensus_Strict for haplogroup prediction.
+	# That's just a copy of previous iteration from line 479. Maybe generalise a function?
+		if len(consensus_single_strict) == 0:
+			print 'no variants found in this contig {0}\n'.format(x)
+			pass
+		else:
+			df= pd.DataFrame(consensus_single_strict)
+			positions=df[0]
+			dup_positions = positions[positions.duplicated()].values
+			for x in dup_positions:
+				d = df[df[0]==x][2] #check the mut type. If ins, report ins instead of del or mism
+				if 'ins' in d.values:
+					idx = d[d!='ins'].index[0]
+					df.drop(df.index[[idx]],inplace=True)
+				elif 'del' in d.values:
+					idx = d[d!='del'].index[0]
+					df.drop(df.index[[idx]],inplace=True) #If ambiguity between mism and del, report deletion instead of mism in the consensus
+
+			for idx in df.index:
+				if df[0][idx] in dict_seq.keys(): #if position is in the dict
+					if df[2][idx] == 'mism': #if mut type is mism
+						dict_seq[df[0][idx]] = df[1][idx][0] #then substitute the dict value with the correspondent nt sequence
+					elif df[2][idx] == 'ins':
+						dict_seq[df[0][idx]] = df[1][idx][0]
+					elif df[2][idx] == 'del':
+						for deleted_pos in df[1][idx]:
+							if deleted_pos in dict_seq:
+								del(dict_seq[deleted_pos])
+							else:
+								pass #do not try to delete the position from the contig as the position is not present in it (this happens when the deletion is downstream to the end of the contig!
+
+			# sort positions in dict_seq and join to have the sequence
+			contig_seq = ''
+			#print "dict_seq is", dict_seq.keys()
+			for j in sorted(dict_seq.keys()):
+				contig_seq += dict_seq[j]
+			#print contig_seq
+			new_i = ((i[0][0], i[0][1]), contig_seq)
+			contigs_wdict.append(new_i)
+			#f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
+			#f.write('>Contig.%i|%i-%i\n' %(x,i[0][0],i[0][1]))
+	dass[i[0]]=[0,0,0,0,0]
+	for j in range(0,len(new_i[1]),60):
+		if crf:
+			f2.write(new_i[1][j:j+60]+'\n')
+
 	x+=1
-if crf: f.close()
+if crf:
+	f.close()
+	f2.close()
+
 
 # store mut_events (it's a dictionary) in a file, which will be used to store
 # indels/mismatches data for the generation of VCF
@@ -558,7 +611,7 @@ for i in range(len(mtdna)):
 		if j[0]<=i+1<=j[1]:
 			if mtdna[i+1][1][0] !='#':
 				dann[j][1]+=1
-				dann[j][2]+=mtdna[i+1][1][2]			
+				dann[j][2]+=mtdna[i+1][1][2]
 
 
 if crc: f=open(coveragefile,'w')
@@ -596,6 +649,3 @@ if crc:f.close()
 #for i in range(0,len(fseq),60):
 #	if crf:f.write(fseq[i:i+60]+'\n')
 #f.close()
-
-
-
