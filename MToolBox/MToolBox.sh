@@ -479,11 +479,11 @@ fasta_input()
 	#for i in $(ls -d OUT_*); do cd $i; variants_functional_annotation.py $hpbest ; cd ..; done
 	variants_functional_annotation.py #${hpbest}
 	# Collect all prioritized variants from all the samples
-	if [[ `ls -1 OUT*/*annotation.csv 2> /dev/null | wc -l` -gt 0 ]]
+	if [[ `find OUT* -name "*annotation.csv" 2> /dev/null | wc -l` -gt 0 ]]
 	then
 		echo "Looking for prioritized variants..."		
-		for i in $(ls -d OUT_*/*annotation.csv); do tail -n+2 $i | awk 'BEGIN {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") {print $1"\t"$2"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14"\t"$15"\t"$16"\t"$17"\t"$30"\t"$31"\t"$32"\t"$33"\t"$34"\t"$35"\t"$36"\t"$37"\t"$38"\t"$39"\t"$40"\t"$41"\t"$42"\t"$43"\t"$44}}' >> priority_tmp.txt; done
-		for i in $(ls -d OUT_*/*annotation.csv); do tail -n+2 $i | awk 'BEGIN {count=0} {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") count++} END {print $1"\t"NR"\t"count}' >> variant_number.txt; done
+		for i in $(find OUT_*/ -name "*annotation.csv"); do tail -n+2 $i | awk 'BEGIN {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") {print $1"\t"$2"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14"\t"$15"\t"$16"\t"$17"\t"$30"\t"$31"\t"$32"\t"$33"\t"$34"\t"$35"\t"$36"\t"$37"\t"$38"\t"$39"\t"$40"\t"$41"\t"$42"\t"$43"\t"$44}}' >> priority_tmp.txt; done
+		for i in $(find  OUT_*/ -name "*annotation.csv"); do tail -n+2 $i | awk 'BEGIN {count=0} {FS="\t"}; {if ($5 == "yes" && $6 == "yes" && $7 == "yes") count++} END {print $1"\t"NR"\t"count}' >> variant_number.txt; done
 		prioritization.py priority_tmp.txt
 		rm priority_tmp.txt
 		echo ""
