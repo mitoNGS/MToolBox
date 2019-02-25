@@ -181,11 +181,12 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 		right=m.split(pcigar[-1])
 		nDel=int(left[-1])
 		left.pop(-1)
-		s=sum(left) # number of 5' flanking positions to Del
+		s=sum(left)
 		error(right)
 		sr=sum(right)-(hardclippingright+softclippingright) # number of 3' flanking positions to Del
-		lflank=s-softclippingleft # exclude softclipped bases from left pos calculation
-		lflank=s-hardclippingleft # exclude hardclipped bases from left pos calculation
+		lflank=s-(softclippingleft+hardclippingleft) # exclude 5' flanking softclipped/hardclipped bases from left pos calculation
+		#print "lflank=s-softclippingleft", lflank
+		#lflank=s-hardclippingleft # exclude hardclipped bases from left pos calculation
 		rLeft=(refposleft+lflank)
 		lowlimit=rLeft+1
 		rRight=lowlimit+nDel
@@ -193,8 +194,8 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
 		type='Del'
 		qsDel=[]
 		if lflank>=tail and sr>=tail:
-			qsLeft=qs[(s-5):s]
-			qsRight=qs[s:(s+5)]
+			qsLeft=qs[(lflank-5):lflank]
+			qsRight=qs[lflank:(lflank+5)]
 			qsL=[]
 			qsR=[]
 			for x in qsLeft:
@@ -341,7 +342,7 @@ def getIUPAC(ref_var, dIUPAC):
 	return iupac_code
 			
 
-def mtvcf_main_analysis(mtable, sam, name2, tail=5):
+def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 	mtable=[i.split('\t') for i in mtable]
 	mtable.remove(mtable[0])
 	sam=sam.readlines()
@@ -378,7 +379,6 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 	print "\n\nsearching for indels in {0}.. please wait...\n\n".format(name2)
 	for i in sam:
 		[CIGAR, readNAME, seq, qs, refposleft, mate] = varnames(i)
-		#print "CIGAR", CIGAR
 		# varnames()
 		if 'I' in CIGAR or 'D' in CIGAR:
 			r=SearchINDELsintoSAM(readNAME,mate,CIGAR,seq, qs,refposleft,tail=tail)
@@ -419,7 +419,8 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 		dicqsIns[i]=[]
 		for x in rposIns.get(i):
 			for j in range(len(x[-1])):
-				if int(x[-1][j])>=25:
+				#if int(x[-1][j])>=25:
+                                if int(x[-1][j])>=Q:
 					pass
 				else:
 					x[-1][j]='-'
@@ -432,7 +433,8 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5):
 		dicqsDel[i]=[]
 		for x in rposDel.get(i):
 			for j in range(len(x[-1])):
-				if int(x[-1][j])>=25:
+				#if int(x[-1][j])>=25:
+                                if int(x[-1][j])>=Q:
 					pass
 				else:
 					x[-1][j]='-'
