@@ -1,5 +1,5 @@
 ### CHANGELOG - 25 February 2019
-Fix in `mtVariantCaller.py` to solve issues #64 and #72.
+Fix in `mtVariantCaller.py` to solve issues #64 and #72.    
 Fix in `MToolBox.sh` to handle multiple haplogroup predictions. This solves issue #73.    
 Tag release of MToolBox.v.1.1
 
