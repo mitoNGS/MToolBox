@@ -49,9 +49,8 @@ Users that would like to run GATK IndelRealigner are now asked to download a new
 mv GenomeAnalysisTK.jar /path/to/MToolBox/MToolBox/ext_tools/
 ```
 
-**Please keep an eye on the MToolBox updates (and do git pull from time to time) by reading the changelogs. To do so please visit [changelogs](https://github.com/mitoNGS/MToolBox/blob/master/changelog.md).**
+To keep track of the **MToolBox updates** please visit [changelogs](https://github.com/mitoNGS/MToolBox/blob/master/changelog.md) and take a look at MToolBox [latest releases](https://github.com/mitoNGS/MToolBox/releases).
 
-####For the previous version of MToolBox (v.0.3.3), please go to https://github.com/mitoNGS/MToolBox/releases. (DEPRECATED)
 
-####For further information, please visit the official [MToolBox Wiki](https://github.com/mitoNGS/MToolBox/wiki).
+### For further information, please visit the official [MToolBox Wiki](https://github.com/mitoNGS/MToolBox/wiki).
 
