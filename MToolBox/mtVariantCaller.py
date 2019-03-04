@@ -647,14 +647,30 @@ def get_consensus_single(i, hf=0.8):
 				consensus_value.append(res)
 				consensus_value_strict.append(res)
 			elif var[-1] == 'mism' and max(var[6]) < hf:
+				print "There we go: {0}".format(var)
+				ref_frequency = 1 - sum(var[6])
 				basevar=[var[1]]+var[3]
 				basevar.sort()
 				a=getIUPAC(basevar, dIUPAC)
 				res=[var[0], a, 'mism']
+				print "Non strict is {0}".format(res)
 				consensus_value.append(res)
-				index=var[6].index(max(var[6]))
-				basevar2=var[3][index]
-				res_strict=[var[0], [basevar2], 'mism']
+				if ref_frequency >= hf:
+					#basevar2 = 
+					res_strict = [var[0], [var[1]], 'mism']
+				else:
+					basevar2 = []
+					over_min_cutoff_indices = [i for i, j in enumerate(var[3]) if j >= 0.2]
+					for x, allele in enumerate(var[3]):
+						if x in over_min_cutoff_indices:
+							basevar2.append(allele)
+					if ref_frequency >= 0.2:
+						basevar2.append(var[0])
+	#				index=var[6].index(max(var[6]))
+					#basevar2=var[1][index]
+					basevar2=var[3][index]
+					res_strict=[var[0], [basevar2], 'mism']
+				print "Strict is {0}".format(res_strict)
 				consensus_value_strict.append(res_strict)
 			elif var[-1] == 'ins' and max(var[6]) >= hf:
 				index=var[6].index(max(var[6]))

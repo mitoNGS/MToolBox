@@ -442,18 +442,23 @@ mt_table = open(tablefile, 'r').readlines()
 if type(sample_name) == (list):
 	sample_name = sample_name[0]
 mut_events = mtvcf_main_analysis(mt_table, sam_file, sample_name, tail=tail)
+#print 'Mut events is {0} long'.format(len(mut_events))
 if os.path.exists('../VCF_dict_tmp'):
 	VCF_dict = ast.literal_eval(open('../VCF_dict_tmp', 'r').read()) # global VCF dict
 else:
 	VCF_dict = {} # global VCF dict
 contigs_wdict = []
+contigs_wdict_strict = []
 if crf:
 	f=open(contigfile,'w')
 	f2=open(contigfile_strict, 'w')
 x=1
 for i in contigs:
+	#print "\ncontig is: {0}\n".format(i)
+	dass[i[0]]=[0,0,0,0,0]
 	#initialize new_i
 	new_i = i
+	new_i_strict = i
 	#write fasta header
 	f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 	f2.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
@@ -476,6 +481,8 @@ for i in contigs:
 		#
 		#print "CONSENSUS SINGLE: ", consensus_single
 		#check if there are repeated positions with different mut type
+		print 'Consensus is {0} long'.format(len(consensus_single))
+		print 'Consensus strict is {0} long'.format(len(consensus_single_strict))
 		if len(consensus_single) == 0:
 			print 'no variants found in this contig {0}\n'.format(x)
 			pass
@@ -515,10 +522,9 @@ for i in contigs:
 			contigs_wdict.append(new_i)
 			#f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 			#f.write('>Contig.%i|%i-%i\n' %(x,i[0][0],i[0][1]))
-	dass[i[0]]=[0,0,0,0,0]
-	for j in range(0,len(new_i[1]),60):
-		if crf:
-			f.write(new_i[1][j:j+60]+'\n')
+			for j in range(0,len(new_i[1]),60):
+				#if crf:
+				f.write(new_i[1][j:j+60]+'\n')
 	# write consensus_Strict for haplogroup prediction.
 	# That's just a copy of previous iteration from line 479. Maybe generalise a function?
 		if len(consensus_single_strict) == 0:
@@ -556,14 +562,13 @@ for i in contigs:
 			for j in sorted(dict_seq.keys()):
 				contig_seq += dict_seq[j]
 			#print contig_seq
-			new_i = ((i[0][0], i[0][1]), contig_seq)
-			contigs_wdict.append(new_i)
+			new_i_strict = ((i[0][0], i[0][1]), contig_seq)
+			contigs_wdict_strict.append(new_i_strict)
 			#f.write('>Contig.%i|%i-%i\n' %(x,new_i[0][0],new_i[0][1]))
 			#f.write('>Contig.%i|%i-%i\n' %(x,i[0][0],i[0][1]))
-	dass[i[0]]=[0,0,0,0,0]
-	for j in range(0,len(new_i[1]),60):
-		if crf:
-			f2.write(new_i[1][j:j+60]+'\n')
+	#dass[i[0]]=[0,0,0,0,0]
+			for j in range(0,len(new_i_strict[1]),60):
+				f2.write(new_i_strict[1][j:j+60]+'\n')
 
 	x+=1
 if crf:
