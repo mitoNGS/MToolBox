@@ -2,6 +2,8 @@
 
 import datatypes, itertools, pickle
 from copy import copy
+from consts import RCRS # which actually is RSRS
+from bioinf.events import *
 
 def traverse_haplogroup(haplogroup, aplo_list=None):
     """
@@ -93,7 +95,7 @@ def filter_positions(haplogroup, reverse=True):
     for haplo in aplo_list:
         pos_list.extend(haplo.pos_list)
 
-    dict_set_start_list = dict(pos_list)
+    dict_set_start_list = dict_p(pos_list)
     new_list, weird_guys = choose_terminal_mutation(dict_set_start_list)
     return new_list
     """
@@ -119,7 +121,7 @@ def filter_positions(haplogroup, reverse=True):
 #
 # dizionario {start : [eventi associati]} (per ogni aplogruppo)
 
-def dict(pos_list):
+def dict_p(pos_list):
     rev_pos_list = copy(pos_list)
     rev_pos_list.reverse()
     
@@ -138,7 +140,7 @@ def dict(pos_list):
 
 # questa funzione dovrebbe scegliere l'ultimo evento relativo ad un sito
 
-def choose_terminal_mutation(dict_set_start_list):
+def choose_terminal_mutation_(dict_set_start_list):
 
     new_list = []
     weird_guys = {}
@@ -182,6 +184,67 @@ def choose_terminal_mutation(dict_set_start_list):
 		"""
     return new_list, weird_guys
 
+def choose_terminal_mutation(dict_set_start_list):
+    new_list = []
+    weird_guys = {}
+    for pos_num in dict_set_start_list.keys():
+        pos_event_dict = dict_set_start_list[pos_num]
+        # se l'ultimo evento (che è il primo, nella lista revertita) è una
+        # retromutazione, viene scartato
+        if [event.mutation_type() for event in pos_event_dict][0] == 'Retromutation':
+            pass
+        # se non c'è retromutazione ma comunque più di due eventi,
+        # escludendo delezioni, possono essere Transversion e Transition
+        elif len(pos_event_dict) > 1:
+            # stampa la voce del dizionario		
+            weird_guys[pos_num] = pos_event_dict
+            # pick up the last mutation only
+            # compare it to RSRS ref allele to state if it's Transition or Transversion
+            try:
+                # try to account for all special cases found in phylotree
+                if dict_set_start_list[pos_num][0].mutation_type() == 'Deletion' and dict_set_start_list[pos_num][1].mutation_type() in ['Transition', 'Transversion']:
+                    pass
+                elif set([event.mutation_type() for event in pos_event_dict]) == set(['Insertion']):
+                    event_seq = ''.join([event.seq for event in pos_event_dict[len(pos_event_dict)::-1]])
+                    new_list.append(datatypes.Insertion("{}.{}".format(pos_num, event_seq)))
+                elif len(pos_event_dict) == 2 and dict_set_start_list[pos_num][0].mutation_type() == 'Deletion' and dict_set_start_list[pos_num][1].mutation_type() == 'Insertion':
+                    pass
+                elif isTransition(dict_set_start_list[pos_num][0].change, RCRS[pos_num-1]):
+                    new_list.append(datatypes.Transition("{}".format(pos_num)))
+                elif isTransversion(dict_set_start_list[pos_num][0].change, RCRS[pos_num-1]):
+                    new_list.append(datatypes.Transversion("{}{}".format(pos_num, dict_set_start_list[pos_num][0].change)))
+            except Exception as e:
+                print str(e)
+                print dict_set_start_list
+                print set([event.mutation_type() for event in pos_event_dict])
+                print "ERROR", pos_event_dict
+            # 
+            # # il prodotto di una transizione e di una trasversione è una trasversione
+            # # il cui change è quello dell'ultima trovata lungo l'albero
+            # if sorted([event.mutation_type() for event in pos_event_dict]) == ['Transition', 'Transversion']:
+            #     new_list.append(datatypes.Transversion("%s" % str(pos_num)+pos_event_dict[0].change))
+            # # il prodotto di due trasversioni è una transizione
+            # # il cui change è quello dell'ultima trovata lungo l'albero
+            # elif sorted([event.mutation_type() for event in pos_event_dict]) == ['Transversion', 'Transversion']:
+            #     new_list.append(datatypes.Transition("%d" % pos_num))
+        else:
+            new_list.append(dict_set_start_list[pos_num][0])
+        """
+		A -> G -> T
+        Transition -> Transversion = Transversion
+
+        A -> T -> C
+        Transversion -> Transition = Transversion
+
+        A -> T -> G
+        Transversion -> Transversion = Transition
+
+        A -> T -> A
+        Transition -> Transition = Retromutation
+		"""
+    return new_list, weird_guys
+
+
 # =================================================================
 
 class HaplogroupTree(object):
@@ -224,7 +287,8 @@ class HaplogroupTree(object):
         pos_list = self.get_branch_positions(haplo_name)
         
         ## PROVA
-        dict_set_start_list = dict(pos_list)
+        dict_set_start_list = dict_p(pos_list)
+        #print dict_set_start_list
         new_list, weird_guys = choose_terminal_mutation(dict_set_start_list)
 #        if weird_guys != {}:
 #        for guy in weird_guys.keys():
