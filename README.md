@@ -21,6 +21,24 @@ The MToolBox development and manteinance relies on the work of undegraduates, Ph
 
 We would also like to thank Professor Marcella Attimonelli (University of Bari), who inspired and supervises the MToolBox project.
 
+**As of April 2019**
+
+We have accidentally pushed fixes to master that have not been adequately tested. Fixes are the following, pushed from the 4th of March 2019 onwards:
+
+```
+4186b5add55e7aa3eb2560565bdc65b62c677f85
+075200422ae616c8f9d532756ae5a266e67bf929
+46ac15cf32f06a55b67002608e1f2856d94cf697
+0d83ee821db1d41422db26c116eb028af8d02bec
+03d1c37ad375d3f47fefac5f37b478641d9ef057
+```
+
+For those users who update the MToolBox pipeline by doing `git pull` we ask to repeat the `git pull` and then undo local changes by doing `git checkout 8dae1134ae20f0ee3d41296cadb47433ed8118d8`.
+
+This will reset your local MToolBox repo to the MToolBox tag release v.1.1.
+
+We apologize for this inconvenient.
+
 **As of February 2019**
 
 A bug in the phylotree build 17 tree parsing has been fixed, causing replacement of `haplogroups.txt` and `phylotree_r17.pickle` files. The bug was causing wrong predictions mostly for X haplogroups. Please update your MToolBox installation with `git pull`.
