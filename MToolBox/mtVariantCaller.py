@@ -1,54 +1,16 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# Created by Claudia Calabrese
 
-"""
-Written by Claudia Calabrese - claudia.calabrese23@gmail.com
-	and Domenico Simone - dome.simone@gmail.com
-"""
-
-import sys, os, glob, math
-#print sys.version
-import re
-import ast
+import getopt, sys, os, re, ast, glob
 from collections import OrderedDict
 import vcf
+import pandas as pd
+import scipy as sp
 
-#######################################################
 
-#defines global variables for Indels
-def varnames(i):
-	#global CIGAR, readNAME, seq, qs, refposleft, mate, refposright
-	CIGAR=i[3]
-	readNAME=i[0]
-	seq=i[7]
-	qs=i[8]
-	refposleft=int(i[2])-1
-	mate=int(i[6])
-	return CIGAR, readNAME, seq, qs, refposleft, mate#, refposright
+#functions definition
 
-#defines global variables for MT-table parsing
-def varnames2(b,i):
-	#global Position, Ref, Cons, Cov, A,C,G,T
-	global Position, Ref, Cov, A,C,G,T
-	Position=int((i[0]).strip())
-	Ref=(i[1]).strip()
-	Cov=int((i[3]).strip())
-	A=b[0]
-	C=b[1]
-	G=b[2]
-	T=b[3]
-	return Position, Ref, Cov, A,C,G,T
-#Heteroplasmic fraction quantification
-def heteroplasmy(cov, Covbase):
-	try:
-		if Covbase >= cov: 
-			Heteroplasmy=float(cov)/float(Covbase)
-			het=round(Heteroplasmy, 3)
-			return het
-		else:
-			return 1.0
-	except ZeroDivisionError:
-		het=1.0
-		return het
 #defines mathematical operations
 #sum
 def sum(left):
@@ -56,190 +18,269 @@ def sum(left):
 	for i in left:
 		s+=int(i)
 	return s
-#median
+	
 def median(l):
 	try:
-		if len(l)%2 != 0:
-			median= sorted(l)[((len(l)+1)/2)-1]
-		else:
-			m1 = sorted(l)[(len(l)/2)+1-1]
-			m2 = sorted(l)[(len(l)/2)-1]
-			median= (float(m1)+float(m2))/2
-		return median
-	except ZeroDivisionError:
-		return 0
-#mean
-def mean(list):
+		median = sp.median(l)
+	except:
+		median = 0
+	return median
+
+def mean(l):
 	try:
-		s=sum(list)
-		m=float(s)/float(len(list))
-		return m
-	except ZeroDivisionError:
-		m=0
-		return m
-#defines function for value errors
+		m = sp.mean(l)
+	except:
+		m = 0
+	return m
+
+def varnames(i):
+    #global CIGAR, readNAME, seq, qs, refposleft, mate, refposright
+    CIGAR=i[5]
+    readNAME=i[0]
+    seq=i[9]
+    qs=i[10]
+    refposleft=int(i[3])-1 #0-based position
+    mate=int(i[1])
+    return CIGAR, readNAME, seq, qs, refposleft, mate#, refposright
+
+
+def varnames2(b,i):
+    #global Position, Ref, Cons, Cov, A,C,G,T
+    global Position, Ref, Cov, A,C,G,T
+    Position=int((i[0]).strip())
+    Ref=(i[1]).strip()
+    Cov=int((i[3]).strip())
+    A=b[0]
+    C=b[1]
+    G=b[2]
+    T=b[3]
+    return Position, Ref, Cov, A,C,G,T
+
+
+def heteroplasmy(cov, Covbase):
+    #Heteroplasmic fraction quantification
+    try:
+        if Covbase >= cov: 
+            Heteroplasmy=float(cov)/float(Covbase)
+            het=round(Heteroplasmy, 3)
+            return het
+        else:
+            return 1.0
+    except ZeroDivisionError:
+        het=1.0
+        return het
+
 def error(list):
-	try:
-		list.remove('')
-	except ValueError:
-		pass
-#defines the function searching for and filtering indels within the read sequence	
-def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail=5):
+    #defines function for value errors
+    try:
+        list.remove('')
+    except ValueError:
+        pass
+
+
+def qs_context_check(qs, Variant_list, list_of_flanking_bases, tail, Q):
+    '''This function checks the median QS of the bases surrounding the Indel. 
+    If the median right or left qs is below the QS threshold, the Indel will be discarded'''
+    qsLeft = []
+    qsRight = []
+    for i in xrange(len(Variant_list)):
+        if list_of_flanking_bases[i] >= tail:
+            qsLeft.append(qs[(list_of_flanking_bases[i]-tail):list_of_flanking_bases[i]])
+            qsRight.append(qs[list_of_flanking_bases[i]:(list_of_flanking_bases[i]+tail)])
+        else:
+            qsLeft.append("delete") #number of flanking leftmost bases is below tail
+            qsRight.append("delete") #number of flanking leftmost bases is below tail
+    qsL=[]
+    qsR=[]
+    for q in qsLeft:
+        if "delete" not in q:
+            median_qs_left = median(map(lambda x:(ord(x)-33),q)) #calculate the median qs around 5nt leftmost to variant
+            if median_qs_left >= Q:
+                qsL.append(median_qs_left)
+            else:
+                qsL.append("delete")
+        else:
+            qsL.append("delete")
+    for q in qsRight:
+        if "delete" not in q:
+            median_qs_right = median(map(lambda x:(ord(x)-33),q)) #calculate the median qs around 5nt rightmost to variant
+            if median_qs_right >= Q:
+                qsR.append(median_qs_right)
+            else:
+                qsR.append("delete")
+        else:
+            qsR.append("delete")
+    qs_median = map(lambda x:[x[0],x[1]],zip(qsL,qsR)) #list of tuples
+    return qs_median
+
+
+def indels_results(left_tail, right_tail, tail, Indel, var_type, readNAME, mate, indels_flanking,refposleft,qs,Q):
+    res = []
+    if len(Indel) > 1 and left_tail >= tail and right_tail >= tail: #check if the first Del and last Del are from more then 5 nt from read ends
+        res.append([var_type]*len(Indel))
+        res.append([readNAME]*len(Indel))
+        res.append([check_strand(mate)]*len(Indel))
+        res.append(refposleft)
+        res.append(Indel)
+        res.append(qs_context_check(qs,Indel,indels_flanking,tail,Q)) #keep Dels list as it is
+    elif len(Indel) > 1 and left_tail >= tail and right_tail < tail:
+        res.append([var_type]*len(Indel))
+        res.append([readNAME]*len(Indel))
+        res.append([check_strand(mate)]*len(Indel))
+        res.append(refposlef)
+        res.append(Indel)
+        res.append(qs_context_check(qs,Indel,indels_flanking,tail,Q))
+        res[-1][-1] = ['delete','delete'] #remove the last indel
+    elif len(Indel) > 1 and left_tail < tail and right_tail >= tail:
+        res.append([var_type]*len(Indel))
+        res.append([readNAME]*len(Indel))
+        res.append([check_strand(mate)]*len(Indel))
+        res.append(refposleft)
+        res.append(Indel)
+        res.append(qs_context_check(qs,Indel,indels_flanking,tail,Q))
+        res[-1][0] = ['delete','delete'] #remove the first indel
+    elif len(Indel) == 1 and left_tail >= tail and right_tail >= tail: #there is only one Deletion in the read
+        res.append([var_type]*len(Indel))
+        res.append([readNAME]*len(Indel))
+        res.append([check_strand(mate)]*len(Indel))
+        res.append(refposleft)
+        res.append(Indel)
+        res.append(qs_context_check(qs,Indel,indels_flanking,tail,Q))
+    else:
+        res.append([var_type]*len(Indel))
+        res.append([readNAME]*len(Indel))
+        res.append([check_strand(mate)]*len(Indel))
+        res.append(refposleft)
+        res.append(Indel)
+        res.append([("delete","delete")])
+    res_final =  map(lambda x:[x[0],x[1],x[2],x[3],x[4],x[5]],zip(res[0],res[1],res[2],res[3],res[4],res[5])) #create list of lists for Indels
+    return res_final
+
+
+def check_strand(mate):
+    #check strand
+    if mate & 16 == 16:
+        strand = '-'
+    else:
+        strand = '+'
+    return strand
+
+def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail,Q):
 	m=re.compile(r'[a-z]', re.I)
+	res = []
+	#take indexes of letters in CIGAR
+	letter_start = [x.start() for x in m.finditer(CIGAR)]
+	#print letter_start
+	CIGAR_sp = sp.array(list(CIGAR))
+	all_changes = CIGAR_sp[letter_start]
+	letter_start = sp.array(letter_start)
+	list_of_indexes = [[0,letter_start[0]]]
+	i = 0
+	while i < len(letter_start)-1:
+		if i == len(letter_start)-2:
+			t = [letter_start[i]+1,letter_start[-1]]
+			list_of_indexes.append(t)
+		else:
+			t = [letter_start[i]+1,letter_start[i+1]]
+			list_of_indexes.append(t)
+		i += 1
+	#slice CIGAR based on start:end in list_of_indexes
+	all_bp = sp.array(map(lambda x:int(CIGAR[x[0]:x[1]]),list_of_indexes))
+	if 'D' in CIGAR:
+		#DELETIONS
+		#boolean vector indicating position of D
+		bv_del = sp.in1d(all_changes,'D')
+		var_type = 'Del'
+		#boolean vector indicating position of Hard clipped (H) and Soft clipped bases (S) to be removed from leftmost count
+		bv_hard_or_soft = (sp.in1d(all_changes,'H')) | (sp.in1d(all_changes,'S'))
+		#dummy vector
+		d = sp.zeros(len(bv_del))
+		#adding leftmost positions, excluding those preceding H and S
+		d[~bv_hard_or_soft] = all_bp[~bv_hard_or_soft]
+		#calculate cumulative number of bp before each del
+		cum_left = sp.cumsum(d)
+		dels_indexes =sp.where(all_changes=='D')[0]
+		flanking_dels_indexes = dels_indexes-1
+		#calculate leftmost positions to dels within the read
+		refposleft_dels = cum_left[flanking_dels_indexes]
+		refposleft_dels = refposleft_dels + refposleft
+		refposleft_dels = refposleft_dels.astype(int).tolist()
+		#get Deletion length
+		dels_indexes = letter_start[bv_del]-1
+		dels = map(lambda x:int(x),CIGAR_sp[dels_indexes])
+		#nDels = map(lambda x:range(x[0]+1,x[0]+1+x[1]),zip(refposleft_dels,dels))
+		list_dels = zip(refposleft_dels,dels)
+		Del = map(lambda x:range(x[0]+1,x[0]+1+x[1]),list_dels)
+		#get left and right tails of dels
+		dels_flanking = all_bp[flanking_dels_indexes]
+		left_tail = dels_flanking[0]
+		right_tail = len(seq)-sum(dels_flanking)
+		res_del = indels_results(left_tail, right_tail, tail, Del, var_type, readNAME, mate, dels_flanking,refposleft_dels,qs,Q)
+		res.extend(res_del)
 	if 'I' in CIGAR:
-		pcigar=CIGAR.partition('I')
-		if 'S' in pcigar[0]:
-			softclippingleft=int(pcigar[0].partition('S')[0]) # calc softclipped bases left
-		else:
-			softclippingleft=0 # no softclipped bases left
-		if 'S' in pcigar[-1]:
-			softclippingright=pcigar[-1].partition('S')[0] # calc softclipped bases right
-			rscnt=m.split(softclippingright)
-			if len(rscnt)>2:  #if  there are other options on the right end
-				softclippingright=int(rscnt[-2])
-			else:  #if there is only S option 
-				softclippingright=int(rscnt[0])
-		else:
-			softclippingright=0 # no softclipped bases right
-		if 'H' in pcigar[0]:
-			hardclippingleft=int(pcigar[0].partition('H')[0]) # calc hardclipped bases left
-		else:
-			hardclippingleft=0 # no hardtclipped bases left
-		if 'H' in pcigar[-1]:
-			hardclippingright=pcigar[-1].partition('H')[0] # calc hardclipped bases right
-			rhcnt=m.split(hardclippingright)
-			if len(rhcnt)>2:  #if  there are other options on the right end
-				hardclippingright=int(rhcnt[-2])
-			else:  #if there is only H option 
-				hardclippingright=int(rhcnt[0])			
-		else:
-			hardclippingright=0 # no hardclipped bases right
-		left=m.split(pcigar[0])
-		right=m.split(pcigar[-1])
-		numIns=int(left[-1])
-		left.pop(-1)
-		s=sum(left) # number of 5' flanking positions to Ins
-		lflank=s-softclippingleft # exclude softclipped bases from left pos calculation
-		lflank=s-hardclippingleft # exclude hardclipped bases from left pos calculation
-		error(right)
-		sr=sum(right)-(hardclippingright+softclippingright) # number of 3' flanking positions to Ins
-		rLeft=refposleft+lflank # modified
-		Ins=seq[s:s+numIns]
-		qsInsASCI=qs[s:s+numIns]
-		qsInsASCI.split()
-		qsIns=[]
-		type='Ins'
-		if mate>0:
-			strand='mate1'
-		elif mate==0:
-			strand='nondefined'
-		else:
-			strand='mate2'
-		if lflank >= tail and sr>= tail:
-			for x in qsInsASCI:
-				numeric=(ord(x)-33)
-				qsIns.append(numeric)
-		else:
-			qsIns='delete'
-		res=[]
-		res.append(type)
-		res.append(readNAME)
-		res.append(strand)
-		res.append(int(rLeft))
-		res.append(Ins)
-		res.append(qsIns)
-		return res
-	elif 'D' in CIGAR:
-		pcigar=CIGAR.partition('D')
-		if 'S' in pcigar[0]:
-			softclippingleft=int(pcigar[0].partition('S')[0]) # calc softclipped bases left
-		else:
-			softclippingleft=0 # no softclipped bases left
-		if 'S' in pcigar[-1]:
-			softclippingright=pcigar[-1].partition('S')[0] # calc softclipped bases right
-			rscnt=m.split(softclippingright)
-			if len(rscnt)>2:  #if  there are other options on the right end
-				softclippingright=int(rscnt[-2])
-			else:  #if there is only S option 
-				softclippingright=int(rscnt[0])
-		else:
-			softclippingright=0 # no softclipped bases right
-		if 'H' in pcigar[0]:
-			hardclippingleft=int(pcigar[0].partition('H')[0]) # calc hardclipped bases left
-		else:
-			hardclippingleft=0 # no hardtclipped bases left
-		if 'H' in pcigar[-1]:
-			hardclippingright=pcigar[-1].partition('H')[0] # calc hardclipped bases right
-			rhcnt=m.split(hardclippingright)
-			if len(rhcnt)>2:  #if  there are other options on the right end
-				hardclippingright=int(rhcnt[-2])
-			else:  #if there is only H option 
-				hardclippingright=int(rhcnt[0])			
-		else:
-			hardclippingright=0 # no hardclipped bases right
-		left=m.split(pcigar[0])
-		right=m.split(pcigar[-1])
-		nDel=int(left[-1])
-		left.pop(-1)
-		s=sum(left)
-		error(right)
-		sr=sum(right)-(hardclippingright+softclippingright) # number of 3' flanking positions to Del
-		lflank=s-(softclippingleft+hardclippingleft) # exclude 5' flanking softclipped/hardclipped bases from left pos calculation
-		#print "lflank=s-softclippingleft", lflank
-		#lflank=s-hardclippingleft # exclude hardclipped bases from left pos calculation
-		rLeft=(refposleft+lflank)
-		lowlimit=rLeft+1
-		rRight=lowlimit+nDel
-		Del=range(lowlimit,rRight)
-		type='Del'
-		qsDel=[]
-		if lflank>=tail and sr>=tail:
-			qsLeft=qs[(lflank-5):lflank]
-			qsRight=qs[lflank:(lflank+5)]
-			qsL=[]
-			qsR=[]
-			for x in qsLeft:
-				qsL.append(ord(x)-33)
-			for x in qsRight:
-				qsR.append(ord(x)-33)
-			medL=median(qsL)
-			medR=median(qsR)
-			qsDel.append(medL)
-			qsDel.append(medR)
-		else:
-			qsDel='delete'
-		if mate>0:
-			strand='mate1'
-		elif mate==0:
-			strand='nondefined'
-		else:
-			strand='mate2'
-		res=[]
-		res.append(type)
-		res.append(readNAME)
-		res.append(strand)
-		res.append(int(rLeft))
-		res.append(Del)
-		res.append(qsDel)
-		return res
-	else:
-		pass 
+		#INSERTIONS
+		ins_indexes =sp.where(all_changes=='I')[0]
+		bv_ins = sp.in1d(all_changes,'I')
+		var_type = 'Ins'
+		#boolean vector indicating position of Hard clipped (H) and Soft clipped bases (S) to be removed from leftmost count
+		bv_hard_or_soft = (sp.in1d(all_changes,'H')) | (sp.in1d(all_changes,'S'))
+		#dummy vector with same length as many ins in the CIGAR
+		i = sp.zeros(len(bv_ins))
+		#adding leftmost positions, excluding those preceding H and S
+		i[~bv_hard_or_soft] = all_bp[~bv_hard_or_soft]
+		#calculate cumulative number of bp before each ins and getting the flanking index in the read
+		i[bv_ins] = 0
+		cum_left = sp.cumsum(i)
+		flanking_ins_indexes = ins_indexes-1
+		#calculate leftmost positions to ins within the read
+		refposleft_ins = cum_left[flanking_ins_indexes]
+		refposleft_ins = refposleft_ins + refposleft
+		refposleft_ins = refposleft_ins.astype(int)
+		#get Insertion length
+		letter_flanking = letter_start[bv_ins]-1
+		ins = map(lambda x:int(x),CIGAR_sp[letter_flanking])
+		list_ins = zip(refposleft_ins,ins)
+		Ins = map(lambda x:range(x[0]+1,x[0]+1+x[1]),list_ins)
+		ins_flanking = all_bp[flanking_ins_indexes]
+		left_tail = ins_flanking[0]
+		right_tail = len(seq)-sum(ins_flanking)
+		res_ins = indels_results(left_tail, right_tail, tail, Ins, var_type, readNAME, mate, ins_flanking,refposleft_ins,qs,Q)
+		#get quality per Ins using Ins positions relative to the read
+		qs = sp.array(list(qs))
+		seq = sp.array(list(seq))
+		i = sp.zeros(len(bv_ins))
+		i[~bv_hard_or_soft] = all_bp[~bv_hard_or_soft]
+		if "bv_del" in locals():
+			i[bv_del] = 0
+		cum_ins = sp.cumsum(i)
+		ins_cum_bases = cum_ins[ins_indexes].astype(int)
+		ins_start_position = ins_cum_bases-1
+		list_ins = zip(ins_start_position,ins)
+		Ins2 = map(lambda x:range(x[0],x[0]+x[1]),list_ins)
+		qsInsASCI = map(lambda x: qs[x].tolist(),Ins2)
+		Ins = map(lambda x: seq[x].tolist(),Ins2)
+		#add to results a list with quality scores of ins
+		for x in xrange(len(qsInsASCI)):
+			res_ins[x].append(map(lambda x:ord(x)-33,qsInsASCI[x])) #adding an extra value to the insertion res list with QS of each insertion
+			res_ins[x][4] = Ins[x]
+		res.extend(res_ins)
+	return res
 
 #defines function searching for point mutations. It produces both the consensus base and variant(s) as output 
-def findmutations(A,C,G,T,Position, Ref, Cov):
+def findmutations(A,C,G,T,Position, Ref, Cov, minrd):
 	oo = []
 	var=[]
 	bases=[]
-	if A>=5:
+	if A>=minrd:
 		var.append(A)
 		bases.append('A')
-	if C>=5:
+	if C>=minrd:
 		var.append(C)
 		bases.append('C')
-	if G>=5:
+	if G>=minrd:
 		var.append(G)
 		bases.append('G')
-	if T>=5:
+	if T>=minrd:
 		var.append(T)
 		bases.append('T')
 	if len(var)>=2:
@@ -269,7 +310,7 @@ def CIW_LOW(het, Covbase):
 	num=p*q
 	squarez=z*z
 	squaren=n*n
-	wilsonci_low=round((p+(z*z)/(2*n)-z*(math.sqrt(p*q/n+(z*z)/(4*(n*n)))))/(1+z*z/n),3)
+	wilsonci_low=round((p+(z*z)/(2*n)-z*(sp.sqrt(p*q/n+(z*z)/(4*(n*n)))))/(1+z*z/n),3)
 	if wilsonci_low<0.0:
 		return 0.0
 	else:
@@ -289,7 +330,7 @@ def CIW_UP(het, Covbase):
 	num=p*q
 	squarez=z*z
 	squaren=n*n
-	wilsonci_up=round((p+(z*z)/(2*n)+z*(math.sqrt(p*q/n+(z*z)/(4*(n*n)))))/(1+z*z/n),3)
+	wilsonci_up=round((p+(z*z)/(2*n)+z*(sp.sqrt(p*q/n+(z*z)/(4*(n*n)))))/(1+z*z/n),3)
 	if wilsonci_up>1.0:
 		return 1.0
 	else:
@@ -306,7 +347,7 @@ def CIAC_LOW(cov,Covbase):
 	N=n+(z*z)
 	P=X/N
 	Q=1-P
-	agresticoull_low=round(P-(z*(math.sqrt(P*Q/N))),3)
+	agresticoull_low=round(P-(z*(sp.sqrt(P*Q/N))),3)
 	if agresticoull_low<0.0:
 		return 0.0
 	else:
@@ -323,12 +364,12 @@ def CIAC_UP(cov,Covbase):
 	N=n+(z*z)
 	P=X/N
 	Q=1-P
-	agresticoull_up=round(P+(z*(math.sqrt(P*Q/N))),3)
+	agresticoull_up=round(P+(z*(sp.sqrt(P*Q/N))),3)
 	if agresticoull_up>1.0:
 		return 1.0
 	else:	
 		return agresticoull_up
-
+		
 #IUPAC dictionary
 dIUPAC={'R':['A','G'],'Y':['C','T'],'S':['G','C'],'W':['A','T'],'K':['G','T'],'M':['A','C'],'B':['C','G','T'],'D':['A','G','T'],'H':['A','C','T'],'V':['A','C','G'],'N':['A','C','G','T']}
 #searches for IUPAC codes and returns the ambiguity
@@ -340,22 +381,16 @@ def getIUPAC(ref_var, dIUPAC):
 		if ref_var == i[1]:
 			iupac_code= [i[0]]
 	return iupac_code
-			
-
-def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
+		
+def mtvcf_main_analysis(mtable, sam, name2, tail, Q, minrd):
+	'''this function applies functions that seek for indels and single mismatches. It records
+	also the number of reads supporting the alternative allele per strand only for insertions and deletions'''
+	#mtvcf_main_analysis
 	mtable=[i.split('\t') for i in mtable]
 	mtable.remove(mtable[0])
 	sam=sam.readlines()
 	sam=[i.split('\t') for i in sam]
-	for i in sam:
-		i.remove(i[1])
-		i.remove(i[3])
-	#includes only values used for parsing
-	c=0
-	while c<len(sam):
-		sam[c]=sam[c][0:9]
-		c+=1
-	#assigns a null value to fields. NB: refpos is the leftmost position of the subject seq minus 1.
+	#Initialize global variables
 	CIGAR=''
 	readNAME=''
 	seq=''
@@ -371,60 +406,59 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 	Coverage=[]
 	for i in mtable:
 		Coverage.append((i[3]).strip())
-	#-----------------------------------------------------------------------------------------
-	#apply functions to sam file and write outputs into a dictionary
 	dic={}
 	dic['Ins']=[]
 	dic['Del']=[]
+	print "\ndistance from read ends and between indels is = {0}\n".format(tail)
+	print "minimum QS is = {0}\n".format(Q)
+	print "minimum read depth per position is = {0}\n".format(minrd)
 	print "\n\nsearching for indels in {0}.. please wait...\n\n".format(name2)
-	for i in sam:
-		[CIGAR, readNAME, seq, qs, refposleft, mate] = varnames(i)
-		# varnames()
-		if 'I' in CIGAR or 'D' in CIGAR:
-			r=SearchINDELsintoSAM(readNAME,mate,CIGAR,seq, qs,refposleft,tail=tail)
-			dic[r[0]].append(r[1:])
-	#############
+	#look for Indels
+	for line in sam:
+		[CIGAR, readNAME, seq, qs, refposleft, mate] = varnames(line)
+		r=SearchINDELsintoSAM(readNAME,mate,CIGAR,seq, qs,refposleft,tail,Q)
+		for i in r:
+			dic[i[0]].append(i[1:])
+	#here we exclude indels based on context
 	rposIns={}
 	rposDel={}
 	for i in dic['Ins']:
 		if i[2] not in rposIns:
-			if i[-1] == 'delete':
+			if "delete" in i[4]: #check if the insertion did not pass the quality check on sequence context
 				pass
 			else:
 				rposIns[i[2]]=[]
-				rposIns[i[2]].append(i[3:])
+				rposIns[i[2]].append([i[3],i[5],i[1]])
 		else:
-			if i[-1] == 'delete':
+			if "delete" in i[4]:
 				pass
 			else:
-				rposIns[i[2]].append(i[3:])
-
+				rposIns[i[2]].append([i[3],i[5],i[1]])
 	for i in dic['Del']:
 		if i[2] not in rposDel:
-			if i[-1]=='delete':
+			if "delete" in i[4]: #check if the deletion did not pass the quality check on sequence context
 				pass
 			else:
 				rposDel[i[2]]=[]			
-				rposDel[i[2]].append(i[3:])
+				rposDel[i[2]].append([i[3],i[4],i[1]])
 		else:
-			if i[-1]=='delete':
+			if "delete" in i[4]:
 				pass
 			else:
-				rposDel[i[2]].append(i[3:])
-	############
+				rposDel[i[2]].append([i[3],i[4],i[1]])
+	#########
 	dicqsDel={}
 	dicqsIns={}
-	#########
+	#here we exclude indels based on QS threshold
 	for i in rposIns:
 		dicqsIns[i]=[]
 		for x in rposIns.get(i):
-			for j in range(len(x[-1])):
-				#if int(x[-1][j])>=25:
-                                if int(x[-1][j])>=Q:
+			for j in range(len(x[1])):
+				if int(x[1][j]) >= Q:
 					pass
 				else:
-					x[-1][j]='-'
-			if '-' in x[-1]:
+					x[1][j]='-'
+			if '-' in x[1]:
 				pass
 			else:
 				dicqsIns[i].append(x)
@@ -432,19 +466,17 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 	for i in rposDel:
 		dicqsDel[i]=[]
 		for x in rposDel.get(i):
-			for j in range(len(x[-1])):
-				#if int(x[-1][j])>=25:
-                                if int(x[-1][j])>=Q:
+			for j in range(len(x[1])):
+				if int(x[1][j]) >= Q:
 					pass
 				else:
-					x[-1][j]='-'
-			if '-' in x[-1]:
+					x[1][j]='-'
+			if '-' in x[1]:
 				pass
 			else:
 				dicqsDel[i].append(x)
-	#print "dicqsIns is", dicqsIns
-	#print "dicqsDel is", dicqsDel
-	##########
+	#############
+	#here we filter by minimum number of reads supporting the variant allele
 	dicIns={}
 	dicDel={}
 	for i in dicqsIns:
@@ -455,9 +487,9 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 			b.append(str(j[0]))
 		s=set(b)
 		for x in s:
-			if b.count(x)>=5:
+			if b.count(x)>=minrd:
 				for z in a:
-					if x in z:
+					if x == str(z[0]):
 						dicIns[i].append(z)
 	for i in dicqsDel:
 		dicDel[i]=[]
@@ -468,87 +500,103 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 		s=set(b)
 		for x in s:
 			l=b.count(x)
-			if l>=5:
+			if l>=minrd:
 				for z in a:
-					if x==str(z[0]):
+					if x == str(z[0]):
 						dicDel[i].append(z)
-	#print "dicIns is", dicIns
-	#print "dicDel is", dicDel
 	Final={}
 	for i in dicIns:
 		Final[i]=[]
 		qs1=[]
 		bases1=[]
 		bases2=[]
+		plus_strand = 0
+		minus_strand = 0
 		a=dicIns.get(i)
 		l=len(dicIns.get(i))
 		depth=[]
 		if l>0:
 			for x in a:
-				bases2.append(x[0])
+				bases2.append(str(x[0]))
+				if x[-1] == '-':
+					minus_strand += 1 #count how many ins on minus strand
+				else:
+					plus_strand += 1 #count how many ins on plus strand
 			b=set(bases2)
 			for z in b:
 				if z != '':
 					n=bases2.count(z)
-					if n>=5:
+					if n>=minrd:
 						qs2=[]
 						for x in a:
 							if str(x[0])==z:
-								qs2.extend(x[-1])
-						bases1.append(z)
+								qs2.extend(x[1])
+						bases1.extend(eval(z))
 						qs1.append(median(qs2))
 						depth.append(n)
-			r=['ins', bases1, qs1, depth]
+			r=['ins', bases1, qs1, depth, plus_strand, minus_strand]
 			Final[i].append(r)
 	for i in dicDel:
 		if i in Final:
 			qs1=[]
 			bases1=[]
 			bases2=[]
+			plus_strand = 0
+			minus_strand = 0
 			a=dicDel.get(i)
 			l=len(a)
 			depth=[]
 			if l>0:
 				for x in a:
 					bases2.append(str(x[0]))
+					if x[-1] == '-':
+						minus_strand += 1
+					else:
+						plus_strand += 1
 				b=set(bases2)
 				for z in b:
 					if z != '':
 						n=bases2.count(z)
-						if n>=5:
+						if n>=minrd:
 							qs2=[]
 							for x in a:
 								if str(x[0])==z:
-									qs2.extend(x[-1])
+									qs2.extend(x[1])
 							bases1.append(z)
 							qs1.append(median(qs2))
 							depth.append(n)
-				r=['del', bases1, qs1, depth]
+				r=['del', bases1, qs1, depth, plus_strand, minus_strand]
 				Final[i].append(r)
 		else:
 			Final[i]=[]
 			qs1=[]
 			bases1=[]
 			bases2=[]
+			plus_strand = 0
+			minus_strand = 0
 			a=dicDel.get(i)
 			l=len(dicDel.get(i))
 			depth=[]
 			if l>0:
 				for x in a:
 					bases2.append(str(x[0]))
+					if x[-1] == '-':
+						minus_strand += 1
+					else:
+						plus_strand += 1
 				b=set(bases2)
 				for z in b:
 					if z != '':
 						n=bases2.count(z)
-						if n>=5:
+						if n>=minrd:
 							qs2=[]
 							for x in a:
 								if str(x[0])==z:
-									qs2.extend(x[-1])
+									qs2.extend(x[1])
 							bases1.append(z)
 							qs1.append(median(qs2))
 							depth.append(n)
-				r=['del', bases1, qs1, depth]
+				r=['del', bases1, qs1, depth, plus_strand, minus_strand]
 				Final[i].append(r)
 	ref=sorted(Final)
 	Indels={}
@@ -576,7 +624,7 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 					ins=[i, Refbase, Covbase, Variant, InsCov, QS, hetfreq, het_ci_low, het_ci_up,'ins']
 					Indels[name2].append(ins)
 				else:
-					if x[1] != [] :#is not empty
+					if x[1] != [] and ast.literal_eval(x[1][0]) < 16569 :#is not empty and deletion is before end of the reference
 						Refbase=[]
 						cov=x[3]
 						DelCov=map(lambda x:int(x),cov)
@@ -613,7 +661,7 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 	for i in mtable:
 		b=ast.literal_eval((i[-1]).strip())
 		varnames2(b,i)
-		a=findmutations(A,C,G,T,Position,Ref,Cov)
+		a=findmutations(A,C,G,T,Position,Ref,Cov,minrd)
 		if len(a) > 0:
 			hetfreq=map(lambda x:heteroplasmy(x,Cov),a[-1])		
 			if Cov<=40:
@@ -637,27 +685,37 @@ def mtvcf_main_analysis(mtable, sam, name2, tail=5, Q=25):
 #applies the analysis only to OUT folders with OUT.sam, mt-table.txt and fasta sequence files.
 
 
-def get_consensus_single(i, hf=0.8):
+def get_consensus_single(i, hf_max=0.8, hf_min = 0.2):
+	#add warning on hf values
 	consensus_value=[]
 	if len(i) != 0:
 		for var in i:
-			if var[-1] == 'mism' and max(var[6]) >= hf:
+			if var[-1] == 'mism' and max(var[6]) > hf_max:
 				index=var[6].index(max(var[6]))
 				basevar=var[3][index]
 				res=[var[0], [basevar], 'mism']
 				consensus_value.append(res)
-			elif var[-1] == 'mism' and max(var[6]) < hf:
-				basevar=[var[1]]+var[3]
+			elif var[-1] == 'mism' and max(var[6]) >= hf_min and max(var[6]) <= hf_max:
+				basevar=sp.array([var[1]]+var[3]) 
+				#keep only basevar >= hf_min for IUPAC
+				ref_hf = 1-sp.sum(var[6])
+				hf_var = [ref_hf]
+				hf_var.extend(var[6])
+				hf_var = sp.array(hf_var)
+				ii = sp.where(hf_var >= hf_min)[0]
+				basevar = basevar[ii].tolist()
 				basevar.sort()
 				a=getIUPAC(basevar, dIUPAC)
 				res=[var[0], a, 'mism']
 				consensus_value.append(res)
-			elif var[-1] == 'ins' and max(var[6]) >= hf:
+			elif var[-1] == 'mism' and max(var[6]) < hf_min: #put the reference allele in consensus
+				res=[var[0], [var[1]], 'mism']
+			elif var[-1] == 'ins' and max(var[6]) > hf_max:
 				index=var[6].index(max(var[6]))
 				basevar=var[3][index]
 				res=[var[0], [basevar], 'ins']
 				consensus_value.append(res)
-			elif var[-1] == 'del' and max(var[6]) >= hf:
+			elif var[-1] == 'del' and max(var[6]) > hf_max:
 				index=var[6].index(max(var[6]))
 				basevar=var[3][index]
 				del_length=len(var[1][0]) - len(basevar)
@@ -669,11 +727,11 @@ def get_consensus_single(i, hf=0.8):
 				pass
 	return consensus_value
 
-def get_consensus(dict_of_dicts):
+def get_consensus(dict_of_dicts, hf_max, hf_min):
 	"""Dictionary of consensus variants, for fasta sequences"""
 	Consensus = {}
 	for i in dict_of_dicts:
-		Consensus[i] = get_consensus_single(dict_of_dicts[i])
+		Consensus[i] = get_consensus_single(dict_of_dicts[i],hf_max, hf_min)
 	return Consensus
 
 def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
@@ -963,9 +1021,6 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
     out.write('##FORMAT=<ID=CIUP,Number=.,Type=Float,Description="Value defining the upper limit of the confidence interval of the heteroplasmy fraction">\n')	
     out.write('##INFO=<ID=AC,Number=.,Type=Integer,Description="Allele count in genotypes">\n')
     out.write('##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">\n')
-        
-
-
     out.write('#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t'+header+'\n')
 
     for position in sorted(present_pos):
@@ -1057,4 +1112,3 @@ def FASTAoutput(Consensus, mtDNAseq, names):
 if __name__ == '__main__':
 	print "This script is used only when called by assembleMTgenome.py."
 	pass
-
