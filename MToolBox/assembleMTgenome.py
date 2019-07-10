@@ -7,7 +7,7 @@ Edited by Claudia Calabrese - claudia.calabrese23@gmail.com
 """
 
 import getopt, sys, os, re, ast
-from mtVariantCaller_Nanopore_final import mtvcf_main_analysis, get_consensus_single
+from mtVariantCaller import mtvcf_main_analysis, get_consensus_single
 import pandas as pd
 
 mt_track="""track db="hg18" type="bed" name="mtGenes" description="Annotation" visibility="3" itemRgb="On"
