@@ -7,7 +7,7 @@ Edited by Claudia Calabrese - claudia.calabrese23@gmail.com
 """
 
 import getopt, sys, os, re, ast
-from mtVariantCaller import mtvcf_main_analysis, get_consensus_single
+from mtVariantCaller_Nanopore_final import mtvcf_main_analysis, get_consensus_single
 import pandas as pd
 
 mt_track="""track db="hg18" type="bed" name="mtGenes" description="Annotation" visibility="3" itemRgb="On"
@@ -50,7 +50,8 @@ Options:
 	-s		samtools executable [/usr/local/bin/samtools]
 	-v		samtools version [default is 0]
 	-t		minimum distance from read end(s) for indels to be detected. Values < 5 will be ignored. [5]
-	-z		heteroplasmy threshold for variants to be reported in consensus FASTA [0.8]
+	-z		upper heteroplasmy threshold for variants to be reported in consensus FASTA [0.5]
+	-x		lower heteroplasmy threshold for variants to select IUPAC for consensus FASTA[0.2]
 	-F		generate fasta output [no]
 	-C		generate coverage file [no]
 	-U		generate UCSC track file [no]
@@ -62,7 +63,7 @@ Options:
 	"""
 
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "hf:i:q:c:d:o:g:a:r:s:v:FCUPNA:D:z:t:")
+	opts, args = getopt.getopt(sys.argv[1:], "hf:i:q:c:d:o:g:a:r:s:v:FCUPNA:D:z:x:t:")
 except getopt.GetoptError, err:
 	print str(err) 
 	usage()
@@ -85,6 +86,8 @@ pout=0
 normb=0
 addv=''
 addd=''
+hf_min=0.2
+hf_max=0.5
 hf=float(0.8)
 tail=5
 for o,a in opts:
@@ -102,13 +105,13 @@ for o,a in opts:
 	elif o == "-r": fasta_dir = a
 	elif o == "-s": sexe = a
 	elif o == "-v": sversion = float(a)
-#	elif o == "-t": tail = int(a)
 	elif o == "-t":
 		if int(a)<5:
 			tail = 5
 		else:
 			tail = int(a)
-	elif o == "-z": hf = float(a)
+	elif o == "-z": hf_max = float(a)
+	elif o == "-x": hf_min = float(a)
 	elif o == "-F": crf = 1
 	elif o == "-C": crc = 1
 	elif o == "-U": cru = 1	
@@ -440,7 +443,8 @@ sam_file = open(basext+'.sam', 'r')
 mt_table = open(tablefile, 'r').readlines()
 if type(sample_name) == (list):
 	sample_name = sample_name[0]
-mut_events = mtvcf_main_analysis(mt_table, sam_file, sample_name, tail=tail)
+mut_events = mtvcf_main_analysis(mt_table, sam_file, sample_name, tail=tail,Q=mqual, minrd=cov)
+print "Heteroplasmic range for IUPAC in consensus is = {0} - {1}\n".format(hf_min,hf_max)
 if os.path.exists('../VCF_dict_tmp'):
 	VCF_dict = ast.literal_eval(open('../VCF_dict_tmp', 'r').read()) # global VCF dict
 else:
@@ -465,7 +469,7 @@ for i in contigs:
 			nuc_index += 1
 		#print "original dict_seq is", dict_seq
 		# add info for consensus dictionary
-		consensus_single = get_consensus_single(mut_events[mut_events.keys()[0]],hf=hf)
+		consensus_single = get_consensus_single(mut_events[mut_events.keys()[0]],hf_max=hf_max,hf_min=hf_min)
 		#print consensus_single
 		# alter dict_seq keys for the implementation
 		# of the consensus information
