@@ -49,7 +49,6 @@ if __name__ == "__main__":
 				line = line.split('\t')
 				alt_var = line[4].split(',')
 				if len(set(alt_var)) == len(alt_var):
-					print line[-1]
 					geno,DPv,HFv_l,CIL,CIU = line[-1].split(':')
 					geno = geno.split('/')
 					if '0' in geno:

@@ -25,14 +25,10 @@ except getopt.GetoptError, err:
 
 for o,a in opts:
 	if o == "-r":
-		if a in ('RCRS', 'RSRS'):
-			reference_sequence = a
-		else:
-			print "Reference sequence must be RSRS or RCRS."
-			sys.exit()
+		reference_sequence = a
 	elif o == "-s":
 		sample_vcf_name = str(a)
 
-VCF_dict = ast.literal_eval(open('VCF_dict_tmp', 'r').read())
+VCF_dict = ast.literal_eval(open(sample_vcf_name+'_VCF_dict_tmp', 'r').read())
 #VCFoutput(VCF_dict, reference=reference_sequence)
 VCFoutput(VCF_dict, reference=reference_sequence, name=sample_vcf_name)

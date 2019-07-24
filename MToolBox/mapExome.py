@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # -*- coding: UTF-8 -*-
 
@@ -8,6 +8,8 @@
 
 
 import getopt, sys, os
+import pandas as pd
+import numpy as np
 
 def usage():
 	print """Map Nanopore FASTQ onto mtDNA
@@ -43,7 +45,7 @@ mapq=30
 thread=8
 mtref_name='chrM'
 folder=os.path.join(os.getcwd(),'OUTfolder2')
-
+numts_outname = 'numts.sam'
 for o,a in opts:
 	if o == "-h":
 		usage()
@@ -123,38 +125,55 @@ if len(pair1)!=0:
 
 if sig:
 	print 'Mapping on complete human genome...single reads'
-	map2cmd='%s -D %s -d %s --nosplicing -f samse --nofails --no-sam-headers -x 1 -O -t %i %s --split-output %s 2> %s' %(gmapexe,gmapdb,humandb,thread,mtoutfastq,os.path.join(folder,'outhumanS'),os.path.join(folder,'loghumanS.txt'))
+	map2cmd='%s -D %s -d %s --nosplicing -f samse --nofails --no-sam-headers -x 1 -O -t %i %s -p 1 --split-output %s 2> %s' %(gmapexe,gmapdb,humandb,thread,mtoutfastq,os.path.join(folder,'outhumanS'),os.path.join(folder,'loghumanS.txt'))
 	os.system(map2cmd)
 	print map2cmd
 
 	print 'Filtering reads...'
 
 	hgoutsam=os.path.join(folder,'outhumanS.uniq')
-	dicsingle={}
-	f=open(hgoutsam)
-	for i in f:
-		if i.strip()=='': continue
-		l=(i.strip()).split('\t')
-		#if l[2]=='*': continue
-		if l[2] == mtref_name and int(l[4]) >= mapq: #filter reads mapping on mitochondrial DNA only and above the mapping quality cutoff
-			if dicsingle.has_key(l[0]):
-				print 'skip read %s because duplicated in outhumanS.uniq' %(l[0])
-				#dicsingle[l[0]].append(l)
-			else:
-				dicsingle[l[0]]=[l]
-	f.close()
+	hgoutsam_mult=os.path.join(folder,'outhumanS.mult')
+	f_s = pd.read_csv(hgoutsam,sep='\t',header=None,quotechar=' ')
+	f_m = pd.read_csv(hgoutsam_mult,sep='\t',header=None,quotechar=' ')
+	#check no repeated ids in the uniq sam file
+	if sum(f_s[0].duplicated()) == 0:
+		pass
+	else:
+		bv = f_s[0].duplicated()
+		print 'something wrong with mapping. Found reads %s duplicated in outhumanS.uniq.\nExit' %(f_s[bv][0].tolist()) #this should never happen
+		sys.exit(1)
 
+	f_s = f_s[(f_s[2] == mtref_name) & (f_s[4].astype(int) >= mapq)] #filter reads mapping on mitochondrial DNA only and above the mapping quality cutoff
+	#remove possible numts
+	numts_file = open(os.path.join(folder,numts_outname),'a')
+	finalsam = open(os.path.join(folder,'OUT2.sam'),'w')
+	read_ids = f_m[f_m[2] != mtref_name][0]
+	bv = np.in1d(f_m[0],read_ids)
+	numts = f_m[bv].to_csv(numts_file,sep='\t',header=None,index=None) #send to numts file reads with suppl align on non mito chromsome
+	f_m = f_m[~bv]	
+	gpb_f_m = f_m.groupby([f_m[0],f_m[1]]).count()
+	read_ids_discordant = gpb_f_m[gpb_f_m.iloc[:,0]!= 2].index.get_level_values(0).tolist() #reads with discordan suppl align on mito chromosome
+	bv = np.in1d(f_m[0],read_ids_discordant)
+	f_m[bv].to_csv(numts_file,sep='\t',header=None,index=None,quotechar=' ') #send to numts file reads
+	f_m = f_m[~bv] #mult deprived of numts and discordant alignments
+	f_m = f_m[f_m[4].astype(int) >= mapq]
+	f = pd.concat([f_s,f_m])
+	#f.sort_values(3,ascending=True,inplace=True)
+	f.to_csv(finalsam,sep='\t',header=None,index=None,quotechar=' ')
 	print 'Filtering reads...done'
 
-	finalsam=os.path.join(folder,'OUT2.sam')
-	out=open(finalsam,'w')
+#	finalsam=os.path.join(folder,'OUT2.sam')
+#	out=open(finalsam,'w')
 
-	for k,v in dicsingle.iteritems():
-		print v[0]
-		o = '\t'.join(v[0])+'\n'
-		out.write(o)
-	out.close()
+#	for k,v in dicsingle.iteritems():
+#		o = '\t'.join(v[0])+'\n'
+#		out.write(o)
+	#out.close()
 
-print 'Outfile saved on %s.' %(finalsam)
+numts_file.close()
+finalsam.close()
+
+print 'Outfile saved on %s.' %('OUT2.sam')
+print 'Sam file with possible numts saved on %s.' %(numts_outname)
 print 'Done.'
 
