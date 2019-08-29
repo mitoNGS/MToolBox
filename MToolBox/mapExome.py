@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 	Written by Ernesto Picardi - e.picardi@biologia.uniba.it
