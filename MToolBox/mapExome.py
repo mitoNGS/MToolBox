@@ -1,27 +1,32 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-"""
-	Written by Ernesto Picardi - e.picardi@biologia.uniba.it
-	"""
+# -*- coding: UTF-8 -*-
+
+#	Written by Ernesto Picardi - e.picardi@biologia.uniba.it
+#	Edited by Claudia Calabrese - claudia.calabrese23@gmail.com
+#	Edited by Domenico Simone - dome.simone@gmail.com
+
 
 import getopt, sys, os
+import pandas as pd
+import numpy as np
 
 def usage():
-	print """Map FASTQ onto mtDNA
+	print """Map Nanopore FASTQ onto mtDNA
 		Options:
-		-a		Input Fastq
-		-b 		Input Fastq for pair-end (optional)
-		-c		Input Fastq for single-end
-		-g		GSNAP executable [/usr/local/bin/gsnap]
-		-D		GSNAP database location [/usr/local/share]
-		-M		GSNAP database for mtDNA [chrRSRS]
-		-H		GSNAP database for complete human genome [hg19RSRS]
-		-t		GSNAP threads [8]
+		-a		Input Fastq (Nanopore only)
+		-r		mtDNA reference name
+		-q		Mapping Quality [30]
+		-g		GMAP executable [/usr/local/bin/gmap]
+		-D		GMAP database location [/usr/local/share]
+		-M		GMAP database for mtDNA [chrRSRS]
+		-H		GMAP database for complete human genome [hg19RSRS]
+		-t		GMAP threads [8]
 		-o		Out folder
 		"""
 
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "ha:b:c:g:D:M:H:t:o:")
+	opts, args = getopt.getopt(sys.argv[1:], "ha:r:q:g:D:M:H:t:o:")
 except getopt.GetoptError, err:
 	print str(err)
 	usage()
@@ -31,28 +36,27 @@ if len(opts)==0:
 	usage()
 	sys.exit()
 fastq1=None
-fastq2=None
-fastq3=None
-gsnapexe='/usr/local/bin/gsnap'
-gsnapdb='/usr/local/share/gmapdb'
+
+gmapexe='/usr/local/bin/gmap'
+gmapdb='/usr/local/share/gmapdb'
 mtdb='chrRSRS'
 humandb='hg19RSRS'
-mqual=30
+mapq=30
 thread=8
+mtref_name='chrM'
 folder=os.path.join(os.getcwd(),'OUTfolder2')
-
+numts_outname = 'numts.sam'
 for o,a in opts:
 	if o == "-h":
 		usage()
 		sys.exit()
 	elif o == "-a": fastq1 = a
-	elif o == "-b": fastq2 = a
-	elif o == "-c": fastq3 = a
-	elif o == "-g": gsnapexe = a
-	elif o == "-D": gsnapdb = a
+	elif o == "-r": mtref_name = a
+	elif o == "-g": gmapexe = a
+	elif o == "-D": gmapdb = a
 	elif o == "-M": mtdb = a
 	elif o == "-H": humandb = a
-	#elif o == "-q": mqual = int(a)
+	elif o == "-q": mapq = int(a)
 	elif o == "-t": thread = int(a)
 	elif o == "-o": folder = a
 	else:
@@ -65,23 +69,13 @@ def rev(seq):
 
 if not os.path.exists(folder): os.mkdir(folder)
 
-"""
-map1cmd='%s -D %s --gunzip -d %s -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 -n 1 -Q -O -t %i %s > %s 2> %s' %(gsnapexe,gsnapdb,mtdb,thread,fastq1,os.path.join(folder,'outmt.sam'),os.path.join(folder,'logmt.txt'))
-print 'Mapping onto mtDNA...'
-os.system(map1cmd)
-"""
 RG_tag = '--read-group-id=sample --read-group-name=sample --read-group-library=sample --read-group-platform=sample'
-if fastq2!=None and fastq3!=None:
-	map1cmd='%s -D %s --gunzip -d %s -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 %s -n 1 -Q -O -t %i %s %s %s > %s 2> %s' %(gsnapexe,gsnapdb,mtdb,RG_tag,thread,fastq1,fastq2,fastq3,os.path.join(folder,'outmt.sam'),os.path.join(folder,'logmt.txt'))
-elif fastq2!=None and fastq3== None:
-	map1cmd='%s -D %s --gunzip -d %s -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 %s -n 1 -Q -O -t %i %s %s > %s 2> %s' %(gsnapexe,gsnapdb,mtdb,RG_tag,thread,fastq1,fastq2,os.path.join(folder,'outmt.sam'),os.path.join(folder,'logmt.txt'))
-else:
-	map1cmd='%s -D %s --gunzip -d %s -A sam --nofails --pairmax-dna=500 --query-unk-mismatch=1 %s -n 1 -Q -O -t %i %s > %s 2> %s' %(gsnapexe,gsnapdb,mtdb,RG_tag,thread,fastq1,os.path.join(folder,'outmt.sam'),os.path.join(folder,'logmt.txt'))
+
+map1cmd='%s -D %s -d %s --nosplicing -f samse %s --nofails -n 1 -O -t %i %s > %s 2> %s' %(gmapexe,gmapdb,mtdb,RG_tag,thread,fastq1,os.path.join(folder,'outmt.sam'),os.path.join(folder,'logmt.txt'))
+
 print 'Mapping onto mtDNA...'
 print map1cmd
 os.system(map1cmd)
-
-#
 
 print 'Extracting FASTQ from SAM...'
 mtoutsam=os.path.join(folder,'outmt.sam')
@@ -115,121 +109,71 @@ for i in dics:
 		entry='\n'.join(['@'+ll[1][0],seq,'+',qual])+'\n'
 		pair2.append(entry)
 
-sig,pai=0,0
+sig=0
 if len(single)!=0:
 	mtoutfastq=os.path.join(folder,'outmt.fastq')
 	out=open(mtoutfastq,'w')
 	out.writelines(single)
 	out.close()
 	sig=1
+else:
+	print 'no mitochondrial reads found\n'
+	sys.exit(1)
+
 if len(pair1)!=0:
-	mtoutfastq1=os.path.join(folder,'outmt1.fastq')
-	out=open(mtoutfastq1,'w')
-	out.writelines(pair1)
-	out.close()
-	mtoutfastq2=os.path.join(folder,'outmt2.fastq')
-	out=open(mtoutfastq2,'w')
-	out.writelines(pair2)
-	out.close()
-	pai=1
-
+	print 'something wrong in here\n...paired end reads not expected for Nanopore.\nAre you sure you are using the right MToolBox version?\n'
 
 if sig:
-	print 'Mapping onto complete human genome...single reads'
-	map2cmd='%s -D %s -d %s -A sam --nofails --query-unk-mismatch=1 -O -t %i %s > %s 2> %s' %(gsnapexe,gsnapdb,humandb,thread,mtoutfastq,os.path.join(folder,'outhumanS.sam'),os.path.join(folder,'loghumanS.txt'))
+	print 'Mapping on complete human genome...single reads'
+	map2cmd='%s -D %s -d %s --nosplicing -f samse --nofails --no-sam-headers -x 1 -O -t %i %s -p 1 --split-output %s 2> %s' %(gmapexe,gmapdb,humandb,thread,mtoutfastq,os.path.join(folder,'outhumanS'),os.path.join(folder,'loghumanS.txt'))
 	os.system(map2cmd)
-if pai:
-	print 'Mapping onto complete human genome...pair reads'
-	map3cmd='%s -D %s -d %s -A sam --nofails --query-unk-mismatch=1 -O -t %i %s %s > %s 2> %s' %(gsnapexe,gsnapdb,humandb,thread,mtoutfastq1,mtoutfastq2,os.path.join(folder,'outhumanP.sam'),os.path.join(folder,'loghumanP.txt'))
-	os.system(map3cmd)
+	print map2cmd
 
-print 'Reading Results...'
-if sig:
-	hgoutsam=os.path.join(folder,'outhumanS.sam')
-	dicsingle={}
-	f=open(hgoutsam)
-	for i in f:
-		if i.strip()=='': continue
-		l=(i.strip()).split('\t')
-		if l[2]=='*': continue
-		if dicsingle.has_key(l[0]):
-			dicsingle[l[0]].append(l)
-		else:
-			dicsingle[l[0]]=[l]
-	f.close()
-if pai:
-	hgoutsam2=os.path.join(folder,'outhumanP.sam')
-	dicpair={}
-	f=open(hgoutsam2)
-	for i in f:
-		if i.strip()=='': continue
-		l=(i.strip()).split('\t')
-		if l[2]=='*': continue
-		if dicpair.has_key(l[0]):
-			dicpair[l[0]].append(l)
-		else:
-			dicpair[l[0]]=[l]
-	f.close()
+	print 'Filtering reads...'
 
-print 'Filtering reads...'
-good=[]
-for i in dics:
-	ll=dics[i]
-	if len(ll)==1:
-		if dicsingle.has_key(i):
-			r=dicsingle[i]
-			#print ll
-			#print r
-			if len(r)==1:
-				if r[0][2]==ll[0][2] and ll[0][3]==r[0][3]: good.append('\t'.join(ll[0])+'\n')
-		else: good.append('\t'.join(ll[0])+'\n')
+	hgoutsam=os.path.join(folder,'outhumanS.uniq')
+	hgoutsam_mult=os.path.join(folder,'outhumanS.mult')
+	f_s = pd.read_csv(hgoutsam,sep='\t',header=None,quotechar=' ')
+	f_m = pd.read_csv(hgoutsam_mult,sep='\t',header=None,quotechar=' ')
+	#check no repeated ids in the uniq sam file
+	if sum(f_s[0].duplicated()) == 0:
+		pass
 	else:
-		if dicpair.has_key(i):
-			r=dicpair[i]
-			if len(r) == 2:
-				if r[0][2]==ll[0][2] and ll[0][3]==r[0][3] and r[1][2]==ll[1][2] and ll[1][3]==r[1][3]:
-					good.append('\t'.join(ll[0])+'\n')
-					good.append('\t'.join(ll[1])+'\n')
-		else:
-			good.append('\t'.join(ll[0])+'\n')
-			good.append('\t'.join(ll[1])+'\n')
+		bv = f_s[0].duplicated()
+		print 'something wrong with mapping. Found reads %s duplicated in outhumanS.uniq.\nExit' %(f_s[bv][0].tolist()) #this should never happen
+		sys.exit(1)
 
-"""
-	hgoutsam=os.path.join(folder,'outhuman.sam')
-	goodhits={}
-	f=open(hgoutsam)
-	for i in f:
-	if i.strip()=='': continue
-	l=(i.strip()).split('\t')
-	nn=l[0].split()[0]
-	if l[2]=='chrM': mt=1
-	else: mt=2
-	if goodhits.has_key(nn): goodhits[nn].append(mt)
-	else: goodhits[nn]=[mt]
-	f.close()
-	"""
-finalsam=os.path.join(folder,'OUT.sam')
-out=open(finalsam,'w')
-# add SAM Header and Read Group for GATK Indels realignment
-out.write("@SQ	SN:%s	LN:16569\n" % mtdb)
-out.write("@RG	ID:sample	PL:sample	PU:sample	LB:sample	SM:sample\n")
-out.writelines(good)
-out.close()
+	f_s = f_s[(f_s[2] == mtref_name) & (f_s[4].astype(int) >= mapq)] #filter reads mapping on mitochondrial DNA only and above the mapping quality cutoff
+	#remove possible numts
+	numts_file = open(os.path.join(folder,numts_outname),'a')
+	finalsam = open(os.path.join(folder,'OUT2.sam'),'w')
+	read_ids = f_m[f_m[2] != mtref_name][0]
+	bv = np.in1d(f_m[0],read_ids)
+	numts = f_m[bv].to_csv(numts_file,sep='\t',header=None,index=None) #send to numts file reads with suppl align on non mito chromsome
+	f_m = f_m[~bv]	
+	gpb_f_m = f_m.groupby([f_m[0],f_m[1]]).count()
+	read_ids_discordant = gpb_f_m[gpb_f_m.iloc[:,0]!= 2].index.get_level_values(0).tolist() #reads with discordan suppl align on mito chromosome
+	bv = np.in1d(f_m[0],read_ids_discordant)
+	f_m[bv].to_csv(numts_file,sep='\t',header=None,index=None,quotechar=' ') #send to numts file reads
+	f_m = f_m[~bv] #mult deprived of numts and discordant alignments
+	f_m = f_m[f_m[4].astype(int) >= mapq]
+	f = pd.concat([f_s,f_m])
+	#f.sort_values(3,ascending=True,inplace=True)
+	f.to_csv(finalsam,sep='\t',header=None,index=None,quotechar=' ')
+	print 'Filtering reads...done'
 
-"""
-	f=open(mtoutsam)
-	xx=1
-	for i in f:
-	if i.strip()=='': continue
-	l=(i.strip()).split('\t')
-	nn=l[0].split()[0]+'.'+str(xx)
-	if not goodhits.has_key(nn): out.write(i)
-	else:
-	if sum(goodhits[nn])==1: out.write(i)
-	xx+=1
-	f.close()
-	out.close()
-	"""
-print 'Outfile saved on %s.' %(finalsam)
+#	finalsam=os.path.join(folder,'OUT2.sam')
+#	out=open(finalsam,'w')
+
+#	for k,v in dicsingle.iteritems():
+#		o = '\t'.join(v[0])+'\n'
+#		out.write(o)
+	#out.close()
+
+numts_file.close()
+finalsam.close()
+
+print 'Outfile saved on %s.' %('OUT2.sam')
+print 'Sam file with possible numts saved on %s.' %(numts_outname)
 print 'Done.'
 

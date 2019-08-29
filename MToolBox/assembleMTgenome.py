@@ -1,34 +1,14 @@
 #!/usr/bin/env python
 
-"""
-Written by Ernesto Picardi - e.picardi@biologia.uniba.it
-Edited by Claudia Calabrese - claudia.calabrese23@gmail.com
-	and Domenico Simone - dome.simone@gmail.com
-"""
+# -*- coding: UTF-8 -*-
+# Written by Ernesto Picardi - e.picardi@biologia.uniba.it
+# Edited by Claudia Calabrese - claudia.calabrese23@gmail.com
+# and Domenico Simone - dome.simone@gmail.com
 
 import getopt, sys, os, re, ast
 from mtVariantCaller import mtvcf_main_analysis, get_consensus_single
 import pandas as pd
 
-mt_track="""track db="hg18" type="bed" name="mtGenes" description="Annotation" visibility="3" itemRgb="On"
-chrRSRS 0 578 D-Loop 0 - 1 578 165,42,42
-chrRSRS 16024 16571 D-Loop 0 - 16024 16571 165,42,42
-chrRSRS 649 1603 RNR1 0 - 649 1603 255,140,0
-chrRSRS 1672 3230 RNR2 0 - 1672 3230 255,140,0
-chrRSRS 3307 4263 ND1 0 + 3307 4263 255,0,0
-chrRSRS 4470 5512 ND2 0 + 4470 5512 255,0,0
-chrRSRS 5904 7446 COX1 0 + 5904 7446 255,0,0
-chrRSRS 7586 8270 COX2 0 + 7586 8270 255,0,0
-chrRSRS 8527 9208 ATP6 0 + 8527 9208 255,0,0
-chrRSRS 8366 8573 ATP8 0 + 8366 8573 255,0,0
-chrRSRS 9207 9991 COX3 0 + 9207 9991 255,0,0
-chrRSRS 10059 10405 ND3 0 + 10059 10405 255,0,0
-chrRSRS 10470 10767 ND4L 0 + 10470 10767 255,0,0
-chrRSRS 10760 12138 ND4 0 + 10760 12138 255,0,0
-chrRSRS 12337 14149 ND5 0 + 12337 14149 255,0,0
-chrRSRS 14149 14674 ND6 0 - 14149 14674 0,0,255
-chrRSRS 14747 15888 CYTB 0 + 14747 15888 255,0,0
-"""
 
 mtt={}
 
@@ -145,6 +125,14 @@ if not os.path.exists(inputfile):
 	usage()
 	sys.exit('File %s does not exist.' %(inputfile))	
 
+
+if mtdnafile==None:
+	usage()
+	sys.exit('Please insert a valid mtDNA file in fasta format.')
+if inputfile==None:
+	usage()
+	sys.exit('Please insert a valid sam file.')
+	
 ext=inputfile.split('.')[-1]
 basext=inputfile.replace('.'+ext,'')
 if ext not in ['sam','bam','pileup']:
@@ -222,12 +210,7 @@ def freq(d):
 		else: return getIUPAC(f)
 	elif len(maxv)>1: return getIUPAC(f)
 
-if mtdnafile==None:
-	usage()
-	sys.exit('Please insert a valid mtDNA file in fasta format.')
-if inputfile==None:
-	usage()
-	sys.exit('Please insert a valid pileup file.')
+
 
 
 if ext=='sam':
@@ -254,10 +237,12 @@ print 'Reading mtDNA sequence...'
 f=open(mtdnafile)
 for i in f:
 	if i.strip()=='': continue
-	if i.startswith('>'): continue
-	for j in i.strip():
-		mtdna[x]=(j.upper(),['#',(0,0,0,0),0,0.0])
-		x+=1
+	if i.startswith('>'):
+		ref_name = i.split()[0][1:].strip()
+	else:
+		for j in i.strip():
+			mtdna[x]=(j.upper(),['#',(0,0,0,0),0,0.0])
+			x+=1
 f.close()
 
 print 'Reading pileup file...'
@@ -265,7 +250,8 @@ f=open(pileupfile)
 for i in f:
 	if i.strip()=='': continue
 	l=(i.strip()).split('\t')
-	if l[0]!=mtdna_fasta.split('.')[0]: continue
+	#if l[0]!=mtdna_fasta.split('.')[0]: continue
+	if l[0] != ref_name: continue
 	pos=int(l[1])
 	if len(l) == 6:
 		ref,seq,qual=l[2],normS(re.sub(r1,"",l[4]),l[2]),l[5]
@@ -298,10 +284,7 @@ tablefile=basename+'-table.txt'
 statfile=basename+'-statistics.txt'
 coveragefile=basename+'-coverage.txt'
 contigfile=basename+'-contigs.fasta'
-# trackfile=basename+'-UCSCtrack.bed'
-#track=['browser position chrRSRS\nbrowser hide all\n']
-#track.append(mt_track)
-#track.append('track db="hg18" type="bedGraph" name="Reads%s" description="Coverage%s" visibility="full" color=0,128,0\n' %(addv,addd))
+
 aseq=''
 f=open(tablefile,'w')
 f.write('Position\tRefNuc\tConsNuc\tCov\tMeanQ\tBaseCount(A,C,G,T)\n')
@@ -393,34 +376,7 @@ if pout:
 	print 'Base composition [A,C,G,T]: %.2f,%.2f,%.2f,%.2f' %(pa,pc,pg,pt)
 #
 
-"""
-track.append('track db="hg18" type="bed" name="Assembly%s" description="Contigs%s" color=255,0,0 visibility="1"\n' %(addv,addd))
-x=1
-for i in contigs:
-	track.append('chrRSRS %i %i Contig.%i 0\n' %(i[0][0]-1,i[0][1],x))
-	x+=1
-if len(gaps)!=0:
-	track.append('track db="hg18" type="bed" name="GAPS%s" description="Gaps%s" color=0,0,0 visibility="1"\n' %(addv,addd))
-	x=1
-	for i in gaps:
-		track.append('chrRSRS %i %i Gap.%i 0\n' %(i[0]-1,i[1],x))
-		x+=1
 
-if cru:
-	f=open(trackfile,'w')
-	for i in track:
-		ll=i
-		if normb:
-			line=(ll.strip()).split(' ')
-			if line[0].startswith('chrRSRS') and len(line)==4:
-				try:v=float(line[3])/maxCval
-				except: v=0.0
-				line[3]='%.3f' %(v)
-				line=' '.join(line)+'\n'
-				ll=line
-		f.write(ll)
-	f.close()
-"""
 dass={}
 
 # DS
@@ -438,15 +394,14 @@ dass={}
 # Sample name is defined as sample_name = os.getcwd().split('/')[-1].split('_')[1]
 sam_handle = basext+'.sam'
 mt_table_handle = tablefile
-
 sam_file = open(basext+'.sam', 'r')
 mt_table = open(tablefile, 'r').readlines()
 if type(sample_name) == (list):
 	sample_name = sample_name[0]
-mut_events = mtvcf_main_analysis(mt_table, sam_file, sample_name, tail=tail,Q=mqual, minrd=cov)
+mut_events = mtvcf_main_analysis(mtable=mt_table, sam=sam_file, name2=sample_name, tail=tail,Q=mqual, minrd=cov)
 print "Heteroplasmic range for IUPAC in consensus is = {0} - {1}\n".format(hf_min,hf_max)
-if os.path.exists('../VCF_dict_tmp'):
-	VCF_dict = ast.literal_eval(open('../VCF_dict_tmp', 'r').read()) # global VCF dict
+if os.path.exists('../'+basename+'_VCF_dict_tmp'):
+	VCF_dict = ast.literal_eval(open('../'+basename+'_VCF_dict_tmp', 'r').read()) # global VCF dict
 else:
 	VCF_dict = {} # global VCF dict
 contigs_wdict = []
@@ -528,22 +483,11 @@ if crf: f.close()
 
 if mut_events:
     VCF_dict.update(mut_events)
-mut_events_cellar = open('../VCF_dict_tmp', 'w')
+mut_events_cellar = open('../'+basename+'_VCF_dict_tmp', 'w')
 mut_events_cellar.write(str(VCF_dict))
 mut_events_cellar.close()
 
 
-"""
-if crf: f=open(contigfile,'w')
-x=1
-for i in contigs:
-	if crf: f.write('>Contig.%i|%i-%i\n' %(x,i[0][0],i[0][1]))
-	dass[i[0]]=[0,0,0,0,0]
-	for j in range(0,len(i[1]),60):
-		if crf: f.write(i[1][j:j+60]+'\n')
-	x+=1
-if crf: f.close()
-"""
 #
 dann={(1,578):['D-Loop1',0,0],(16025,16571):['D-Loop2',0,0],(650,1603):['RNR1',0,0],(1673,3230):['RNR2',0,0],(3308,4263):['ND1',0,0],(4470,5512):['ND2',0,0],(5904,7446):['COX1',0,0],(7586,8270):['COX2',0,0],(8527,9208):['ATP6',0,0],(8366,8573):['ATP8',0,0],(9207,9991):['COX3',0,0],(10059,10405):['ND3',0,0],(10470,10767):['ND4L',0,0],(10760,12138):['ND4',0,0],(12337,14149):['ND5',0,0],(14149,14674):['ND6',0,0],(14747,15888):['CYTB',0,0]}
 #

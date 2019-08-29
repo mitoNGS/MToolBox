@@ -186,10 +186,10 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail,Q):
 		i += 1
 	#slice CIGAR based on start:end in list_of_indexes
 	all_bp = sp.array(map(lambda x:int(CIGAR[x[0]:x[1]]),list_of_indexes))
-	if 'D' in CIGAR:
+	if 'D' in CIGAR or 'N' in CIGAR: #GMAP can use also N for large deletions
 		#DELETIONS
 		#boolean vector indicating position of D
-		bv_del = sp.in1d(all_changes,'D')
+		bv_del = sp.in1d(all_changes,'D') | sp.in1d(all_changes,'N')
 		var_type = 'Del'
 		#boolean vector indicating position of Hard clipped (H) and Soft clipped bases (S) to be removed from leftmost count
 		bv_hard_or_soft = (sp.in1d(all_changes,'H')) | (sp.in1d(all_changes,'S'))
@@ -199,7 +199,7 @@ def SearchINDELsintoSAM(readNAME,mate,CIGAR,seq,qs,refposleft,tail,Q):
 		d[~bv_hard_or_soft] = all_bp[~bv_hard_or_soft]
 		#calculate cumulative number of bp before each del
 		cum_left = sp.cumsum(d)
-		dels_indexes =sp.where(all_changes=='D')[0]
+		dels_indexes =sp.where((all_changes=='D') | (all_changes=='N'))[0]
 		flanking_dels_indexes = dels_indexes-1
 		#calculate leftmost positions to dels within the read
 		refposleft_dels = cum_left[flanking_dels_indexes]
