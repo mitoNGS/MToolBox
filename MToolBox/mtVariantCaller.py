@@ -956,7 +956,7 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
     #out=open("VCF_file.vcf","w")
     out = open(name+'.vcf','w')
     out.write('##fileformat=VCFv4.0\n##reference=chr%s\n' % reference)
-    out.write('##FORMAT=<ID=GT,Number=.,Type=String,Description="Genotype">\n')
+    out.write('##FORMAT=<ID=GT,Number=1,Type=Integer,Description="Genotype">\n')
     out.write('##FORMAT=<ID=DP,Number=.,Type=Integer,Description="Reads covering the REF position">\n')
     out.write('##FORMAT=<ID=HF,Number=.,Type=Float,Description="Heteroplasmy Frequency of variant allele">\n')
     out.write('##FORMAT=<ID=CILOW,Number=.,Type=Float,Description="Value defining the lower limit of the confidence interval of the heteroplasmy fraction">\n')
