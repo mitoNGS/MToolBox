@@ -92,4 +92,15 @@ UseIndelRealigner=false
 ##OPTIONAL: specify if to exctract only mitochondrial reads from bam file provided as input. [false | true; DEFAULT is false]
 MitoExtraction=false
 ##
-
+##OPTIONAL: specificy the minumum level of heteroplasmy for the alternative allele(s) for consensus generation [DEFAULT is 0.2]
+hf_min=0.2
+##
+##OPTIONAL: specify the maximum level of heteroplasmy for the alternative allele(s) for consensus generation [DEFAULT is 0.8]
+hf_max=0.8
+##
+##OPTIONAL: specify the minimum read depth per position [DEFAULT is 5]
+minrd=5
+##
+##OPTIONAL: specify the minimum quality score per allele [DEFAULT is 25]
+minqual=25
+##
