@@ -286,7 +286,7 @@ def main_functional_analysis(merg, d, g, best, haplo, hapconto, PATH, FILENAME, 
 		o.write('\t'.join(header)+'\n')
 
 
-	# lista delle varianti che definiscono l'aplogruppo best
+	# list of variants defining the best haplogroup
 		varbest=[]
 		for i in merg: # for each variant
 			if mutations_HF_dict != {}:
