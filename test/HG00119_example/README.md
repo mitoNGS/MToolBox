@@ -44,7 +44,7 @@ and `HG00119/OUT_SRR043366/logmt.txt`.
 
 **As of September 2019**
 
-Version 1.2 of MToolBox has been released. To test the new version you can run on this test file as follows:
+Version 1.2 of MToolBox has been released. To test the new version you can run it on this test file as follows:
 
 
 ```
