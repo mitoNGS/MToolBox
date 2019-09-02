@@ -1,11 +1,13 @@
-##CHANGELOG - 2 September 2019
+### CHANGELOG - 2 September 2019
 Update to `MToolBox v.1.2`
 
 1) A bug in consensus fasta sequence generation has been fixed. The bug caused heteroplasmic variants to be included in the consensus fasta sequence (generating many IUPAC ambiguity and incorrect haplogroup predictions). 
 
-2) Strand-specific read depth has been added as a new feature to the VCF, under the new field `SDP`. This field reports the number of forward and reverse reads supporting the alternative allele, expressed as `F;R`, where `F` is the number of forward reads and `R` is the number of reverse reads. 
+2) Changes in the `mapExome.py` to  remove reads that show a number of soft-clipped bases > 1/3 read length. This is to remove reads that show unique best alignments to mtDNA but still carry a small portion of the non-aligned read that can putatively map on nuclear homologous (NumtS) sequences.
 
-3) Additional options can be now specified in the configuration file (or default values will be considered).
+3) Strand-specific read depth has been added as a new feature to the VCF, under the new field `SDP`. This field reports the number of forward and reverse reads supporting the alternative allele, expressed as `F;R`, where `F` is the number of forward reads and `R` is the number of reverse reads. 
+
+4) Additional options can be now specified in the configuration file (or default values will be considered).
 
 Options to define the consensus fasta:
 
