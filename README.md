@@ -21,6 +21,13 @@ The MToolBox development and manteinance relies on the work of undegraduates, Ph
 
 We would also like to thank Professor Marcella Attimonelli (University of Bari), who inspired and supervises the MToolBox project.
 
+
+**As of September 2019**
+
+Update to MToolBox v.1.2
+
+Please check the changelog for more details.
+
 **As of April 2019**
 
 
