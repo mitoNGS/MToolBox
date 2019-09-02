@@ -79,7 +79,7 @@ def pprint2datatype(event):
 def feature2datatype(dict, snp, ref_seq=rsrs_seq):
 	"""output should be a list [Transition(100) : [HF, CI_low, CI_up], Transition(101) : [HF, CI_low, CI_up]]
 	"""
-	for j in zip(snp[3], snp[6], snp[7], snp[8]):
+	for j in zip(snp[3], snp[7], snp[8], snp[9]):
 		if snp[-1] == 'del': #OK?
 			# [515, ['ACA'], 525, ['A'], [10], [35.0], [0.019], [0.01176], 'del']
 			mut = Deletion("%d-%dd" % (snp[0]+1, snp[0]+1+len(snp[1][0])-2))
