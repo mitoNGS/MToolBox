@@ -2,9 +2,10 @@
 
 """
 	Written by Ernesto Picardi - e.picardi@biologia.uniba.it
+	
 	"""
 
-import getopt, sys, os
+import getopt, sys, os, re
 
 def usage():
 	print """Map FASTQ onto mtDNA
@@ -62,7 +63,13 @@ def rev(seq):
 	s=''.join([d[x] for x in seq])
 	return s[::-1]
 
-
+def softclipping(i):
+	lseq = len(i[9])
+	sc = re.findall(r'(\d+)S', i[5])
+	sc = map(lambda x:int(x),sc)
+	sc = sum(sc)
+	return lseq, sc
+		
 if not os.path.exists(folder): os.mkdir(folder)
 
 """
@@ -93,6 +100,8 @@ for i in f:
 	if i.strip()=='' or i.startswith('@'): continue
 	l=(i.strip()).split('\t')
 	if l[2]=='*': continue
+	lseq, sc = softclipping(l)
+	if sc > float(lseq)/3: continue #if soft-clipped read greater than a third of read lenght, discard the read
 	if dics.has_key(l[0]): dics[l[0]].append(l)
 	else: dics[l[0]]=[l]
 f.close()
