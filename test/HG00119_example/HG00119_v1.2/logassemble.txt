@@ -1,0 +1,34 @@
+Path to mitochondrial reference genome: /data/genomics/cc926/tools/MToolBox_v1.1_new/genome_fasta/chrM.fa
+
+Path to nuclear and mitochondrial reference genome: /data/genomics/cc926/tools/MToolBox_v1.1_new/genome_fasta/hg19RCRS.fa
+
+Samtools version is 1.3
+
+assembleMTgenome for sample ['SRR043366']
+Converting SAM to BAM...
+Sorting and indexing BAM...
+Creating pileup...
+Reading mtDNA sequence...
+Reading pileup file...
+Assembling...
+Basic statistics:
+Assembled bases: 99.99%
+Mean coverage depth: 303.79
+Number of Contigs: 1
+Base composition [A,C,G,T]: 0.31,0.31,0.13,0.25
+minimum QS is = 25
+
+minimum read depth per position is = 5
+
+
+
+searching for indels in SRR043366.. please wait...
+
+
+
+
+searching for mismatches in SRR043366.. please wait...
+
+
+Heteroplasmic range for IUPAC in consensus is = 0.2 - 0.8
+
