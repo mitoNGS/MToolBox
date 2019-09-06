@@ -571,9 +571,10 @@ def mtvcf_main_analysis(mtable, sam, name2, tail, Q, minrd):
 					Variant=map(lambda x:Refbase+x,bases)
 					InsCov=map(lambda x:int(x),cov)
 					Covbase=int(Coverage[int(i)-1])
+					if max(InsCov) > Covbase:
+						Covbase = max(InsCov)
 					QS=map(lambda x:round(float(x),2),qs)
 					hetfreq=map(lambda x:heteroplasmy(x,Covbase),InsCov)
-					print Covbase, hetfreq, InsCov
 					if Covbase <=40:
 						het_ci_low=map(lambda x: CIW_LOW(x, Covbase), hetfreq)
 						het_ci_up=map(lambda x: CIW_UP(x, Covbase), hetfreq)
@@ -601,8 +602,9 @@ def mtvcf_main_analysis(mtable, sam, name2, tail, Q, minrd):
 							Covbase.append(median(convert))
 						maxcovbase=max(Covbase)
 						Covbase=int(maxcovbase)
+						if max(DelCov) > Covbase:
+							Covbase = max(DelCov)
 						hetfreq=map(lambda x:heteroplasmy(x,Covbase),DelCov)
-						print Covbase, hetfreq, DelCov, 'Del'
 						if Covbase <=40:
 							het_ci_low=map(lambda x: CIW_LOW(x, Covbase), hetfreq)
 							het_ci_up=map(lambda x: CIW_UP(x, Covbase), hetfreq)	
