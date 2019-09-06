@@ -1,13 +1,15 @@
-### CHANGELOG - 2 September 2019
+### CHANGELOG - 6 September 2019
 Update to `MToolBox v.1.2`
 
 1) A bug in consensus fasta sequence generation has been fixed. The bug caused heteroplasmic variants to be included in the consensus fasta sequence (generating many IUPAC ambiguity and incorrect haplogroup predictions). 
 
-2) Changes in the `mapExome.py` to  remove reads that show a number of soft-clipped bases > 1/3 read length. This is to remove reads that show unique best alignments to mtDNA but still carry a small portion of the non-aligned read that can putatively map on nuclear homologous (NumtS) sequences.
+2) Fix to heteroplasmy calculation of insertions and deletions that previously returned underestimated values. 
 
-3) Strand-specific read depth has been added as a new feature to the VCF, under the new field `SDP`. This field reports the number of forward and reverse reads supporting the alternative allele, expressed as `F;R`, where `F` is the number of forward reads and `R` is the number of reverse reads. 
+3) Changes in the `mapExome.py` to  remove reads that show a number of soft-clipped bases > 1/3 read length. This is to remove reads that show unique best alignments to mtDNA but still carry a small portion of the non-aligned read that can putatively map on nuclear homologous (NumtS) sequences.
 
-4) Additional options can be now specified in the configuration file (or default values will be considered).
+4) Strand-specific read depth has been added as a new feature to the VCF, under the new field `SDP`. This field reports the number of forward and reverse reads supporting the alternative allele, expressed as `F;R`, where `F` is the number of forward reads and `R` is the number of reverse reads. 
+
+5) Additional options can be now specified in the configuration file (or default values will be considered).
 
 Options to define the consensus fasta:
 
@@ -15,6 +17,8 @@ Options to define the consensus fasta:
 `hf_max = float [DEFAULT = 0.8]` is the upper bound of the heteroplasmy range for ALT alleles
 
 If there is one ALT allele with HF > hf_max, this will be reported in the consensus. If all ALT alleles have hf_min <= HF <= hf_max, a IUPAC ambuguity will be reported in the consensus. If there is no ALT allele with HF >= hf_min (i.e. ALT HF allele < hf_min) the REF allele will be reported in the consensus
+
+Other options:
 
 `minrd = integer [DEFAULT = 5]` is the minimum read depth to call an ALT allele in the VCF file
 `minqual = integer [DEFAULT = 25]` is the minimum per-base quality score required to consider base calling variants in a certain mtDNA position.
