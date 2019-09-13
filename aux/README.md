@@ -33,7 +33,7 @@ Usage examples:
 python filter_HF_v2.py HG00119 HG00119.vcf 0.8 100 txt HG00119.txt No
 ``` 
 
-Expected Output:
+Expected content of the `HG00119.txt` output:
 
 
 | CHROM | POS | ID | REF | ALT | DP | HF | CIL | CIU | SDP_R | SDP_R | HG00119 |
