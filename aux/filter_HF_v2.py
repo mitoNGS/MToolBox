@@ -14,6 +14,26 @@ Usage:
 filter_HF.py <sample_name>  <vcf_file> <HF_threshold[float]> <DP_threshold[float]> <out_type[vcf|txt]> <outfilename> <convert_to_homoplamy[Yes|No]> \n<vcf_file> can also be .gz file\n\n<convert_to_homoplasmy> is boolean and takes Yes or No values and converts HF >= 0.9 to GT=1/1. Useful for haplogroup prediction with other methods (e.g. haplogrep)\n\n'''
 
 
+def check_inconsistency(genotype, HF, CIUP, CILOW, SDP, sample_name):
+	if len(genotype) != len(HF):
+		diff = len(genotype) - len(HF)
+		HF.extend(['und']*diff)
+		sys.stderr.write('Unable to determine HF for pos {0} in sample {1}\n'.format(line[1], sample_name))
+	if len(genotype) != len(CIUP):
+		diff = len(genotype) - len(CIUP)
+		CIUP.extend(['und']*diff)
+		sys.stderr.write('Unable to determine CILOW for pos {0} in sample {1}\n'.format(line[1], sample_name))
+	if len(genotype) != len(CILOW):
+		diff = len(genotype) - len(CILOW)
+		CILOW.extend(['und']*diff)
+		sys.stderr.write('Unable to determine CIUP for pos {0} in sample {1}\n'.format(line[1], sample_name))
+	if len(genotype) != len(SDP):
+		diff = len(genotype) - len(SDP)
+		SDP.extend(['und;und']*diff)
+		sys.stderr.write('Unable to determine SDP for pos {0} in sample {1}\n'.format(line[1], sample_name))
+	return HF, CIUP, CILOW, SDP
+	
+
 if __name__ == "__main__":
 	if len(sys.argv[1:]) < 7:
 		sys.stderr.write('ERROR: argument missing\n')
@@ -60,6 +80,7 @@ if __name__ == "__main__":
 				CIU = CIU.split(',')
 				SDP = SDP.split(',')
 				ALT = line[4].split(',')
+				HFv_l,CIL,CIU,SDP = check_inconsistency(geno, HFv_l, CIL, CIU, SDP,samplename)
 				c =0
 				while c < (len(geno)):
 					HFv = float(HFv_l[c])
@@ -72,8 +93,8 @@ if __name__ == "__main__":
 						SDP_R = int(SDP[c].split(';')[1])
 					except:
 						#case when SDP is undetermined
-						SDP_F = SDP[c].split(';')[0]
-						SDP_R = SDP[c].split(';')[1]
+						SDP_F = SDP[c].split(';')[0].strip()
+						SDP_R = SDP[c].split(';')[1].strip()
 					if DPv >= float(DPt) and HFv >= float(HFt):
 						if out_type == 'txt':
 							res='\t'.join(map(lambda x:str(x),[line[0],line[1],line[2],line[3],ALTv,DPv,HFv,CILv,CIUv,SDP_F,SDP_R,samplename]))
