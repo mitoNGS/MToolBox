@@ -581,7 +581,6 @@ def mtvcf_main_analysis(mtable, sam, name2, tail, Q, minrd):
 					else:
 						het_ci_low=map(lambda x: CIAC_LOW(x,Covbase), InsCov)
 						het_ci_up=map(lambda x: CIAC_UP(x,Covbase), InsCov)
-					strand = len(Refbase)*strand
 					ins=[i, Refbase, Covbase, Variant, InsCov, strand, QS, hetfreq, het_ci_low, het_ci_up,'ins']
 					Indels[name2].append(ins)
 				else:
@@ -617,7 +616,6 @@ def mtvcf_main_analysis(mtable, sam, name2, tail, Q, minrd):
 							delfinal=dels[-1]
 							deletions.append(mtDNAseq[delflank])
 							Refbase.append(mtDNAseq[delflank:delfinal])
-						strand = len(Refbase)*strand
 						dele=[(dels[0]-1), Refbase, Covbase, deletions, DelCov, strand, qs, hetfreq, het_ci_low, het_ci_up, 'del']
 						Indels[name2].append(dele)
 	Subst={}
@@ -740,8 +738,9 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
             # if the v. position was never encountered before,is homoplasmic and is a deletion
             elif variant[0] not in present_pos and max(variant[7])>=1 and variant[-1]=='del':
                 allelecount=[1]*len(variant[1])
-                r = vcf.parser._Record(CHROM='chrMT', POS=variant[0], ID='.', REF=variant[1], ALT=variant[3], QUAL='.', FILTER='PASS', INFO=OrderedDict([('AC',allelecount),('AN',1)]), FORMAT='GT:DP:HF:CILOW:CIUP:SDP', sample_indexes={sample:''}, samples=[])
-                r._sample_indexes[sample]=[1,variant[2], variant[7], variant[8], variant[9], variant[5]]
+                r = vcf.parser._Record(CHROM='chrMT', POS=variant[0], ID='.', REF=variant[1], ALT=variant[3], QUAL='.', FILTER='PASS', INFO=OrderedDict([('AC',allelecount),('AN',len(variant[1]))]), FORMAT='GT:DP:HF:CILOW:CIUP:SDP', sample_indexes={sample:''}, samples=[])
+                genotype=range(1,len(variant[1])+1) #returns a list of genotypes where one is homopolasmic [1,2,...]
+                r._sample_indexes[sample]=[genotype,variant[2], variant[7], variant[8], variant[9], variant[5]]
                 r.samples.append(sample)
                 if len(variant[3])>1:
                     r.REF=r.REF*len(variant[3])
@@ -751,8 +750,9 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
             # if the v. position was never encountered before,is homoplasmic and is not a deletion
             elif variant[0] not in present_pos and max(variant[7])>=1 and variant[-1]!='del':
                 allelecount=[1]*len(variant[3])
-                r = vcf.parser._Record(CHROM='chrMT', POS=variant[0], ID='.', REF=[variant[1]], ALT=variant[3], QUAL='.', FILTER='PASS', INFO=OrderedDict([('AC',allelecount),('AN',1)]), FORMAT='GT:DP:HF:CILOW:CIUP:SDP', sample_indexes={sample:''}, samples=[])
-                r._sample_indexes[sample]=[1,variant[2], variant[7], variant[8],variant[9], variant[5]]
+                r = vcf.parser._Record(CHROM='chrMT', POS=variant[0], ID='.', REF=[variant[1]], ALT=variant[3], QUAL='.', FILTER='PASS', INFO=OrderedDict([('AC',allelecount),('AN',len(variant[3]))]), FORMAT='GT:DP:HF:CILOW:CIUP:SDP', sample_indexes={sample:''}, samples=[])
+                genotype = range(1,len(variant[3])+1) #returns a list of genotypes where one is homopolasmic [1,2,...]
+                r._sample_indexes[sample]=[genotype,variant[2], variant[7], variant[8],variant[9], variant[5]]
                 r.samples.append(sample)
                 if len(variant[3])>1:
                     r.REF=r.REF*len(variant[3])
