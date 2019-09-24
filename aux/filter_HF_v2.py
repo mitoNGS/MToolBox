@@ -67,7 +67,7 @@ if __name__ == "__main__":
 				line = '\t'.join(line)
 				out.write(line)
 			elif line.startswith('#CHROM') and out_type == 'txt':
-				header='CHROM\tPOS\tID\tREF\tALT\tDP\tHF\tCIL\tCIU\tSDP_R\tSDP_R\t'+samplename
+				header='CHROM\tPOS\tID\tREF\tALT\tDP\tHF\tCIL\tCIU\tSDP_F\tSDP_R\t'+samplename
 				out.write(header+'\n')
 			else:
 				line = line.split('\t')
