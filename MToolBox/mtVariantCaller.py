@@ -857,6 +857,9 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
                                     i._sample_indexes[sample][4].append(variant[9][hf_index])
                                     if i.POS == 3107 and variant[10] == 'mism':
                                         i._sample_indexes[sample][5].append(variant[5][0])
+                                    elif 'und' in variant[5][0] and len(variant[5])!= len(variant[3]): #this is the case when IUPAC ambiguity is in mt-table
+                                       variant[5] = variant[5]*len(variant[3]) #not a very nice trick but this will be repleaced in the new v. caller 
+                                       i._sample_indexes[sample][5].append(variant[5][hf_index])
                                     else:
                                         i._sample_indexes[sample][5].append(variant[5][hf_index])
                                     i.TYPEVAR.append(variant[-1])
