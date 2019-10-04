@@ -226,12 +226,14 @@ gsnap_db_install() {
 
 anaconda_install() {
 	echo "Installing Anaconda version $anaconda_version..."
-	anaconda_file=$anaconda_file
+	anaconda_file=Anaconda$anaconda_version-Linux-x86_64.sh
+	#anaconda_file=$anaconda_file
 	unset PYTHONPATH
 	if [ "$opsys" == "osx" ]; then
-	    curl -k https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/$anaconda_file -o $anaconda_file
+	    curl -k https://repo.anaconda.com/archive/$anaconda_file -o $anaconda_file
     else
-    	download https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/$anaconda_file $anaconda_file
+	echo $anaconda_file
+	download https://repo.anaconda.com/archive/${anaconda_file} $anaconda_file
     fi
 	chmod +x $anaconda_file
 	mkdir -p $MTOOLBOX_BIN/anaconda
