@@ -762,6 +762,8 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
                 #print r.POS, sample
             #If the v.position was encountered before
             elif variant[0] in present_pos and max(variant[7])<1:
+		if variant[-1] == 'ins':
+			print variant[0], variant[-1]
                 for i in VCF_RECORDS:
                     if variant[0] == i.POS:
                         #print i
@@ -902,24 +904,24 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
                 #for homoplasmic variants in a position encountered before
                 for i in VCF_RECORDS:
                     if i.POS == variant[0]:
-                        for allele in variant[3]:
-                            if allele not in i.ALT:
+                        for x in range(len(variant[3])):
+                            if variant[3][x] not in i.ALT:
                                 i.INFO['AC'].append(1)
                                 i.INFO['AN'] += 1
-                                i.ALT.append(allele)
+                                i.ALT.append(variant[3][x])
+                                i.REF.append(variant[1][x])
                                 i.samples.append(sample)
-                                index=i.ALT.index(allele)
-                                aplotype=index+1
-                                genotype=aplotype
+                                index=i.ALT.index(variant[3][x])
+                                genotype=index+1
                                 i.TYPEVAR.append(variant[-1])
                                 if sample in i._sample_indexes:
                                     i._sample_indexes[sample][0].append(genotype)
-                                    i._sample_indexes[sample][2].append(variant[7][0])
-                                    i._sample_indexes[sample][3].append(variant[8][0])
-                                    i._sample_indexes[sample][4].append(variant[9][0])
-                                    i._sample_indexes[sample][5].append(variant[5][0])
+                                    i._sample_indexes[sample][2].append(variant[7][x])
+                                    i._sample_indexes[sample][3].append(variant[8][x])
+                                    i._sample_indexes[sample][4].append(variant[9][x])
+                                    i._sample_indexes[sample][5].append(variant[5][x])
                                 else:
-                                    i._sample_indexes.setdefault(sample,[genotype, variant[2], variant[7], variant[8], variant[9], variant[5]]) 
+                                    i._sample_indexes.setdefault(sample,[genotype, variant[2], variant[7], variant[8], variant[9], variant[5]])
                                 #if a deletion, add a further reference base
                                 #print i
                                 if type(variant[1])== type(list()):
@@ -928,18 +930,22 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
                                     i.REF.append(variant[1])
                                 #print i
                             else:
-                                index = i.ALT.index(allele)
+                                index = i.ALT.index(variant[3][x])
                                 i.INFO['AC'][index] += 1
                                 i.INFO['AN']+=1
                                 i.samples.append(sample)
-                                aplotype=index+1
-                                genotype=aplotype
+                                genotype=index+1
+                                if genotype in i._sample_indexes[sample][0]: #if the alt change is already there then add 1 to the genotype
+                                    genotype = genotype+1
+                                    i.ALT.append(variant[3][x])
+                                    i.REF.append(variant[1][x])
+                                i.TYPEVAR.append(variant[-1])
                                 if sample in i._sample_indexes:
                                     i._sample_indexes[sample][0].append(genotype)
-                                    i._sample_indexes[sample][2].append(variant[7][0])
-                                    i._sample_indexes[sample][3].append(variant[8][0])
-                                    i._sample_indexes[sample][4].append(variant[9][0])
-                                    i._sample_indexes[sample][5].append(variant[5][0])
+                                    i._sample_indexes[sample][2].append(variant[7][x])
+                                    i._sample_indexes[sample][3].append(variant[8][x])
+                                    i._sample_indexes[sample][4].append(variant[9][x])
+                                    i._sample_indexes[sample][5].append(variant[5][x])
                                 else:                                
                                     i._sample_indexes.setdefault(sample,[genotype, variant[2], variant[7], variant[8], variant[9], variant[5]])
     for r in VCF_RECORDS:
@@ -956,7 +962,21 @@ def VCFoutput(dict_of_dicts, reference='RSRS', name='sample'):
                         r.ALT[x] = altdel
                     else:
                         r.ALT[x] = r.ALT[x]+ord[-1][1:]
-                r.REF=[ord[-1]]
+                count_repeated_alt_allele = sum(sp.unique(r.ALT,return_counts=True)[1]>1)
+                if count_repeated_alt_allele > 0: #add exception when multiple reference alleles are needed to explain two or more variants of the same type (e.g. GCACA,GCA --> G,G)
+                    bv = sp.unique(r.ALT,return_counts=True)[1]>1
+                    n_repeated_alleles = sp.unique(r.ALT,return_counts=True)[1][bv].tolist()
+                    n_repeated_alleles = n_repeated_alleles[0]
+                    ref = sp.unique(ord).tolist()
+                    r.REF =[ref[-1]]
+                    c = -1
+                    for x in range(n_repeated_alleles):
+                        c = c - x #add references with backward iteration
+                        r.REF.append(ref[c])
+                    r.REF = ','.join(r.REF)
+                    r.REF = [r.REF]
+                else:
+                    r.REF=[ord[-1]]
             else:
                 r.REF=[r.REF[0]]
     #gets the index of each sample and assign the definitive genotype to each individual        
