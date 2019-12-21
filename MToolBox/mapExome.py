@@ -125,7 +125,7 @@ if len(pair1)!=0:
 
 if sig:
 	print 'Mapping on complete human genome...single reads'
-	map2cmd='%s -D %s -d %s --nosplicing -f samse --nofails --no-sam-headers -x 1 -O -t %i %s -p 1 --split-output %s 2> %s' %(gmapexe,gmapdb,humandb,thread,mtoutfastq,os.path.join(folder,'outhumanS'),os.path.join(folder,'loghumanS.txt'))
+	map2cmd='%s -D %s -d %s --nosplicing -f samse --nofails --no-sam-headers -O -t %i %s -p 1 --split-output %s 2> %s' %(gmapexe,gmapdb,humandb,thread,mtoutfastq,os.path.join(folder,'outhumanS'),os.path.join(folder,'loghumanS.txt'))
 	os.system(map2cmd)
 	print map2cmd
 
@@ -146,10 +146,11 @@ if sig:
 	f_s = f_s[(f_s[2] == mtref_name) & (f_s[4].astype(int) >= mapq)] #filter reads mapping on mitochondrial DNA only and above the mapping quality cutoff
 	#remove possible numts
 	numts_file = open(os.path.join(folder,numts_outname),'a')
-	finalsam = open(os.path.join(folder,'OUT2.sam'),'w')
+	finalsam = os.path.join(folder,'OUT2.sam')
+	print finalsam
 	read_ids = f_m[f_m[2] != mtref_name][0]
 	bv = np.in1d(f_m[0],read_ids)
-	numts = f_m[bv].to_csv(numts_file,sep='\t',header=None,index=None) #send to numts file reads with suppl align on non mito chromsome
+	f_m[bv].to_csv(numts_file,sep='\t',header=None,index=None) #send to numts file reads with suppl align on non mito chromsome
 	f_m = f_m[~bv]	
 	gpb_f_m = f_m.groupby([f_m[0],f_m[1]]).count()
 	read_ids_discordant = gpb_f_m[gpb_f_m.iloc[:,0]!= 2].index.get_level_values(0).tolist() #reads with discordan suppl align on mito chromosome
@@ -158,20 +159,12 @@ if sig:
 	f_m = f_m[~bv] #mult deprived of numts and discordant alignments
 	f_m = f_m[f_m[4].astype(int) >= mapq]
 	f = pd.concat([f_s,f_m])
-	#f.sort_values(3,ascending=True,inplace=True)
 	f.to_csv(finalsam,sep='\t',header=None,index=None,quotechar=' ')
+	#f.sort_values(3,ascending=True,inplace=True)
 	print 'Filtering reads...done'
 
-#	finalsam=os.path.join(folder,'OUT2.sam')
-#	out=open(finalsam,'w')
-
-#	for k,v in dicsingle.iteritems():
-#		o = '\t'.join(v[0])+'\n'
-#		out.write(o)
-	#out.close()
-
 numts_file.close()
-finalsam.close()
+
 
 print 'Outfile saved on %s.' %('OUT2.sam')
 print 'Sam file with possible numts saved on %s.' %(numts_outname)

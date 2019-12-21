@@ -43,7 +43,7 @@ usage()
 
 version()
 {
-	VERSION=$(echo "MToolBox v1.1")
+	VERSION=$(echo "MToolBox version for Nanopore")
 	echo $VERSION
 }
 
@@ -55,9 +55,10 @@ version()
 UseMarkDuplicates=false
 UseIndelRealigner=false
 MitoExtraction=false
-vcf_name=sample
+vcf_name="sample"
 # export folder where MToolBox.sh is placed, it is the same folder of PicardTools and GATK jars
 me=`basename $0`
+mtref_name='chrM'
 export mtoolbox_folder=$(which $me | sed "s/$me//g")
 export externaltoolsfolder=${mtoolbox_folder}ext_tools/
 
@@ -239,28 +240,28 @@ fastq_input()
 			if (( $(ls $i.*fastq* | wc -l) == 1 ))
 			then
 				#echo $i is 1
-				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
+				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
 			elif (( $(ls $i.*fastq* | wc -l) == 2 ))
 			then
 				#echo $i is 2
-				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.R1.fastq* -b $i.R2.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
+				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.R1.fastq* -b $i.R2.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
 			elif (( $(ls $i.*fastq* | wc -l) == 3 ))
 			then
 				if [ -s $i.fastq* ] 
 				then 
 					if [ -s $i.R1.fastq* -a -s $i.R2.fastq* ]
 					then
-						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.R1.fastq* -b $i.R2.fastq* -c $i.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
+						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.R1.fastq* -b $i.R2.fastq* -c $i.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
 					else 
 						rm $i.R1.fastq*
 						rm $i.R2.fastq*
 						echo "$i.R1/R2.fastq are empty paired end fastq. Files have been removed."
-						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
+						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
 					fi
 				else	
 					rm $i.fastq*
 					echo "$i.fastq is an empty unpaired fastq. File has been removed."
-					mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.R1.fastq* -b $i.R2.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
+					mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.R1.fastq* -b $i.R2.fastq* -o ${output_name}/OUT_${i} ${mapExome_OPTS}
 				fi			
 			#then
 				#echo $i is 3
@@ -275,28 +276,28 @@ fastq_input()
 			if (( $(ls $i.*fastq* | wc -l) == 1 ))
 			then
 				#echo $i is 1
-				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.fastq* -o OUT_${i} ${mapExome_OPTS}
+				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.fastq* -o OUT_${i} ${mapExome_OPTS}
 			elif (( $(ls $i.*fastq* | wc -l) == 2 ))
 			then
 				#echo $i is 2
-				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.R1.fastq* -b $i.R2.fastq* -o OUT_${i} ${mapExome_OPTS}
+				mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.R1.fastq* -b $i.R2.fastq* -o OUT_${i} ${mapExome_OPTS}
 			elif (( $(ls $i.*fastq* | wc -l) == 3 ))
 			then
 				if [ -s $i.fastq* ] 
 				then 
 					if [ -s $i.R1.fastq* -a -s $i.R2.fastq* ]
 					then
-						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.R1.fastq* -b $i.R2.fastq* -c $i.fastq* -o OUT_${i} ${mapExome_OPTS}
+						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.R1.fastq* -b $i.R2.fastq* -c $i.fastq* -o OUT_${i} ${mapExome_OPTS}
 					else 
 						rm $i.R1.fastq*
 						rm $i.R2.fastq*
 						echo "$i.R1/R2.fastq are empty paired end fastq. Files have been removed."
-						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.fastq* -o OUT_${i} ${mapExome_OPTS}
+						mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.fastq* -o OUT_${i} ${mapExome_OPTS}
 					fi
 				else	
 					rm $i.fastq*
 					echo "$i.fastq is an empty unpaired fastq. File has been removed."
-					mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -a $i.R1.fastq* -b $i.R2.fastq* -o OUT_${i} ${mapExome_OPTS}
+					mapExome.py -g ${gsnapexe} -D ${gsnapdb} -M ${mtdb} -H ${humandb} -r ${mtref_name} -a $i.R1.fastq* -b $i.R2.fastq* -o OUT_${i} ${mapExome_OPTS}
 				fi			
 			
 			else (( $(ls $i.*fastq* | wc -l) > 3 ))
@@ -337,13 +338,13 @@ fastq_input()
 	echo "SAM files post-processing..."
 	echo ""
 	# SORT SAM WITH PICARD TOOLS
-	echo "##### SORTING OUT.sam FILES WITH PICARDTOOLS..."
+	echo "##### SORTING OUT2.sam FILES WITH PICARDTOOLS..."
 	echo ""
 	for i in $(ls -d OUT_*); do cd ${i}; java -Xmx4g \
 	-Djava.io.tmpdir=`pwd`/tmp \
 	-jar ${externaltoolsfolder}SortSam.jar \
 	SORT_ORDER=coordinate \
-	INPUT=OUT.sam \
+	INPUT=OUT2.sam \
 	OUTPUT=OUT.sam.bam \
 	TMP_DIR=`pwd`/tmp; cd ..; done
 	check_exit_status
@@ -397,7 +398,7 @@ fastq_input()
 	# RE-CONVERT BAM OUTPUT FROM MARKDUPLICATES IN SAM.
 	for i in $(ls -d OUT_*); do cd ${i}; java -Xmx4g -Djava.io.tmpdir=`pwd`/tmp -jar ${externaltoolsfolder}SamFormatConverter.jar INPUT=OUT.sam.bam.marked.bam OUTPUT=OUT.sam.bam.marked.bam.marked.sam TMP_DIR=`pwd`/tmp; cd ..; done
 
-	for i in $(ls -d OUT_*); do cd ${i}; grep -v "^@" *marked.sam > OUT2.sam; mkdir MarkTmp; mv OUT.sam.bam MarkTmp; mv OUT.sam.bam.marked.bam MarkTmp; mv OUT.sam.bam.marked.bam.marked.sam MarkTmp; tar -czf MarkTmp.tar.gz MarkTmp; rm -R MarkTmp/; cd ..; done
+	for i in $(ls -d OUT_*); do cd ${i};  mkdir MarkTmp; mv OUT.sam.bam MarkTmp; mv OUT.sam.bam.marked.bam MarkTmp; mv OUT.sam.bam.marked.bam.marked.sam MarkTmp; tar -czf MarkTmp.tar.gz MarkTmp; rm -R MarkTmp/; cd ..; done
 
 	# ASSEMBLE CONTIGS, GET MT-TABLES...
 	echo ""
@@ -409,7 +410,8 @@ fastq_input()
 	echo ""
 	echo "##### GENERATING VCF OUTPUT..."
 	# ... AND VCF OUTPUT
-	VCFoutput.py -r ${ref} -s $vcf_name
+	echo $vcf_name
+	VCFoutput.py -r ${ref} -s ${vcf_name}
 }
 
 fasta_input()

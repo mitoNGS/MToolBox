@@ -8,14 +8,14 @@ def usage():
 		Version 1.1 - Written by Domenico Simone and Claudia Calabrese - 2013-2014
 		
 		Options:
-		-r		Reference sequence [RSRS|RCRS]
+		-r		Reference sequence [RCRS]
 		-s		VCF name
 		
 		If launched stand-alone needs the VCF_dict_tmp file to be positioned in the working directory
 		"""
 
-reference_sequence="RSRS"
-
+reference_sequence="RCRS"
+sample_vcf_name='sample'
 try:
 	opts, args = getopt.getopt(sys.argv[1:], "h:r:s:")
 except getopt.GetoptError, err:
@@ -29,6 +29,7 @@ for o,a in opts:
 	elif o == "-s":
 		sample_vcf_name = str(a)
 
-VCF_dict = ast.literal_eval(open(sample_vcf_name+'_VCF_dict_tmp', 'r').read())
+
+VCF_dict = ast.literal_eval(open('VCF_dict_tmp', 'r').read())
 #VCFoutput(VCF_dict, reference=reference_sequence)
 VCFoutput(VCF_dict, reference=reference_sequence, name=sample_vcf_name)

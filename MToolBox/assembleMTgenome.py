@@ -400,8 +400,8 @@ if type(sample_name) == (list):
 	sample_name = sample_name[0]
 mut_events = mtvcf_main_analysis(mtable=mt_table, sam=sam_file, name2=sample_name, tail=tail,Q=mqual, minrd=cov)
 print "Heteroplasmic range for IUPAC in consensus is = {0} - {1}\n".format(hf_min,hf_max)
-if os.path.exists('../'+basename+'_VCF_dict_tmp'):
-	VCF_dict = ast.literal_eval(open('../'+basename+'_VCF_dict_tmp', 'r').read()) # global VCF dict
+if os.path.exists('../VCF_dict_tmp'):
+	VCF_dict = ast.literal_eval(open('../VCF_dict_tmp', 'r').read()) # global VCF dict
 else:
 	VCF_dict = {} # global VCF dict
 contigs_wdict = []
@@ -483,7 +483,7 @@ if crf: f.close()
 
 if mut_events:
     VCF_dict.update(mut_events)
-mut_events_cellar = open('../'+basename+'_VCF_dict_tmp', 'w')
+mut_events_cellar = open('../VCF_dict_tmp', 'w')
 mut_events_cellar.write(str(VCF_dict))
 mut_events_cellar.close()
 
