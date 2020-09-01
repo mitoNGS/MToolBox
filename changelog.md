@@ -1,3 +1,10 @@
+### CHANGELOG - 18 September 2019
+
+Fixes in `mtVariantCaller.py` to avoid issues with  multiallelic positions with homoplasmic insertions or deletions. Variant Calling was failing and not generating a VCF or providing `None` in place of the expected genotypes in the GT field of the VCF.
+
+This fix should solve issue #84
+
+
 ### CHANGELOG - 6 September 2019
 Update to `MToolBox v.1.2`
 
