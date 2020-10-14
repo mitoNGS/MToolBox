@@ -57,7 +57,7 @@ d_def_mapExome = dict(default_mapExome_opts)
 #print d_def_mapExome
 
 #print "\nassembleMTgenome argument user-defined"
-user_assembleMTgenome_opts, user_assembleMTgenome_args = getopt.getopt(f.assembleMTgenome_OPTS.split(), "hf:i:q:c:d:o:g:a:r:s:FCUPNA:D:z:t:")
+user_assembleMTgenome_opts, user_assembleMTgenome_args = getopt.getopt(f.assembleMTgenome_OPTS.split(), "hf:i:q:c:d:o:g:a:r:s:FCUPNA:D:z:x:t:")
 d_user_assembleMTgenome = dict(user_assembleMTgenome_opts)
 #print d_user_assembleMTgenome
 #print "\nassembleMTgenome argument defaults"
