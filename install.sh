@@ -21,7 +21,7 @@ TO UPDATE ONLY ONE SPECIFIC SOTWARE:
 ./install.sh -i <software_name>
 
 followed, in case, by one of the options to specify the software version/kmer parameter:
-	-g	GSNAP version: default is 2015-12-31.v7
+	-g	GSNAP version: default is 2020-10-14
 	-a	Anaconda version: default is 2-2.5.0
 	-z	Zlib version: default is 1.2.11
 	-m 	MUSCLE version: default is muscle3.8.31_i86linux64
@@ -36,7 +36,7 @@ Help options:
 	echo "$USAGE"
 }
 
-gsnap_gmap_version=2015-12-31.v7
+gsnap_gmap_version=2020-10-14
 anaconda_version=2-2.5.0
 anaconda_file=Anaconda$anaconda_version-Linux-x86_64.sh
 muscle_file=muscle3.8.31_i86linux64
@@ -182,8 +182,8 @@ gsnap_install() {
 }
 
 gsnap_db_install() {
-	nfasta_rcrs_url=http://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg19RCRS.fa.gz
-	nfasta_rcrs=hg19RCRS.fa.gz
+	nfasta_rcrs_url=http://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg38RCRS.fa.gz
+	nfasta_rcrs=hg38RCRS.fa.gz
 	nfasta_rsrs_url=http://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg19RSRS.fa.gz
 	nfasta_rsrs=hg19RSRS.fa.gz
 	rcrs_mfasta_url=http://sourceforge.net/projects/mtoolbox/files/genome_fasta/chrM.fa.gz
@@ -247,7 +247,7 @@ anaconda_install() {
 decompress_fasta=True
 database_name_rcrs=chrM
 database_name_rsrs=chrRSRS
-database_name_nfasta_rcrs=hg19RCRS
+database_name_nfasta_rcrs=hg38RCRS
 database_name_nfasta_rsrs=hg19RSRS
 DIRECTORY=bin
 if [ -d "$DIRECTORY" ]; then
@@ -342,10 +342,10 @@ export gsnapexe=\$MTOOLBOX_BIN/gmap/bin/gsnap
 fasta_path=\$MTOOLBOX_DIR/$GENOME_FASTA/
 gsnapdb=\$MTOOLBOX_DIR/$gmap_db/
 samtools_version=$samtools_version
-mtdb_fasta=chrRSRS.fa
-hg19_fasta=hg19RSRS.fa
-mtdb=chrRSRS
-humandb=hg19RSRS
+mtdb_fasta=chrM.fa
+hg38_fasta=hg38RCRS.fa
+mtdb=chrM
+humandb=hg38RCRS
 EOF
 
 exit 0

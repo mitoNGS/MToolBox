@@ -409,7 +409,7 @@ fastq_input()
 	echo ""
 	echo "WARNING: values of tail < 5 are deprecated and will be replaced with 5"
 	echo ""	
-	for i in $(ls -d OUT_*); do outhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg19_fasta} -s ${samtoolsexe} -v ${samtools_version} -z ${hf_max} -x ${hf_min} -q ${minqual} -d ${minrd} -FCP ${assembleMTgenome_OPTS}; cd ..; done > logassemble.txt
+	for i in $(ls -d OUT_*); do outhandle=$(echo ${i} | sed 's/OUT_//g'); cd ${i}; assembleMTgenome.py -i OUT2.sam -o ${outhandle} -r ${fasta_path} -f ${mtdb_fasta} -a ${hg38_fasta} -s ${samtoolsexe} -v ${samtools_version} -z ${hf_max} -x ${hf_min} -q ${minqual} -d ${minrd} -FCP ${assembleMTgenome_OPTS}; cd ..; done > logassemble.txt
 	echo ""
 	echo "##### GENERATING VCF OUTPUT..."
 	# ... AND VCF OUTPUT

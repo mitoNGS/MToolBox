@@ -1,3 +1,9 @@
+### CHANGELOG - 24 Februrary 2021
+
+hg38 fasta genome is now available at the MToolBox sourceforge.net repository: https://sourceforge.net/projects/mtoolbox/files/genome_fasta/hg38RCRS.fa.gz/download
+
+The install.sh scripts will install hg38RCRS.fa and chrM.fa as default reference sequences for the MToolBox analysis. 
+
 ### CHANGELOG - 18 September 2019
 
 Fixes in `mtVariantCaller.py` to avoid issues with  multiallelic positions with homoplasmic insertions or deletions. Variant Calling was failing and not generating a VCF or providing `None` in place of the expected genotypes in the GT field of the VCF.
